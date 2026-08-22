@@ -264,34 +264,40 @@
     }
 
     /* ====================================================== */
-    /* 3. SERVICES — การ์ดบริการ (grid อัตโนมัติ ใส่การ์ดที่ 5 ได้เลย)  */
+    /* 3. ABOUT + SERVICES — เกี่ยวกับเรา + บริการของเรา (ส่วนเดียว)    */
+    /*    หัวข้อย่อยในส่วนเดียวกันใช้ class .subsection-title (h3)     */
+    /*    Subsection heading inside a merged section uses .subsection-title */
     /* ====================================================== */
+    .about-text p { max-width: 65ch; margin-bottom: var(--space-md); color: var(--color-text); }
+    .subsection-title { font-size: 1.3rem; font-weight: 600; margin-top: var(--space-lg); margin-bottom: var(--space-sm); color: var(--color-text); }
     .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); }
     .service-card {
       background: var(--color-surface); border: 1px solid var(--color-border);
       border-radius: var(--radius); padding: var(--space-md); text-align: center;
     }
     .service-card svg { color: var(--color-primary); margin-bottom: var(--space-sm); }
-    .service-card h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: var(--space-xs); }
+    .service-card h4 { font-size: 1.15rem; font-weight: 600; margin-bottom: var(--space-xs); }
     .service-card p { color: var(--color-text-muted); font-size: 0.95rem; }
 
     /* ====================================================== */
-    /* 3b. BRANDS — ยี่ห้อที่จำหน่ายและซ่อม (chip pills)              */
+    /* 3b. BRANDS + MODELS — ยี่ห้อและรุ่นรถ (chip pills 2 กลุ่ม)       */
+    /*    แต่ละกลุ่ม chip มีหัวข้อย่อย .chip-group-label (h3)          */
+    /*    Each chip group has a .chip-group-label subheading (h3)    */
     /* ====================================================== */
+    .chip-group-label { font-size: 1.15rem; font-weight: 600; margin-top: var(--space-lg); margin-bottom: var(--space-sm); color: var(--color-text); }
+    .chip-group-intro { color: var(--color-text-muted); max-width: 60ch; margin-bottom: var(--space-sm); }
     .brand-chips { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-xs); justify-content: center; }
     .chip { background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 999px; padding: 0.4rem 1rem; font-weight: 600; }
 
     /* ====================================================== */
-    /* 4. ABOUT — เกี่ยวกับเรา (ย่อหน้า)                            */
+    /* 4. FAQ — คำถามที่พบบ่อย (รายการแบบเส้นคั่น กะทัดรัด)             */
+    /*    ไม่มีพื้นการ์ด/มุมโค้ง — ใช้เส้นคั่นบาง ๆ คำตอบแสดงตลอดเวลา    */
+    /*    Compact separator list — no card bg/radius, answers always visible */
     /* ====================================================== */
-    .about-text p { max-width: 65ch; margin-bottom: var(--space-md); color: var(--color-text); }
-
-    /* ====================================================== */
-    /* 4b. FAQ — คำถามที่พบบ่อย (การ์ดคำถาม-คำตอบ)                  */
-    /* ====================================================== */
-    .faq-list { display: grid; gap: var(--space-md); }
-    .faq-item { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius); padding: var(--space-md); }
-    .faq-item h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: var(--space-xs); }
+    .faq-list { display: grid; gap: 0; }
+    .faq-item { background: none; border: none; border-radius: 0; border-top: 1px solid var(--color-border); padding: var(--space-sm) 0; }
+    .faq-item:last-child { border-bottom: 1px solid var(--color-border); }
+    .faq-item h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: var(--space-xs); }
     .faq-item p { color: var(--color-text-muted); }
 
     /* ====================================================== */
@@ -386,9 +392,8 @@
       </label>
       <!-- EDIT ME / แก้ไขตรงนี้: เพิ่ม/ลบลิงก์เมนูใน <nav> นี้ที่เดียว (ใช้ร่วมทั้งมือถือและเดสก์ท็อป) -->
       <nav class="header-nav" aria-label="เมนูหลัก">
-        <a href="#services">บริการ</a>
-        <a href="#brands">ยี่ห้อ</a>
         <a href="#about">เกี่ยวกับเรา</a>
+        <a href="#brands">ยี่ห้อ</a>
         <a href="#faq">คำถาม</a>
         <a href="#gallery">ภาพหน้าร้าน</a>
         <a href="#location">ที่ตั้ง/เวลา</a>
@@ -436,12 +441,32 @@
   </section>
 
   <!-- ================================================================ -->
-  <!-- 3. SERVICES / บริการของเรา — 4 การ์ด (grid อัตโนมัติ วางการ์ดที่ 5 ได้เลย) -->
+  <!-- 3. ABOUT + SERVICES / เกี่ยวกับเรา + บริการของเรา — ส่วนเดียว       -->
+  <!--    ย่อหน้าแนะนำร้าน ตามด้วยหัวข้อย่อย "บริการของเรา" และการ์ดบริการ    -->
+  <!--    จะเพิ่มย่อหน้า: คัดลอกบล็อก <p>...</p> ทั้งบล็อก วาง แล้วแก้ข้อความ   -->
   <!--    จะเพิ่มการ์ดที่ 5: คัดลอกบล็อก service-card ทั้งบล็อก วาง แล้วแก้ข้อความ -->
+  <!--    Merged section: about paragraphs, then a "บริการของเรา" h3      -->
+  <!--    subsection with service cards. Copy a <p> block to add a       -->
+  <!--    paragraph; copy a service-card block to add a service card.    -->
   <!-- ================================================================ -->
-  <section class="section" id="services">
+  <section class="section" id="about">
     <div class="container">
-      <h2 class="section-title">บริการของเรา</h2>
+      <h2 class="section-title">เกี่ยวกับเรา</h2>
+      <div class="about-text">
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ย่อหน้า 1 ย่อหน้า -->
+        <!-- EDIT ME / แก้ไขตรงนี้: เนื้อหาแนะนำร้าน -->
+        <p>{{SHOP_NAME}} คือศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำย่านโชคชัย 4 ลาดพร้าว กรุงเทพฯ เราขายมอเตอร์ไซค์ทุกรุ่น ทุกยี่ห้อ ทั้งฮอนด้า ยามาฮ่า จีพีเอ็กซ์ และรถมอเตอร์ไซค์ไฟฟ้า ด้วยปรัชญา "บริการเกินร้อย ใส่ใจเกินล้าน"</p>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดย่อหน้า 1 ย่อหน้า -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ย่อหน้า 1 ย่อหน้า (คัดลอกบล็อกนี้เพื่อเพิ่มย่อหน้าใหม่) -->
+        <!-- EDIT ME / แก้ไขตรงนี้: เนื้อหาย่อหน้าที่ 2 -->
+        <p>ออกรถง่าย ออกได้ทุกอาชีพ ฟรีดาวน์ ใช้แค่บัตรประชาชนใบเดียว ติดประวัติก็ปรึกษาได้ฟรี พร้อมส่วนลดเยอะ ของแถมเพียบ และบริการหลังการขายครบวงจรที่ดูแลรถของคุณตลอดการใช้งาน</p>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดย่อหน้า 1 ย่อหน้า -->
+      </div>
+
+      <!-- หัวข้อย่อย: บริการของเรา (อยู่ในส่วน "เกี่ยวกับเรา") / Subsection: services -->
+      <h3 class="subsection-title">บริการของเรา</h3>
+      <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้น -->
       <p class="section-intro">บริการเกินร้อย ใส่ใจเกินล้าน — ออกรถง่าย ออกได้ทุกอาชีพ ใช้แค่บัตรประชาชนใบเดียว</p>
 
       <div class="services-grid">
@@ -455,7 +480,7 @@
             <circle cx="17.5" cy="17.5" r="2.5"/>
           </svg>
           <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
-          <h3>ฟรีดาวน์ ออกรถง่าย</h3>
+          <h4>ฟรีดาวน์ ออกรถง่าย</h4>
           <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
           <p>ออกได้ทุกอาชีพ ใช้แค่บัตรประชาชนใบเดียว ติดประวัติ ปรึกษาฟรี</p>
         </article>
@@ -472,7 +497,7 @@
             <path d="M9 11l2-3h4"/>
           </svg>
           <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
-          <h3>รถใหม่ ทุกรุ่น ทุกยี่ห้อ</h3>
+          <h4>รถใหม่ ทุกรุ่น ทุกยี่ห้อ</h4>
           <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
           <p>ฮอนด้า ยามาฮ่า จีพีเอ็กซ์ และรถมอเตอร์ไซค์ไฟฟ้า พร้อมส่งมอบ</p>
         </article>
@@ -488,7 +513,7 @@
             <path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>
           </svg>
           <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
-          <h3>ส่วนลดเยอะ ของแถมเพียบ</h3>
+          <h4>ส่วนลดเยอะ ของแถมเพียบ</h4>
           <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
           <p>โปรโมชั่นทุกเดือน ส่วนลดพิเศษ พร้อมของแถมครบทุกคัน</p>
         </article>
@@ -501,7 +526,7 @@
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
           <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
-          <h3>บริการหลังการขายครบวงจร</h3>
+          <h4>บริการหลังการขายครบวงจร</h4>
           <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
           <p>ดูแลรถของคุณตลอดการใช้งาน ซ่อมบำรุงโดยช่างผู้เชี่ยวชาญ</p>
         </article>
@@ -512,16 +537,23 @@
   </section>
 
   <!-- ================================================================ -->
-  <!-- 3b. BRANDS / ยี่ห้อที่เราจำหน่ายและซ่อม — รายชื่อยี่ห้อ (chip pills)    -->
-  <!--    จะเพิ่มยี่ห้อ: คัดลอกบล็อก <li>...</li> ทั้งบล็อก วาง แล้วแก้ชื่อ     -->
+  <!-- 3b. BRANDS + MODELS / ยี่ห้อและรุ่นรถ — ส่วนเดียว (chip pills 2 กลุ่ม) -->
+  <!--    กลุ่มที่ 1: ยี่ห้อที่จำหน่าย  กลุ่มที่ 2: รุ่นยอดนิยม                -->
+  <!--    ชื่อรุ่นช่วยให้คนค้นใน Google เจอ เช่น "Click 125i ฟรีดาวน์"      -->
+  <!--    จะเพิ่มยี่ห้อ/รุ่น: คัดลอกบล็อก <li>...</li> ทั้งบล็อก วาง แล้วแก้ชื่อ  -->
+  <!--    Merged section: brand chips + model chips in two labeled groups. -->
+  <!--    Model names catch Google searches like "Click 125i ฟรีดาวน์".     -->
+  <!--    Edit the lists to match real stock; copy an <li> block to add one. -->
   <!-- ================================================================ -->
   <section class="section" id="brands">
     <div class="container">
-      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อส่วนยี่ห้อ -->
-      <h2 class="section-title">ยี่ห้อที่เราจำหน่าย</h2>
+      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อส่วนยี่ห้อและรุ่นรถ -->
+      <h2 class="section-title">ยี่ห้อและรุ่นรถที่เราจำหน่าย</h2>
       <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้น -->
       <p class="section-intro">มอเตอร์ไซค์ใหม่ ทุกรุ่น ทุกยี่ห้อ พร้อมรถมอเตอร์ไซค์ไฟฟ้า</p>
 
+      <!-- กลุ่มที่ 1: ยี่ห้อ / Group 1: brands -->
+      <h3 class="chip-group-label">ยี่ห้อที่เราจำหน่าย</h3>
       <!-- EDIT ME / แก้ไขตรงนี้: เปลี่ยนชื่อยี่ห้อ หรือก๊อปปี้ li เพื่อเพิ่มยี่ห้อ -->
       <ul class="brand-chips">
         <li class="chip">Honda</li>
@@ -531,23 +563,11 @@
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดยี่ห้อ 1 ยี่ห้อ -->
         <li class="chip">รถมอเตอร์ไซค์ไฟฟ้า</li>
       </ul>
-    </div>
-  </section>
 
-  <!-- ================================================================ -->
-  <!-- 3c. MODELS / รุ่นยอดนิยม — ชื่อรุ่นรถ (chip pills)                    -->
-  <!--    ชื่อรุ่นช่วยให้คนค้นใน Google เจอ เช่น "Click 125i ฟรีดาวน์"      -->
-  <!--    แก้รายชื่อให้ตรงกับรถที่มีจริงในร้าน — คัดลอกบล็อก <li> เพื่อเพิ่มรุ่น -->
-  <!--    Model names catch Google searches like "Click 125i ฟรีดาวน์".     -->
-  <!--    Edit the list to match real stock; copy an <li> block to add one. -->
-  <!-- ================================================================ -->
-  <section class="section" id="models">
-    <div class="container">
-      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อส่วนรุ่นรถ -->
-      <h2 class="section-title">รุ่นยอดนิยม</h2>
-      <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้น -->
-      <p class="section-intro">รถใหม่แกะกล่องรุ่นที่ลูกค้าถามหามากที่สุด — สอบถามราคาและโปรโมชั่นล่าสุดได้ทุกวัน</p>
-
+      <!-- กลุ่มที่ 2: รุ่นรถ / Group 2: models -->
+      <h3 class="chip-group-label">รุ่นยอดนิยม</h3>
+      <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้นของรุ่นยอดนิยม -->
+      <p class="chip-group-intro">รถใหม่แกะกล่องรุ่นที่ลูกค้าถามหามากที่สุด — สอบถามราคาและโปรโมชั่นล่าสุดได้ทุกวัน</p>
       <!-- EDIT ME / แก้ไขตรงนี้: เปลี่ยนชื่อรุ่นให้ตรงสต็อกจริง หรือก๊อปปี้ li เพื่อเพิ่มรุ่น -->
       <ul class="brand-chips">
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รุ่นรถ 1 รุ่น -->
@@ -565,31 +585,12 @@
   </section>
 
   <!-- ================================================================ -->
-  <!-- 4. ABOUT / เกี่ยวกับเรา — ย่อหน้าแนะนำร้าน                          -->
-  <!--    จะเพิ่มย่อหน้าใหม่: คัดลอกบล็อก <p>...</p> ทั้งบล็อก วาง แล้วแก้ข้อความ -->
-  <!-- ================================================================ -->
-  <section class="section" id="about">
-    <div class="container">
-      <h2 class="section-title">เกี่ยวกับเรา</h2>
-      <div class="about-text">
-        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ย่อหน้า 1 ย่อหน้า -->
-        <!-- EDIT ME / แก้ไขตรงนี้: เนื้อหาแนะนำร้าน -->
-        <p>{{SHOP_NAME}} คือศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำย่านโชคชัย 4 ลาดพร้าว กรุงเทพฯ เราขายมอเตอร์ไซค์ทุกรุ่น ทุกยี่ห้อ ทั้งฮอนด้า ยามาฮ่า จีพีเอ็กซ์ และรถมอเตอร์ไซค์ไฟฟ้า ด้วยปรัชญา "บริการเกินร้อย ใส่ใจเกินล้าน"</p>
-        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดย่อหน้า 1 ย่อหน้า -->
-
-        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ย่อหน้า 1 ย่อหน้า (คัดลอกบล็อกนี้เพื่อเพิ่มย่อหน้าใหม่) -->
-        <!-- EDIT ME / แก้ไขตรงนี้: เนื้อหาย่อหน้าที่ 2 -->
-        <p>ออกรถง่าย ออกได้ทุกอาชีพ ฟรีดาวน์ ใช้แค่บัตรประชาชนใบเดียว ติดประวัติก็ปรึกษาได้ฟรี พร้อมส่วนลดเยอะ ของแถมเพียบ และบริการหลังการขายครบวงจรที่ดูแลรถของคุณตลอดการใช้งาน</p>
-        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดย่อหน้า 1 ย่อหน้า -->
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================ -->
-  <!-- 4c. FAQ / คำถามที่พบบ่อย — การ์ดคำถาม-คำตอบ ช่วยให้คนค้น Google เจอ  -->
-  <!--    จะเพิ่มคำถาม: คัดลอกบล็อก faq-item ทั้งบล็อก วาง แล้วแก้ข้อความ    -->
+  <!-- 4c. FAQ / คำถามที่พบบ่อย — รายการแบบเส้นคั่น ช่วยให้คนค้น Google เจอ  -->
+  <!--    คำตอบแสดงตลอดเวลา (ไม่มีการ์ด/ไม่ซ่อน) — จะเพิ่มคำถาม:            -->
+  <!--    คัดลอกบล็อก faq-item ทั้งบล็อก วาง แล้วแก้ข้อความ                -->
   <!--    สำคัญ: ถ้าเพิ่มหรือแก้คำถาม/คำตอบที่นี่ ต้องแก้บล็อก JSON-LD         -->
   <!--    FAQPage (ท้ายไฟล์นี้ เหนือแท็กปิด body) ให้ตรงกันด้วยเสมอ            -->
+  <!--    Compact separator list — answers always visible (no cards).      -->
   <!--    IMPORTANT: keep this Q&A list in sync with the FAQPage JSON-LD    -->
   <!--    block near the end of this file (just before the closing body).   -->
   <!-- ================================================================ -->
