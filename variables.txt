@@ -22,6 +22,12 @@ PHONE_DISPLAY = 096-142-6542
 # Phone number WITHOUT dashes (digits only), for the call button and Google data
 PHONE_TEL = 0961426542
 
+# เบอร์โทรแบบสากล ขึ้นต้นด้วย +66 แล้วตามด้วยตัวเลข (ตัดเลข 0 หน้าสุดออก)
+# ใช้ในข้อมูล Google (JSON-LD) เท่านั้น ไม่ได้แสดงบนหน้าเว็บ
+# International-format phone: +66 followed by digits (drop the leading 0).
+# Used only for Google's structured data (JSON-LD), not shown on the page.
+PHONE_TEL_INTL = +66961426542
+
 # เบอร์โทรสำรอง (เบอร์ที่ 2 บนป้ายหน้าร้าน) แบบมีขีด / แบบตัวเลขล้วน
 # Second phone number (shown on the shop sign), with dashes / digits only
 PHONE_BACKUP_DISPLAY = 094-595-9624
