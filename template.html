@@ -26,6 +26,22 @@
   <meta name="keywords" content="ขายมอเตอร์ไซค์, มอเตอร์ไซค์ฟรีดาวน์, ฮอนด้า, ยามาฮ่า, จีพีเอ็กซ์, รถมอเตอร์ไซค์ไฟฟ้า, ลาดพร้าว, โชคชัย 4, เกินร้อยมอเตอร์">
   <meta name="author" content="{{SHOP_NAME}}">
 
+  <!-- บอก Google ให้เก็บหน้านี้เข้าดัชนี และอนุญาตรูปขนาดใหญ่ในผลค้นหา -->
+  <!-- Tell Google to index this page and allow large image previews -->
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <!-- สีแถบเบราว์เซอร์บนมือถือ — ถ้าเปลี่ยน --color-primary ใน CSS ให้เปลี่ยนตรงนี้ตาม -->
+  <!-- Mobile browser bar color — keep in sync with --color-primary in the CSS -->
+  <meta name="theme-color" content="#C8102E">
+
+  <!-- ไอคอนเว็บ (แสดงในแท็บเบราว์เซอร์และผลค้นหา Google บนมือถือ) -->
+  <!-- Favicon — shown in browser tabs and Google's mobile search results -->
+  <link rel="icon" type="image/png" sizes="144x144" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <!-- โหลดรูปพื้นหลังส่วนแรกล่วงหน้า หน้าเว็บจะแสดงผลเร็วขึ้น (ช่วยคะแนน LCP) -->
+  <!-- Preload the hero background image so the page renders faster (helps LCP) -->
+  <link rel="preload" as="image" href="images/shop-front.jpg">
+
   <!-- โดเมนดึงจาก variables.txt (SITE_URL) — แก้ที่ไฟล์นั้นไฟล์เดียว -->
   <link rel="canonical" href="{{SITE_URL}}">
 
@@ -37,16 +53,21 @@
   <meta property="og:title" content="{{SHOP_NAME}} | ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ ลาดพร้าว กรุงเทพฯ">
   <meta property="og:description" content="ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ บริการหลังการขายครบวงจร เปิดทุกวัน 8.30-18.30 น.">
   <meta property="og:url" content="{{SITE_URL}}">
-  <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปสำหรับแชร์บน Facebook/LINE (แนะนำ 1200x630) -->
-  <meta property="og:image" content="{{SITE_URL}}images/shop-front.jpg">
+  <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปสำหรับแชร์บน Facebook/LINE (ต้องมีขนาด 1200x630 พิกเซลพอดี) -->
+  <!-- Share image for Facebook/LINE — must be exactly 1200x630 pixels -->
+  <meta property="og:image" content="{{SITE_URL}}images/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="หน้าร้าน{{SHOP_NAME}} โชคชัย 4 ลาดพร้าว กรุงเทพฯ">
   <meta property="og:locale" content="th_TH">
   <meta property="og:site_name" content="{{SHOP_NAME}}">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{{SHOP_NAME}} | ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ ลาดพร้าว กรุงเทพฯ">
   <meta name="twitter:description" content="ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ บริการหลังการขายครบวงจร">
-  <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปสำหรับแชร์บน Twitter -->
-  <meta name="twitter:image" content="{{SITE_URL}}images/shop-front.jpg">
+  <!-- รูปสำหรับแชร์บน Twitter — ใช้รูปเดียวกับ og:image ด้านบน -->
+  <!-- Twitter share image — same file as og:image above -->
+  <meta name="twitter:image" content="{{SITE_URL}}images/og-cover.jpg">
 
   <!-- ====================================================== -->
   <!-- ฟอนต์ภาษาไทย "Sarabun" จาก Google Fonts                     -->
@@ -704,11 +725,13 @@
     "@context": "https://schema.org",
     "@type": "MotorcycleDealer",
     "name": "{{SHOP_NAME}}",
-    "image": "{{SITE_URL}}images/shop-front.jpg",
+    "image": "{{SITE_URL}}images/og-cover.jpg",
     "@id": "{{SITE_URL}}",
     "url": "{{SITE_URL}}",
-    "telephone": "{{PHONE_TEL}}",
+    "telephone": "{{PHONE_TEL_INTL}}",
     "priceRange": "฿฿",
+    "areaServed": "กรุงเทพมหานคร",
+    "hasMap": "https://www.google.com/maps/dir/?api=1&destination=13.8192369%2C100.5962201&travelmode=driving",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "{{ADDRESS}}",
