@@ -1,5 +1,5 @@
 // ============================================================
-// optimize.mjs — สคริปต์ย่อไฟล์สำหรับเว็บจริง (รันใน GitHub Actions เท่านั้น)
+// optimize.mjs — optimize the built site in GitHub Actions only.
 // Optimize the BUILT site before deploy: shrink images, make WebP
 // copies, switch references to WebP, then minify index.html.
 //
@@ -7,14 +7,10 @@
 // deploy job AFTER build.py, so it edits the generated index.html
 // (never template.html). Local testing: see pages.yml deploy job.
 //
-// ขั้นตอน / What it does:
-//   1. ย่อรูปใน images/ ให้กว้างไม่เกิน 1200px + บีบอัดใหม่
+// What it does:
 //      Resize every images/*.jpg|png to max 1200px and recompress.
-//   2. สร้างไฟล์ .webp คู่กันทุกรูป (เบราว์เซอร์ใหม่เกือบทั้งหมดอ่านได้)
 //      Create a .webp sibling next to each image.
-//   3. แก้ index.html ให้ใช้ .webp (img → <picture>, url() ใน CSS, preload)
 //      Rewrite index.html references to WebP with JPEG/PNG fallback.
-//   4. ย่อ index.html (ตัดคอมเมนต์/ช่องว่าง) แล้วตรวจความถูกต้องอีกครั้ง
 //      Minify index.html (strip comments/whitespace) and re-verify.
 // ============================================================
 
@@ -25,7 +21,6 @@ import { fileURLToPath } from "node:url";
 
 // sharp + html-minifier-terser are installed OUTSIDE the repo (runner temp
 // dir) so node_modules never lands in the Pages artifact — see pages.yml.
-// ติดตั้ง dependencies ไว้นอก repo เพื่อไม่ให้ node_modules หลุดไปในเว็บจริง
 const require = createRequire(
   (process.env.OPTIMIZER_MODULES || ".") + "/"
 );
@@ -36,8 +31,8 @@ const ROOT = join(fileURLToPath(import.meta.url), "..", "..");
 const IMAGES_DIR = join(ROOT, "images");
 const INDEX_HTML = join(ROOT, "index.html");
 
-// ขนาด/คุณภาพ / Tuning knobs
-const MAX_DIMENSION = 1200;   // px — พอสำหรับจอมือถือ/เดสก์ท็อปทั่วไป (retina 2x ของการ์ด 600px)
+// Tuning knobs.
+const MAX_DIMENSION = 1200;   // px — enough for common mobile and desktop displays
 const JPEG_QUALITY = 80;
 const WEBP_QUALITY = 78;
 
@@ -51,7 +46,7 @@ function kb(bytes) {
   return (bytes / 1024).toFixed(1) + " KB";
 }
 
-// ---- Step 1+2: images / รูปภาพ ------------------------------------------
+// ---- Steps 1 and 2: images ----------------------------------------------
 // Returns a Set of webp filenames that now exist in images/ (e.g. "shop-front")
 async function optimizeImages() {
   if (!existsSync(IMAGES_DIR)) {
@@ -69,23 +64,21 @@ async function optimizeImages() {
     const before = statSync(path).size;
     const isPng = /\.png$/i.test(file);
 
-    // rotate() = หมุนตาม EXIF ของรูปถ่ายมือถือก่อน แล้วค่อยย่อ
     // rotate() respects phone-camera EXIF orientation before resizing.
     let pipeline = sharp(path).rotate().resize({
       width: MAX_DIMENSION,
       height: MAX_DIMENSION,
       fit: "inside",
-      withoutEnlargement: true, // รูปเล็กอยู่แล้วไม่ขยาย / never upscale
+      withoutEnlargement: true, // Never upscale.
     });
 
-    // 1) เขียนทับไฟล์เดิมด้วยเวอร์ชันที่ย่อแล้ว (เป็น fallback ให้เบราว์เซอร์เก่า)
-    //    Overwrite the original with the optimized version (old-browser fallback).
+    // Overwrite the original with the optimized version (old-browser fallback).
     const optimized = isPng
       ? await pipeline.png({ compressionLevel: 9 }).toBuffer()
       : await pipeline.jpeg({ quality: JPEG_QUALITY, mozjpeg: true }).toBuffer();
     writeFileSync(path, optimized);
 
-    // 2) สร้าง .webp คู่กัน / Create the WebP sibling.
+    // Create the WebP sibling.
     const webpPath = join(IMAGES_DIR, name + ".webp");
     await sharp(optimized).webp({ quality: WEBP_QUALITY }).toFile(webpPath);
 
@@ -98,10 +91,7 @@ async function optimizeImages() {
   return webpReady;
 }
 
-// ---- Step 3: rewrite references to WebP / เปลี่ยนการอ้างอิงเป็น WebP ------
-// แก้เฉพาะการอ้างอิงแบบ relative "images/..." เท่านั้น — og:image / JSON-LD
-// ที่เป็น URL เต็ม ({{SITE_URL}}images/...) จะไม่ถูกแตะ เพราะ crawler ของ
-// Facebook/LINE ยังต้องการ JPEG/PNG
+// ---- Step 3: rewrite references to WebP ---------------------------------
 // Only relative "images/..." references are rewritten. Absolute URLs
 // (og:image, JSON-LD) keep JPEG/PNG for Facebook/LINE crawlers.
 function rewriteToWebp(html, webpReady) {
@@ -112,7 +102,7 @@ function rewriteToWebp(html, webpReady) {
   html = html.replace(
     /<img\s+([^>]*?)src="images\/([^"]+?)\.(jpe?g|png)"([^>]*)>/g,
     (match, before, name, ext, after) => {
-      if (!forName(name)) return match; // ไม่มี webp ก็ใช้ไฟล์เดิม / no webp → keep
+      if (!forName(name)) return match; // Keep the original if WebP is unavailable.
       return (
         `<picture><source srcset="images/${name}.webp" type="image/webp">` +
         `<img ${before}src="images/${name}.${ext}"${after}></picture>`
@@ -120,8 +110,7 @@ function rewriteToWebp(html, webpReady) {
     }
   );
 
-  // url("images/x.jpg") ใน CSS (รูปพื้นหลัง hero) → webp
-  // CSS background url() (hero image) → webp
+  // Rewrite the CSS background url() for the hero image.
   html = html.replace(
     /url\("images\/([^")]+?)\.(jpe?g|png)"\)/g,
     (match, name) =>
@@ -129,7 +118,6 @@ function rewriteToWebp(html, webpReady) {
   );
 
   // <link rel="preload" as="image" href="images/x.jpg"> → webp
-  // (ต้องตรงกับ url() ใน CSS ไม่งั้นเบราว์เซอร์โหลดรูปสองครั้ง)
   // Must match the CSS url() or the browser downloads the image twice.
   html = html.replace(
     /(<link[^>]*rel="preload"[^>]*href=")images\/([^"]+?)\.(jpe?g|png)(")/g,
@@ -140,7 +128,7 @@ function rewriteToWebp(html, webpReady) {
   return html;
 }
 
-// ---- Step 4: minify + verify / ย่อและตรวจสอบ ------------------------------
+// ---- Step 4: minify and verify ------------------------------------------
 async function minifyAndVerify(html) {
   const result = await minify(html, {
     collapseWhitespace: true,
@@ -148,10 +136,10 @@ async function minifyAndVerify(html) {
     minifyCSS: true,
     removeRedundantAttributes: true,
     sortClassName: false,
-    minifyJS: false, // ห้ามแตะ JSON-LD / never touch JSON-LD script bodies
+    minifyJS: false, // Never touch JSON-LD script bodies.
   });
 
-  // ตรวจผลลัพธ์อีกครั้งก่อนเผยแพร่ / Re-verify the output before deploy.
+  // Re-verify the output before deploy.
   if (!result.includes("</html>")) {
     fail("index.html ที่ย่อแล้วไม่มีแท็กปิด </html>", "minified index.html lost </html>");
   }
@@ -163,7 +151,7 @@ async function minifyAndVerify(html) {
   }
   for (const block of ldBlocks) {
     try {
-      JSON.parse(block[1]); // JSON-LD ต้อง parse ได้เสมอ / must stay valid JSON
+      JSON.parse(block[1]); // JSON-LD must stay valid.
     } catch {
       fail("JSON-LD เสียหลังการย่อไฟล์", "JSON-LD broke during minification");
     }
