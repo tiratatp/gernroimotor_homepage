@@ -68,6 +68,28 @@ jobs:
           grep -q "<style>" template.html
           grep -q "</style>" template.html
 
+      # Image guardrails / กฎสำหรับรูปภาพ: only JPG or PNG, each <= 5 MB.
+      # The deploy job shrinks images automatically, so phone photos are
+      # fine — but a wrong format (e.g. HEIC) or a huge file fails HERE
+      # with a red X; the live site keeps the previous version.
+      # อัปโหลดได้เฉพาะ JPG/PNG ไม่เกิน 5 MB ต่อรูป — ระบบจะย่อรูปให้เอง
+      # ตอนเผยแพร่ ถ้าไฟล์ผิดประเภทหรือใหญ่เกินจะขึ้นกากบาทแดงตรงนี้
+      # (เว็บเดิมยังทำงานปกติ)
+      - name: Check image files (ตรวจสอบไฟล์รูปภาพ)
+        run: |
+          shopt -s nullglob
+          for f in images/*; do
+            case "$f" in
+              *.jpg|*.jpeg|*.png|*.JPG|*.JPEG|*.PNG) ;;
+              *) echo "ERROR / ข้อผิดพลาด: $f ไม่ใช่ไฟล์ JPG หรือ PNG (only JPG or PNG allowed in images/)"; exit 1;;
+            esac
+            size=$(stat -c%s "$f")
+            if [ "$size" -gt 5242880 ]; then
+              echo "ERROR / ข้อผิดพลาด: $f ใหญ่เกิน 5 MB (larger than 5 MB) — กรุณาย่อรูปให้เล็กลงก่อนอัปโหลด"
+              exit 1
+            fi
+          done
+
   # ---- Job 2: deploy (only on main, only if validate passed) ----
   deploy:
     name: Deploy to GitHub Pages
@@ -82,6 +104,27 @@ jobs:
 
       - name: Build website from template (สร้างเว็บไซต์จาก template)
         run: python3 build.py
+
+      # Optimize images + minify index.html (ย่อรูปภาพและไฟล์ HTML อัตโนมัติ)
+      # Runs AFTER build.py and only in this deploy job — template.html keeps
+      # its readable comments; only the deployed copy is minified.
+      # ทำเฉพาะตอนเผยแพร่เท่านั้น — template.html ยังอ่าน/แก้ได้เหมือนเดิม
+      # Tools install OUTSIDE the repo so node_modules never lands in the
+      # Pages artifact. / ติดตั้งเครื่องมือไว้นอก repo กัน node_modules หลุดขึ้นเว็บ
+      - name: Install optimizer tools (ติดตั้งเครื่องมือย่อไฟล์)
+        run: npm install --prefix "$RUNNER_TEMP/optimizer" --no-save --no-package-lock sharp html-minifier-terser
+
+      - name: Optimize images and minify HTML (ย่อรูปภาพและย่อไฟล์ HTML)
+        run: node .github/optimize.mjs
+        env:
+          OPTIMIZER_MODULES: ${{ runner.temp }}/optimizer
+
+      # The minified output must still pass the sentinel checks.
+      # ตรวจซ้ำหลังย่อไฟล์ว่าส่วนสำคัญยังอยู่ครบ
+      - name: Re-check sentinels after minify (ตรวจสอบซ้ำหลังย่อไฟล์)
+        run: |
+          grep -q "</html>" index.html
+          grep -q 'application/ld+json' index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

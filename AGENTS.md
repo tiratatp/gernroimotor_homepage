@@ -25,6 +25,26 @@ template.html  +  variables.txt  --(python3 build.py)-->  index.html  (+ robots.
 - Never hardcode shop facts (name, phone, address, socials, URL) in
   `template.html` — always use a token. `variables.txt` is the single source.
 
+## Deploy-time optimization (CI only)
+
+The deploy job runs `.github/optimize.mjs` (Node, sharp + html-minifier-terser,
+installed into `$RUNNER_TEMP` so `node_modules` never enters the artifact) after
+`build.py`. It only touches the **built** output — `template.html` stays readable:
+
+- Every `images/*.jpg|png` is resized to ≤1200px (no upscale), EXIF-rotated,
+  recompressed, and gets a `.webp` sibling.
+- In `index.html`, relative `images/...` references are switched to the WebP:
+  `<img>` becomes `<picture>` (JPEG/PNG fallback kept), CSS `url("images/...")`
+  (hero) and `<link rel="preload">` are rewritten. **Absolute** URLs
+  (`og:image`, JSON-LD → `og-cover.jpg`) keep JPEG for Facebook/LINE crawlers.
+- `index.html` is then minified (comments/whitespace stripped) and self-checked
+  (`</html>`, both JSON-LD blocks must parse, no `{{` tokens).
+- The validate job rejects non-JPG/PNG files and images > 5 MB.
+- `images/*.webp` is gitignored — WebP exists only in the deployed artifact.
+- Local preview note: the script is CI-only; running it locally requires
+  `OPTIMIZER_MODULES=<dir with sharp + html-minifier-terser> node .github/optimize.mjs`
+  and it rewrites `images/` in place.
+
 ## Verify after any template/variables change
 
 ```bash
