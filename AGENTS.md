@@ -19,7 +19,8 @@ template.html  +  variables.txt  --(python3 build.py)-->  index.html  (+ robots.
   `{{TOKEN}}` placeholders in `template.html` with values from `variables.txt`
   and fails with bilingual Thai/English errors on: missing `=`, empty value,
   duplicate key, bad key name (`[A-Z_]+` only), or a template token with no
-  matching variable.
+  matching variable. It also rejects malformed/unmatched placeholders and
+  invalid URL, phone, postal-code, or social-identifier formats.
 - Adding a variable: put `{{NEW_TOKEN}}` in `template.html`, add
   `NEW_TOKEN = value` in `variables.txt`. Nothing else — build.py validates.
 - Never hardcode shop facts (name, phone, address, socials, URL) in
@@ -27,9 +28,10 @@ template.html  +  variables.txt  --(python3 build.py)-->  index.html  (+ robots.
 
 ## Deploy-time optimization (CI only)
 
-The deploy job runs `.github/optimize.mjs` (Node, sharp + html-minifier-terser,
+The build job runs `.github/optimize.mjs` (Node, sharp + html-minifier-terser,
 installed into `$RUNNER_TEMP` so `node_modules` never enters the artifact) after
-`build.py`. It only touches the **built** output — `template.html` stays readable:
+tests and `build.py`. It validates and uploads that same **built** output;
+`template.html` stays readable:
 
 - Every `images/*.jpg|png` is resized to ≤1200px (no upscale), EXIF-rotated,
   recompressed, and gets a `.webp` sibling.
@@ -39,7 +41,7 @@ installed into `$RUNNER_TEMP` so `node_modules` never enters the artifact) after
   (`og:image`, JSON-LD → `og-cover.jpg`) keep JPEG for Facebook/LINE crawlers.
 - `index.html` is then minified (comments/whitespace stripped) and self-checked
   (`</html>`, both JSON-LD blocks must parse, no `{{` tokens).
-- The validate job rejects non-JPG/PNG files and images > 5 MB.
+- The build job rejects non-JPG/PNG files and images > 5 MB.
 - `images/*.webp` is gitignored — WebP exists only in the deployed artifact.
 - Local preview note: the script is CI-only; running it locally requires
   `OPTIMIZER_MODULES=<dir with sharp + html-minifier-terser> node .github/optimize.mjs`
@@ -48,9 +50,10 @@ installed into `$RUNNER_TEMP` so `node_modules` never enters the artifact) after
 ## Verify after any template/variables change
 
 ```bash
+python3 -m unittest discover -s tests -v
 python3 build.py                 # must print OK
 grep -c "{{" index.html          # must be 0 (no unreplaced tokens)
-npx --yes html-validate@11 index.html   # same check CI runs; config: .htmlvalidate.json
+npx --yes html-validate@11.9.0 index.html   # same check CI runs; config: .htmlvalidate.json
 open index.html                  # visual check
 ```
 
@@ -61,9 +64,9 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
 
 ## Editing conventions (do not break these — they are the product)
 
-- **Bilingual comments (Thai + English) are the maintainer interface.** Never strip
-  or "clean up" comments in `template.html`, `variables.txt`, `build.py`, or the
-  workflow file.
+- Preserve bilingual maintainer comments in `template.html` and `variables.txt`.
+  Comments in `*.py` and `.github/*` are English-only; runtime errors and
+  user-facing text remain bilingual or Thai as appropriate.
 - Editable text regions carry `<!-- EDIT ME / แก้ไขตรงนี้: ... -->`; images carry
   `<!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: ... -->`. Keep the markers when editing.
 - Repeating blocks (service card, gallery figure, hours row, contact card, brand
@@ -95,5 +98,6 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
 ## Deployment
 
 Deployed by the Actions workflow, **not** "Deploy from branch" — repo
-Settings → Pages → Source must be **GitHub Actions**. Artifact path is `.`
-(the repo root), so everything committed at root is published.
+Settings → Pages → Source must be **GitHub Actions**. The workflow stages `_site`
+with only `index.html`, `robots.txt`, `sitemap.xml`, optimized `images/`, and an
+optional `CNAME`; source files, tests, workflows, and README are not published.
