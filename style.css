@@ -100,12 +100,15 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .header-brand { font-size: 1.2rem; font-weight: 700; color: var(--color-primary); text-decoration: none; white-space: nowrap; }
 .header-brand:hover { text-decoration: none; }
 
-/* ปุ่มโทร — มือถือ: ไอคอนอย่างเดียว / เดสก์ท็อป: ไอคอน + ข้อความ */
+/* ปุ่มโทร — มือถือ: ไอคอนอย่างเดียว / เดสก์ท็อป: ไอคอน + ข้อความ
+   margin-left: auto ดันปุ่มโทรไปชิดขวา เรียงข้างปุ่ม ≡ (ระยะห่างจาก gap ของ .header-inner)
+   margin-left: auto pushes the call button to the right, next to ≡ */
 .header-call {
   display: inline-flex; align-items: center; gap: 0.4rem;
   background: var(--color-primary); color: var(--color-white) !important;
   font-weight: 600; padding: 0.6rem; border-radius: var(--radius-sm);
   text-decoration: none; white-space: nowrap;
+  margin-left: auto;
 }
 .header-call:hover { background: var(--color-primary-dark); text-decoration: none; }
 .call-icon { display: inline-flex; }
@@ -160,6 +163,7 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   }
   .header-call {
     order: 3;
+    margin-left: 0; /* เดสก์ท็อป: space-between จัดตำแหน่งเอง / desktop: space-between handles placement */
     padding: 0.5rem clamp(0.6rem, 1.25vw, 1rem);
     font-size: clamp(0.85rem, 0.65rem + 0.55vw, 1.0625rem);
   }
