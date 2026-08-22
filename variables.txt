@@ -1,0 +1,47 @@
+# ================================================================
+# ข้อมูลหลักของร้าน — แก้ไขไฟล์นี้ไฟล์เดียว ทุกที่ในเว็บจะเปลี่ยนตาม
+# Shop's main info — edit THIS ONE FILE and the whole site updates.
+#
+# วิธีแก้: เปลี่ยนเฉพาะข้อความหลังเครื่องหมาย = เท่านั้น
+#         ห้ามลบหรือเปลี่ยนชื่อตัวแปรฝั่งซ้ายของ =
+# How to edit: change ONLY the text after the = sign.
+#              Never delete or rename the NAME part before the =.
+#
+# ตัวอย่าง / example:   SHOP_NAME = ร้านมอเตอร์ไซค์สมชาย
+# ================================================================
+
+# ชื่อร้าน (แสดงบนหน้าเว็บ ชื่อแท็บเบราว์เซอร์ และข้อมูลสำหรับ Google)
+# Shop name (shown on the page, browser tab title, and Google data)
+SHOP_NAME = ชื่อร้านมอเตอร์ไซค์
+
+# เบอร์โทรแบบมีขีด สำหรับแสดงบนหน้าเว็บ
+# Phone number WITH dashes, for display on the page
+PHONE_DISPLAY = 02-000-0000
+
+# เบอร์โทรแบบไม่มีขีด (ตัวเลขล้วน) สำหรับปุ่มกดโทรและข้อมูล Google
+# Phone number WITHOUT dashes (digits only), for the call button and Google data
+PHONE_TEL = 0200000000
+
+# ที่อยู่ร้าน: เลขที่ ถนน แขวง เขต (ไม่ต้องใส่ กรุงเทพมหานคร และรหัสไปรษณีย์ ระบบใส่ให้เอง)
+# Street address: no., road, subdistrict, district (city and postal code are added automatically)
+ADDRESS = เลขที่ ถนน แขวง เขต
+
+# รหัสไปรษณีย์ 5 หลัก
+# 5-digit postal code
+POSTAL_CODE = XXXXX
+
+# LINE ID ของร้าน (ไม่ต้องใส่ @ ข้างหน้า)
+# Shop LINE ID (without the leading @)
+LINE_ID = yourlineid
+
+# ชื่อเพจ Facebook (ส่วนท้ายของลิงก์ เช่น facebook.com/ชื่อเพจ)
+# Facebook page name (the part after facebook.com/)
+FACEBOOK_PAGE = yourpage
+
+# โดเมนจริงของเว็บ เช่น https://www.yourshop.com/ (ต้องขึ้นต้นด้วย https:// และลงท้ายด้วย /)
+# The site's real domain, e.g. https://www.yourshop.com/ (must start with https:// and end with /)
+SITE_URL = https://www.example.com/
+
+# ชื่อบัญชี TikTok ไม่ต้องใส่เครื่องหมาย @
+# TikTok username (without the leading @)
+TIKTOK_USER = yourtiktok
