@@ -7,41 +7,46 @@
 # How to edit: change ONLY the text after the = sign.
 #              Never delete or rename the NAME part before the =.
 #
-# ตัวอย่าง / example:   SHOP_NAME = ร้านมอเตอร์ไซค์สมชาย
+# ตัวอย่าง / example:   SHOP_NAME = เกินร้อยมอเตอร์
 # ================================================================
 
 # ชื่อร้าน (แสดงบนหน้าเว็บ ชื่อแท็บเบราว์เซอร์ และข้อมูลสำหรับ Google)
 # Shop name (shown on the page, browser tab title, and Google data)
-SHOP_NAME = ชื่อร้านมอเตอร์ไซค์
+SHOP_NAME = เกินร้อยมอเตอร์
 
 # เบอร์โทรแบบมีขีด สำหรับแสดงบนหน้าเว็บ
 # Phone number WITH dashes, for display on the page
-PHONE_DISPLAY = 02-000-0000
+PHONE_DISPLAY = 096-142-6542
 
 # เบอร์โทรแบบไม่มีขีด (ตัวเลขล้วน) สำหรับปุ่มกดโทรและข้อมูล Google
 # Phone number WITHOUT dashes (digits only), for the call button and Google data
-PHONE_TEL = 0200000000
+PHONE_TEL = 0961426542
+
+# เบอร์โทรสำรอง (เบอร์ที่ 2 บนป้ายหน้าร้าน) แบบมีขีด / แบบตัวเลขล้วน
+# Second phone number (shown on the shop sign), with dashes / digits only
+PHONE_BACKUP_DISPLAY = 094-595-9624
+PHONE_BACKUP_TEL = 0945959624
 
 # ที่อยู่ร้าน: เลขที่ ถนน แขวง เขต (ไม่ต้องใส่ กรุงเทพมหานคร และรหัสไปรษณีย์ ระบบใส่ให้เอง)
 # Street address: no., road, subdistrict, district (city and postal code are added automatically)
-ADDRESS = เลขที่ ถนน แขวง เขต
+ADDRESS = 545 ซอยโชคชัย 4 แยก 63 แขวงลาดพร้าว เขตลาดพร้าว
 
 # รหัสไปรษณีย์ 5 หลัก
 # 5-digit postal code
-POSTAL_CODE = XXXXX
+POSTAL_CODE = 10230
 
 # LINE ID ของร้าน (ไม่ต้องใส่ @ ข้างหน้า)
 # Shop LINE ID (without the leading @)
-LINE_ID = yourlineid
+LINE_ID = 485txeto
 
 # ชื่อเพจ Facebook (ส่วนท้ายของลิงก์ เช่น facebook.com/ชื่อเพจ)
 # Facebook page name (the part after facebook.com/)
-FACEBOOK_PAGE = yourpage
+FACEBOOK_PAGE = gernroimotor
 
 # โดเมนจริงของเว็บ เช่น https://www.yourshop.com/ (ต้องขึ้นต้นด้วย https:// และลงท้ายด้วย /)
 # The site's real domain, e.g. https://www.yourshop.com/ (must start with https:// and end with /)
-SITE_URL = https://www.example.com/
+SITE_URL = https://tiratatp.github.io/aimmy_landing_page/
 
 # ชื่อบัญชี TikTok ไม่ต้องใส่เครื่องหมาย @
 # TikTok username (without the leading @)
-TIKTOK_USER = yourtiktok
+TIKTOK_USER = 100motor.bkk

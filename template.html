@@ -1,5 +1,5 @@
 <!-- ================================================================ -->
-<!-- ไฟล์นี้คือ "แม่แบบ" ของเว็บร้าน (template.html)                      -->
+<!-- ไฟล์นี้คือ "แม่แบบ" ของเว็บร้านเกินร้อยมอเตอร์ (template.html)           -->
 <!-- ระบบ GitHub สร้าง index.html จากไฟล์นี้อัตโนมัติ — ห้ามแก้ index.html โดยตรง -->
 <!-- แก้ไขได้ง่ายและปลอดภัย 3 อย่าง:                                    -->
 <!--   1) ข้อมูลที่ใช้ซ้ำหลายที่ (ชื่อร้าน เบอร์โทร ที่อยู่ LINE            -->
@@ -21,10 +21,10 @@
   <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) — แก้ที่นั่น ไม่ใช่ตรงนี้ -->
   <!-- ข้อความ description/keywords ด้านล่างแก้ได้ตรงนี้ (สำหรับ Google)  -->
   <!-- ====================================================== -->
-  <title>{{SHOP_NAME}} | ซ่อม ขาย อะไหล่ กรุงเทพฯ</title>
-  <meta name="description" content="แก้ไขตรงนี้: คำอธิบายร้าน 1-2 ประโยค เช่น ร้านซ่อมและจำหน่ายมอเตอร์ไซค์ในกรุงเทพฯ บริการซ่อมบำรุง รถมือสอง รถใหม่ อะไหล่และอุปกรณ์แต่ง">
-  <meta name="keywords" content="แก้ไขตรงนี้: ซ่อมมอเตอร์ไซค์, รถจักรยานยนต์มือสอง, อะไหล่มอเตอร์ไซค์, กรุงเทพฯ, ชื่อร้าน">
-  <meta name="author" content="แก้ไขตรงนี้: ชื่อร้าน">
+  <title>{{SHOP_NAME}} | ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ ลาดพร้าว กรุงเทพฯ</title>
+  <meta name="description" content="ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ ร้านขายมอเตอร์ไซค์ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ ออกรถง่าย ออกได้ทุกอาชีพ บริการหลังการขายครบวงจร โชคชัย 4 ซอย 63 ลาดพร้าว กรุงเทพฯ เปิดทุกวัน 8.30-18.30 น.">
+  <meta name="keywords" content="ขายมอเตอร์ไซค์, มอเตอร์ไซค์ฟรีดาวน์, ฮอนด้า, ยามาฮ่า, จีพีเอ็กซ์, รถมอเตอร์ไซค์ไฟฟ้า, ลาดพร้าว, โชคชัย 4, เกินร้อยมอเตอร์">
+  <meta name="author" content="{{SHOP_NAME}}">
 
   <!-- โดเมนดึงจาก variables.txt (SITE_URL) — แก้ที่ไฟล์นั้นไฟล์เดียว -->
   <link rel="canonical" href="{{SITE_URL}}">
@@ -34,19 +34,19 @@
   <!-- ชื่อร้าน/โดเมนดึงจาก variables.txt — แก้ได้เฉพาะคำอธิบายและรูปแชร์  -->
   <!-- ====================================================== -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="{{SHOP_NAME}} | ซ่อม ขาย อะไหล่ กรุงเทพฯ">
-  <meta property="og:description" content="แก้ไขตรงนี้: คำอธิบายร้านสั้นๆ สำหรับแชร์บน Facebook/LINE">
+  <meta property="og:title" content="{{SHOP_NAME}} | ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ ลาดพร้าว กรุงเทพฯ">
+  <meta property="og:description" content="ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ บริการหลังการขายครบวงจร เปิดทุกวัน 8.30-18.30 น.">
   <meta property="og:url" content="{{SITE_URL}}">
-  <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยนเป็น images/og-share.jpg (รูปขนาด 1200x630 สำหรับแชร์) -->
-  <meta property="og:image" content="https://placehold.co/1200x630/C8102E/FFFFFF?text=Share+Image">
+  <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปสำหรับแชร์บน Facebook/LINE (แนะนำ 1200x630) -->
+  <meta property="og:image" content="{{SITE_URL}}images/shop-front.jpg">
   <meta property="og:locale" content="th_TH">
   <meta property="og:site_name" content="{{SHOP_NAME}}">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{SHOP_NAME}} | ซ่อม ขาย อะไหล่ กรุงเทพฯ">
-  <meta name="twitter:description" content="แก้ไขตรงนี้: คำอธิบายร้านสั้นๆ">
-  <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยนเป็น images/og-share.jpg -->
-  <meta name="twitter:image" content="https://placehold.co/1200x630/C8102E/FFFFFF?text=Share+Image">
+  <meta name="twitter:title" content="{{SHOP_NAME}} | ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ ลาดพร้าว กรุงเทพฯ">
+  <meta name="twitter:description" content="ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ บริการหลังการขายครบวงจร">
+  <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปสำหรับแชร์บน Twitter -->
+  <meta name="twitter:image" content="{{SITE_URL}}images/shop-front.jpg">
 
   <!-- ====================================================== -->
   <!-- ฟอนต์ภาษาไทย "Sarabun" จาก Google Fonts                     -->
@@ -238,7 +238,7 @@
       /* เปลี่ยน URL ในบรรทัด url("...") ด้านล่าง เป็น images/รูปหน้าร้าน.jpg */
       /* (เหมือนการเปลี่ยนรูปในแกลเลอรี — ดู README.md ส่วน "เปลี่ยนรูปภาพ") */
       background: linear-gradient(rgba(26,26,26,0.55), rgba(26,26,26,0.65)),
-                  url("https://placehold.co/1600x900/1A1A1A/C8102E?text=Hero+Image")
+                  url("images/shop-front.jpg")
                   center / cover no-repeat;
     }
     .hero-content { max-width: 700px; }
@@ -390,10 +390,10 @@
       <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) -->
       <h1>{{SHOP_NAME}}</h1>
       <!-- EDIT ME / แก้ไขตรงนี้: แท็กไลน์ 1 บรรทัด (ขายตัวเองใน 1 ประโยค) -->
-      <p class="hero-tagline">แก้ไขตรงนี้: ซ่อม ขาย อะไหล่ มอเตอร์ไซค์ครบจบในที่เดียว ที่กรุงเทพฯ</p>
+      <p class="hero-tagline">ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ มีบริการหลังการขายครบวงจร</p>
       <div class="hero-buttons">
-        <!-- EDIT ME / แก้ไขตรงนี้: ลิงก์ Google Maps ของร้าน (เปิด Maps คลิก Share คัดลอกลิงก์) -->
-        <a href="https://www.google.com/maps/place/Bangkok" class="btn btn-primary">
+        <!-- EDIT ME / แก้ไขตรงนี้: ลิงก์นำทาง Google Maps ของร้าน (destination = พิกัดร้าน) -->
+        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=13.8192369%2C100.5962201&amp;travelmode=driving" class="btn btn-primary" target="_blank" rel="noopener">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:middle; margin-right:0.4rem;">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
             <circle cx="12" cy="10" r="3"/>
@@ -425,26 +425,28 @@
   <section class="section" id="services">
     <div class="container">
       <h2 class="section-title">บริการของเรา</h2>
-      <p class="section-intro">แก้ไขตรงนี้: แนะนำบริการของร้าน 1-2 ประโยค</p>
+      <p class="section-intro">บริการเกินร้อย ใส่ใจเกินล้าน — ออกรถง่าย ออกได้ทุกอาชีพ ใช้แค่บัตรประชาชนใบเดียว</p>
 
       <div class="services-grid">
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดบริการ 1 ใบ -->
         <article class="service-card">
-          <!-- ไอคอน: ประแจ (ซ่อมบำรุง) — เปลี่ยนไอคอนได้โดยแทนที่ path ใน svg -->
+          <!-- ไอคอน: เปอร์เซ็นต์ (ฟรีดาวน์) — เปลี่ยนไอคอนได้โดยแทนที่ path ใน svg -->
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            <line x1="19" y1="5" x2="5" y2="19"/>
+            <circle cx="6.5" cy="6.5" r="2.5"/>
+            <circle cx="17.5" cy="17.5" r="2.5"/>
           </svg>
           <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
-          <h3>ซ่อมบำรุงรถจักรยานยนต์</h3>
+          <h3>ฟรีดาวน์ ออกรถง่าย</h3>
           <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
-          <p>แก้ไขตรงนี้: ซ่อมเครื่อง เปลี่ยนน้ำมัน ตรวจเช็คระบบ โดยช่างผู้เชี่ยวชาญ</p>
+          <p>ออกได้ทุกอาชีพ ใช้แค่บัตรประชาชนใบเดียว ติดประวัติ ปรึกษาฟรี</p>
         </article>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดบริการ 1 ใบ -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดบริการ 1 ใบ -->
         <article class="service-card">
-          <!-- ไอคอน: รถมอเตอร์ไซค์ (รถมือสอง) -->
+          <!-- ไอคอน: รถมอเตอร์ไซค์ (รถใหม่หลายยี่ห้อ) -->
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="5.5" cy="17.5" r="3.5"/>
             <circle cx="18.5" cy="17.5" r="3.5"/>
@@ -453,41 +455,38 @@
             <path d="M9 11l2-3h4"/>
           </svg>
           <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
-          <h3>รถมือสอง</h3>
+          <h3>รถใหม่ ทุกรุ่น ทุกยี่ห้อ</h3>
           <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
-          <p>แก้ไขตรงนี้: รถมือสองคุณภาพดี หลายยี่ห้อ ราคายุติธรรม สภาพพร้อมใช้งาน</p>
+          <p>ฮอนด้า ยามาฮ่า จีพีเอ็กซ์ และรถมอเตอร์ไซค์ไฟฟ้า พร้อมส่งมอบ</p>
         </article>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดบริการ 1 ใบ -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดบริการ 1 ใบ -->
         <article class="service-card">
-          <!-- ไอคอน: รถใหม่ (ดาว = ใหม่) -->
+          <!-- ไอคอน: ของขวัญ (ส่วนลดและของแถม) -->
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <circle cx="5.5" cy="17.5" r="3.5"/>
-            <circle cx="18.5" cy="17.5" r="3.5"/>
-            <path d="M5.5 17.5L9 11h7l2.5 6.5"/>
-            <path d="M9 11l2-3h4"/>
-            <path d="M19 2l.6 1.8L21.5 4.4l-1.8.6L19 6.8l-.6-1.8L16.6 4.4l1.8-.6L19 2z"/>
+            <rect x="3" y="8" width="18" height="4" rx="1"/>
+            <path d="M12 8v13"/>
+            <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/>
+            <path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/>
           </svg>
           <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
-          <h3>รถใหม่</h3>
+          <h3>ส่วนลดเยอะ ของแถมเพียบ</h3>
           <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
-          <p>แก้ไขตรงนี้: รถใหม่หลายรุ่น พร้อมบริการหลังการขาย ผ่อนชำระสะดวก</p>
+          <p>โปรโมชั่นทุกเดือน ส่วนลดพิเศษ พร้อมของแถมครบทุกคัน</p>
         </article>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดบริการ 1 ใบ -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดบริการ 1 ใบ -->
         <article class="service-card">
-          <!-- ไอคอน: กล่องอะไหล่ (อะไหล่และอุปกรณ์แต่ง) -->
+          <!-- ไอคอน: ประแจ (บริการหลังการขาย) -->
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-            <path d="M3.27 6.96L12 12.01l8.73-5.05"/>
-            <path d="M12 22V12"/>
+            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>
           <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
-          <h3>อะไหล่และอุปกรณ์แต่ง</h3>
+          <h3>บริการหลังการขายครบวงจร</h3>
           <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
-          <p>แก้ไขตรงนี้: อะไหล่แท้ อุปกรณ์แต่ง หมวกกันน็อก และอุปกรณ์เสริมครบครัน</p>
+          <p>ดูแลรถของคุณตลอดการใช้งาน ซ่อมบำรุงโดยช่างผู้เชี่ยวชาญ</p>
         </article>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดบริการ 1 ใบ -->
 
@@ -502,22 +501,18 @@
   <section class="section" id="brands">
     <div class="container">
       <!-- EDIT ME / แก้ไขตรงนี้: ชื่อส่วนยี่ห้อ -->
-      <h2 class="section-title">ยี่ห้อที่เราจำหน่ายและซ่อม</h2>
+      <h2 class="section-title">ยี่ห้อที่เราจำหน่าย</h2>
       <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้น -->
-      <p class="section-intro">แก้ไขตรงนี้: เพิ่มหรือลดยี่ห้อให้ตรงกับของจริงในร้าน</p>
+      <p class="section-intro">มอเตอร์ไซค์ใหม่ ทุกรุ่น ทุกยี่ห้อ พร้อมรถมอเตอร์ไซค์ไฟฟ้า</p>
 
       <!-- EDIT ME / แก้ไขตรงนี้: เปลี่ยนชื่อยี่ห้อ หรือก๊อปปี้ li เพื่อเพิ่มยี่ห้อ -->
       <ul class="brand-chips">
         <li class="chip">Honda</li>
         <li class="chip">Yamaha</li>
-        <li class="chip">Suzuki</li>
-        <li class="chip">Kawasaki</li>
-        <li class="chip">GPX</li>
-        <li class="chip">Vespa</li>
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ยี่ห้อ 1 ยี่ห้อ -->
-        <li class="chip">Stallions</li>
+        <li class="chip">GPX</li>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดยี่ห้อ 1 ยี่ห้อ -->
-        <li class="chip">Royal Enfield</li>
+        <li class="chip">รถมอเตอร์ไซค์ไฟฟ้า</li>
       </ul>
     </div>
   </section>
@@ -532,12 +527,12 @@
       <div class="about-text">
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ย่อหน้า 1 ย่อหน้า -->
         <!-- EDIT ME / แก้ไขตรงนี้: เนื้อหาแนะนำร้าน -->
-        <p>แก้ไขตรงนี้: แนะนำประวัติร้าน ประสบการณ์ และความมุ่งมั่นในการให้บริการ เช่น ร้านเราเปิดมากว่า 10 ปี มีช่างผู้เชี่ยวชาญ ใส่ใจทุกคันที่เข้าร้าน</p>
+        <p>{{SHOP_NAME}} คือศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำย่านโชคชัย 4 ลาดพร้าว กรุงเทพฯ เราขายมอเตอร์ไซค์ทุกรุ่น ทุกยี่ห้อ ทั้งฮอนด้า ยามาฮ่า จีพีเอ็กซ์ และรถมอเตอร์ไซค์ไฟฟ้า ด้วยปรัชญา "บริการเกินร้อย ใส่ใจเกินล้าน"</p>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดย่อหน้า 1 ย่อหน้า -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ย่อหน้า 1 ย่อหน้า (คัดลอกบล็อกนี้เพื่อเพิ่มย่อหน้าใหม่) -->
         <!-- EDIT ME / แก้ไขตรงนี้: เนื้อหาย่อหน้าที่ 2 -->
-        <p>แก้ไขตรงนี้: ย่อหน้าที่สอง — เพิ่มรายละเอียด เช่น รับประกันงานซ่อม บริการรวดเร็ว ราคายุติธรรม</p>
+        <p>ออกรถง่าย ออกได้ทุกอาชีพ ฟรีดาวน์ ใช้แค่บัตรประชาชนใบเดียว ติดประวัติก็ปรึกษาได้ฟรี พร้อมส่วนลดเยอะ ของแถมเพียบ และบริการหลังการขายครบวงจรที่ดูแลรถของคุณตลอดการใช้งาน</p>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดย่อหน้า 1 ย่อหน้า -->
       </div>
     </div>
@@ -550,43 +545,25 @@
   <section class="section" id="gallery">
     <div class="container">
       <h2 class="section-title">ภาพหน้าร้าน</h2>
-      <p class="section-intro">แก้ไขตรงนี้: แนะนำภาพหน้าร้าน 1 ประโยค</p>
+      <p class="section-intro">หน้าร้านที่โชคชัย 4 ซอย 63 — มอเตอร์ไซค์พร้อมขายหลากหลายรุ่น</p>
 
       <div class="gallery-grid">
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปภาพ 1 รูป -->
         <figure>
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน URL เป็น images/รูปของคุณ.jpg -->
-          <img src="https://placehold.co/600x450/C8102E/FFFFFF?text=Photo+1" alt="แก้ไขตรงนี้: คำอธิบายรูปภาพภาษาไทย เช่น หน้าร้านมอเตอร์ไซค์" loading="lazy" width="600" height="450">
+          <img src="images/shop-front.jpg" alt="หน้าร้านเกินร้อยมอเตอร์ โชคชัย 4 มีมอเตอร์ไซค์จอดเรียงหน้าร้านจำนวนมาก" loading="lazy" width="600" height="450">
           <!-- EDIT ME / แก้ไขตรงนี้: คำบรรยายใต้รูป -->
-          <figcaption>แก้ไขตรงนี้: คำบรรยายใต้รูปที่ 1</figcaption>
+          <figcaption>หน้าร้าน โชคชัย 4 ซอย 63</figcaption>
         </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปภาพ 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปภาพ 1 รูป -->
         <figure>
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน URL เป็น images/รูปของคุณ.jpg -->
-          <img src="https://placehold.co/600x450/1A1A1A/C8102E?text=Photo+2" alt="แก้ไขตรงนี้: คำอธิบายรูปภาพภาษาไทย เช่น พื้นที่ซ่อมในร้าน" loading="lazy" width="600" height="450">
+          <img src="images/logo.jpg" alt="โลโก้ร้านเกินร้อยมอเตอร์ ตัวอักษรสีขาวบนพื้นสีแดง" loading="lazy" width="600" height="450">
           <!-- EDIT ME / แก้ไขตรงนี้: คำบรรยายใต้รูป -->
-          <figcaption>แก้ไขตรงนี้: คำบรรยายใต้รูปที่ 2</figcaption>
-        </figure>
-        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปภาพ 1 รูป -->
-
-        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปภาพ 1 รูป -->
-        <figure>
-          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน URL เป็น images/รูปของคุณ.jpg -->
-          <img src="https://placehold.co/600x450/C8102E/FFFFFF?text=Photo+3" alt="แก้ไขตรงนี้: คำอธิบายรูปภาพภาษาไทย เช่น รถมอเตอร์ไซค์ในสต็อก" loading="lazy" width="600" height="450">
-          <!-- EDIT ME / แก้ไขตรงนี้: คำบรรยายใต้รูป -->
-          <figcaption>แก้ไขตรงนี้: คำบรรยายใต้รูปที่ 3</figcaption>
-        </figure>
-        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปภาพ 1 รูป -->
-
-        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปภาพ 1 รูป -->
-        <figure>
-          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน URL เป็น images/รูปของคุณ.jpg -->
-          <img src="https://placehold.co/600x450/1A1A1A/C8102E?text=Photo+4" alt="แก้ไขตรงนี้: คำอธิบายรูปภาพภาษาไทย เช่น อะไหล่และอุปกรณ์" loading="lazy" width="600" height="450">
-          <!-- EDIT ME / แก้ไขตรงนี้: คำบรรยายใต้รูป -->
-          <figcaption>แก้ไขตรงนี้: คำบรรยายใต้รูปที่ 4</figcaption>
+          <figcaption>เกินร้อยมอเตอร์ — บริการเกินร้อย ใส่ใจเกินล้าน</figcaption>
         </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปภาพ 1 รูป -->
 
@@ -610,7 +587,7 @@
                → คัดลอกเฉพาะ URL ในส่วน src="..." มาวางแทน URL ด้านล่าง -->
           <iframe
             class="map-embed"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387193.30591910525!2d100.525!3d13.725!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x311d6032280d61f3%3A0x1010bdb2970a0e0!2sBangkok!5e0!3m2!1sen!2sth!4v0000000000000"
+            src="https://maps.google.com/maps?q=%E0%B9%80%E0%B8%81%E0%B8%B4%E0%B8%99%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A2%E0%B8%A1%E0%B8%AD%E0%B9%80%E0%B8%95%E0%B8%AD%E0%B8%A3%E0%B9%8C%20%E0%B9%82%E0%B8%8A%E0%B8%84%E0%B8%8A%E0%B8%B1%E0%B8%A2%204&z=17&output=embed"
             title="แผนที่ร้าน" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           <!-- ที่อยู่ดึงจาก variables.txt (ADDRESS + POSTAL_CODE) -->
           <p class="address-line">{{ADDRESS}} กรุงเทพมหานคร {{POSTAL_CODE}}</p>
@@ -618,41 +595,8 @@
 
         <div>
           <h3 style="font-size:1.3rem; font-weight:600; margin-bottom:var(--space-sm);">เวลาเปิดทำการ</h3>
-          <table class="hours-table">
-            <thead>
-              <tr>
-                <th scope="col">วัน</th>
-                <th scope="col">เวลา</th>
-              </tr>
-            </thead>
-            <tbody>
-
-              <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: 1 วัน -->
-              <!-- EDIT ME / แก้ไขตรงนี้: ชื่อวันและเวลา -->
-              <tr>
-                <td>จันทร์ - ศุกร์</td>
-                <td>08:00 - 18:00 น.</td>
-              </tr>
-              <!-- TO HERE / ถึงตรงนี้: สิ้นสุด 1 วัน -->
-
-              <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: 1 วัน -->
-              <!-- EDIT ME / แก้ไขตรงนี้: ชื่อวันและเวลา -->
-              <tr>
-                <td>เสาร์</td>
-                <td>08:00 - 17:00 น.</td>
-              </tr>
-              <!-- TO HERE / ถึงตรงนี้: สิ้นสุด 1 วัน -->
-
-              <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: 1 วัน -->
-              <!-- EDIT ME / แก้ไขตรงนี้: ชื่อวันและเวลา -->
-              <tr>
-                <td>อาทิตย์</td>
-                <td>ปิดทำการ</td>
-              </tr>
-              <!-- TO HERE / ถึงตรงนี้: สิ้นสุด 1 วัน -->
-
-            </tbody>
-          </table>
+          <!-- EDIT ME / แก้ไขตรงนี้: วันและเวลาเปิดทำการ -->
+          <p style="font-size:1.3rem;"><strong style="color:var(--color-primary);">เปิดทุกวัน</strong><br>08:30 - 18:30 น.</p>
         </div>
       </div>
     </div>
@@ -665,7 +609,7 @@
   <section class="section" id="contact">
     <div class="container">
       <h2 class="section-title">ติดต่อเรา</h2>
-      <p class="section-intro">แก้ไขตรงนี้: เชิญติดต่อสอบถามหรือเข้ามาที่ร้านได้ทุกวันทำการ</p>
+      <p class="section-intro">สอบถามรุ่นรถ โปรโมชั่น หรือเข้ามาชมรถจริงที่ร้านได้ทุกวัน 8.30-18.30 น.</p>
 
       <ul class="contact-list">
 
@@ -677,6 +621,18 @@
               <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
             </svg>
             <span>โทรศัพท์<small>{{PHONE_DISPLAY}}</small></span>
+          </a>
+        </li>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางติดต่อ 1 ช่อง -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ช่องทางติดต่อ 1 ช่อง -->
+        <!-- เบอร์โทรสำรองดึงจาก variables.txt (PHONE_BACKUP_TEL / PHONE_BACKUP_DISPLAY) -->
+        <li>
+          <a href="tel:{{PHONE_BACKUP_TEL}}" class="contact-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>โทรศัพท์ (สำรอง)<small>{{PHONE_BACKUP_DISPLAY}}</small></span>
           </a>
         </li>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางติดต่อ 1 ช่อง -->
@@ -700,7 +656,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
             </svg>
-            <span>Facebook<small>facebook.com/{{FACEBOOK_PAGE}}</small></span>
+            <span>Facebook<small>@{{FACEBOOK_PAGE}}</small></span>
           </a>
         </li>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางติดต่อ 1 ช่อง -->
@@ -709,8 +665,10 @@
         <!-- บัญชี TikTok ดึงจาก variables.txt (TIKTOK_USER) ไม่ต้องแก้ตรงนี้ -->
         <li>
           <a href="https://www.tiktok.com/@{{TIKTOK_USER}}" class="contact-item" target="_blank" rel="noopener">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true">
-              <path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 18V5l12-2v13"/>
+              <circle cx="6" cy="18" r="3"/>
+              <circle cx="18" cy="16" r="3"/>
             </svg>
             <span>TikTok<small>@{{TIKTOK_USER}}</small></span>
           </a>
@@ -731,7 +689,7 @@
       <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) -->
       <p class="footer-brand">{{SHOP_NAME}}</p>
       <!-- EDIT ME: แก้ปีลิขสิทธิ์ได้ตรงนี้ — ชื่อร้านดึงจาก variables.txt -->
-      <small>&copy; 2024 {{SHOP_NAME}} สงวนลิขสิทธิ์</small>
+      <small>&copy; 2026 {{SHOP_NAME}} สงวนลิขสิทธิ์</small>
     </div>
   </footer>
 
@@ -746,7 +704,7 @@
     "@context": "https://schema.org",
     "@type": "MotorcycleDealer",
     "name": "{{SHOP_NAME}}",
-    "image": "https://placehold.co/1200x630/C8102E/FFFFFF?text=Shop+Photo",
+    "image": "{{SITE_URL}}images/shop-front.jpg",
     "@id": "{{SITE_URL}}",
     "url": "{{SITE_URL}}",
     "telephone": "{{PHONE_TEL}}",
@@ -762,21 +720,19 @@
     "openingHoursSpecification": [
       {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-        "opens": "08:00",
-        "closes": "18:00"
-      },
-      {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": "Saturday",
-        "opens": "08:00",
-        "closes": "17:00"
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "08:30",
+        "closes": "18:30"
       }
+    ],
+    "sameAs": [
+      "https://www.facebook.com/{{FACEBOOK_PAGE}}",
+      "https://www.tiktok.com/@{{TIKTOK_USER}}"
     ],
     "geo": {
       "@type": "GeoCoordinates",
-      "latitude": "0.000000",
-      "longitude": "0.000000"
+      "latitude": "13.8192369",
+      "longitude": "100.5962201"
     }
   }
   </script>
