@@ -9,9 +9,10 @@ accurate.
 ## Build system (the crux)
 
 `index.html` is **generated** — never edit it (it is gitignored and overwritten).
+Same for `robots.txt` and `sitemap.xml` — build.py generates them from `SITE_URL`.
 
 ```
-template.html  +  variables.txt  --(python3 build.py)-->  index.html
+template.html  +  variables.txt  --(python3 build.py)-->  index.html  (+ robots.txt, sitemap.xml)
 ```
 
 - `build.py` is **stdlib-only Python 3** (no pip installs, ever). It substitutes
