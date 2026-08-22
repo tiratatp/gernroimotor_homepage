@@ -102,7 +102,7 @@
 
     /* ===== Reset พื้นฐาน / base reset ===== */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html { scroll-behavior: smooth; scroll-padding-top: 6rem; -webkit-text-size-adjust: 100%; }
     body {
       font-family: var(--font-family);
       color: var(--color-text);
@@ -221,18 +221,29 @@
     .header-nav a:hover { color: var(--color-primary); text-decoration: none; }
 
     @media (min-width: 768px) {
-      .header-inner { padding: 0 var(--space-md); }
-      .header-brand { font-size: 1.35rem; }
+      /* ขนาด/ระยะห่างไหลตามความกว้างจอ (768→1280) ให้พอดีที่ 768px โดยไม่หักบรรทัด
+         Fluid sizing/spacing (768→1280) so Thai nav labels stay on one line at 768px */
+      .header-inner { padding: 0 clamp(0.6rem, 1.8vw, 1.5rem); }
+      .header-brand { font-size: clamp(1.2rem, 0.85rem + 0.6vw, 1.35rem); }
       .nav-hamburger { display: none; }
       .header-nav {
         display: flex;
         position: static; flex-direction: row;
         box-shadow: none; border: none; padding: 0;
-        gap: 0.25rem var(--space-sm); align-items: center;
+        gap: 0.25rem clamp(0.5rem, calc(-0.25rem + 1.56vw), 1rem); align-items: center;
         order: 2;
       }
-      .header-call { order: 3; padding: 0.5rem 1rem; }
-      .header-nav a { padding: 0.35rem 0.5rem; border-radius: var(--radius-sm); }
+      .header-call {
+        order: 3;
+        padding: 0.5rem clamp(0.6rem, 1.25vw, 1rem);
+        font-size: clamp(0.85rem, 0.65rem + 0.55vw, 1.0625rem);
+      }
+      .header-nav a {
+        padding: 0.35rem clamp(0.35rem, 0.7vw, 0.5rem);
+        font-size: clamp(0.85rem, 0.65rem + 0.55vw, 0.95rem);
+        border-radius: var(--radius-sm);
+        white-space: nowrap;
+      }
       .header-nav a + a { border-top: none; }
       .call-text { display: inline; }
       .call-icon { display: none; }
@@ -369,7 +380,7 @@
       <a href="#top" class="header-brand">{{SHOP_NAME}}</a>
 
       <!-- เบอร์โทรดึงจาก variables.txt (PHONE_DISPLAY / PHONE_TEL) -->
-      <a href="tel:{{PHONE_TEL}}" class="header-call">
+      <a href="tel:{{PHONE_TEL}}" class="header-call" aria-label="โทร: {{PHONE_DISPLAY}}">
         <span class="call-icon" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
@@ -617,7 +628,7 @@
           <!-- EDIT ME / แก้ไขตรงนี้: คำถาม -->
           <h3>ติดเครดิตบูโรหรือเคยมีประวัติผ่อนไม่ดี ออกรถได้ไหม</h3>
           <!-- EDIT ME / แก้ไขตรงนี้: คำตอบ -->
-          <p>ปรึกษาได้ฟรี เราพิจารณาเป็นครณี ๆ ออกได้ทุกอาชีพ ทักมาคุยกันก่อนได้ทาง LINE หรือโทรศัพท์</p>
+          <p>ปรึกษาได้ฟรี เราพิจารณาเป็นกรณี ๆ ออกได้ทุกอาชีพ ทักมาคุยกันก่อนได้ทาง LINE หรือโทรศัพท์</p>
         </div>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดคำถาม-คำตอบ 1 ข้อ -->
 
@@ -878,7 +889,7 @@
         "name": "ติดเครดิตบูโรหรือเคยมีประวัติผ่อนไม่ดี ออกรถได้ไหม",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "ปรึกษาได้ฟรี เราพิจารณาเป็นครณี ๆ ออกได้ทุกอาชีพ ทักมาคุยกันก่อนได้ทาง LINE หรือโทรศัพท์"
+          "text": "ปรึกษาได้ฟรี เราพิจารณาเป็นกรณี ๆ ออกได้ทุกอาชีพ ทักมาคุยกันก่อนได้ทาง LINE หรือโทรศัพท์"
         }
       },
       {
