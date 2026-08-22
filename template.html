@@ -142,7 +142,9 @@
     }
 
     /* ====================================================== */
-    /* 1. HEADER — แถบบนสุด (ชื่อร้าน + ปุ่มโทร)                     */
+    /* 1. HEADER — แถบบนสุด (ชื่อร้าน + ปุ่มโทร + เมนู)                */
+    /*    มือถือ: ปุ่มแฮมเบอร์เกอร์เปิดเมนูแบบเดรอปดาวน์ (ไม่มี JS)     */
+    /*    เดสก์ท็อป: ลิงก์แสดงเรียงในบรรทัดเดียว                          */
     /* ====================================================== */
     .site-header {
       position: sticky; top: 0; z-index: 100;
@@ -151,28 +153,77 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
     .header-inner {
-      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-      gap: var(--space-xs) var(--space-sm);
+      display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between;
+      gap: var(--space-sm);
       min-height: var(--header-height);
       padding: 0.5rem var(--space-sm);
       max-width: var(--max-width); margin: 0 auto;
     }
-    .header-brand { font-size: 1.2rem; font-weight: 700; color: var(--color-primary); text-decoration: none; }
+    .header-brand { font-size: 1.2rem; font-weight: 700; color: var(--color-primary); text-decoration: none; white-space: nowrap; }
     .header-brand:hover { text-decoration: none; }
-    .header-nav { display: flex; flex-wrap: wrap; gap: 0.25rem var(--space-sm); align-items: center; }
+
+    /* ปุ่มโทร — มือถือ: ไอคอนอย่างเดียว / เดสก์ท็อป: ไอคอน + ข้อความ */
+    .header-call {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: var(--color-primary); color: var(--color-white) !important;
+      font-weight: 600; padding: 0.6rem; border-radius: var(--radius-sm);
+      text-decoration: none; white-space: nowrap;
+    }
+    .header-call:hover { background: var(--color-primary-dark); text-decoration: none; }
+    .call-icon { display: inline-flex; }
+    .call-text { display: none; }
+
+    /* ปุ่มแฮมเบอร์เกอร์ (checkbox + label — ไม่มี JavaScript) */
+    /* Hamburger (checkbox hack — no JS). ห้ามใช้ details/summary: Chrome ซ่อนเนื้อหาด้วย UA !important แก้ด้วย CSS ไม่ได้ */
+    .nav-checkbox {
+      position: absolute; width: 1px; height: 1px;
+      opacity: 0; pointer-events: none;
+    }
+    .nav-hamburger {
+      width: 44px; height: 44px;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+      color: var(--color-text); cursor: pointer;
+    }
+    .nav-hamburger:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .nav-checkbox:focus-visible + .nav-hamburger { outline: 3px solid var(--color-primary); outline-offset: 2px; }
+    .icon-close { display: none; }
+    .nav-checkbox:checked ~ .nav-hamburger .icon-open { display: none; }
+    .nav-checkbox:checked ~ .nav-hamburger .icon-close { display: inline-block; }
+
+    /* เมนูนำทาง — มือถือ: ซ่อน แล้วเปิดเป็นเดรอปดาวน์ / เดสก์ท็อป: แสดงในบรรทัด */
+    .header-nav { display: none; }
+    .nav-checkbox:checked ~ .header-nav {
+      display: flex; flex-direction: column;
+      position: absolute; top: 100%; left: 0; right: 0;
+      background: var(--color-bg);
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+      padding: var(--space-xs) 0; z-index: 99;
+    }
     .header-nav a {
       color: var(--color-text); font-weight: 500; font-size: 0.95rem;
-      padding: 0.35rem 0.5rem; border-radius: var(--radius-sm); text-decoration: none;
+      padding: 0.85rem var(--space-sm); text-decoration: none;
     }
+    .header-nav a + a { border-top: 1px solid var(--color-border); }
     .header-nav a:hover { color: var(--color-primary); text-decoration: none; }
-    .header-call {
-      background: var(--color-primary); color: var(--color-white) !important;
-      font-weight: 600; padding: 0.5rem 1rem !important;
-    }
-    .header-call:hover { background: var(--color-primary-dark); }
+
     @media (min-width: 768px) {
       .header-inner { padding: 0 var(--space-md); }
       .header-brand { font-size: 1.35rem; }
+      .nav-hamburger { display: none; }
+      .header-nav {
+        display: flex;
+        position: static; flex-direction: row;
+        box-shadow: none; border: none; padding: 0;
+        gap: 0.25rem var(--space-sm); align-items: center;
+        order: 2;
+      }
+      .header-call { order: 3; padding: 0.5rem 1rem; }
+      .header-nav a { padding: 0.35rem 0.5rem; border-radius: var(--radius-sm); }
+      .header-nav a + a { border-top: none; }
+      .call-text { display: inline; }
+      .call-icon { display: none; }
     }
 
     /* ====================================================== */
@@ -280,14 +331,44 @@
 <body>
 
   <!-- ================================================================ -->
-  <!-- 1. HEADER — แถบบนสุด: ชื่อร้าน + เมนูลิงก์ + ปุ่มโทร                  -->
-  <!--    เมนูเป็นลิงก์ธรรมดาที่ขึ้นบรรทัดใหม่บนมือถือเอง (ไม่มีปุ่มแฮมเบอร์เกอร์) -->
+  <!-- 1. HEADER — แถบบนสุด: ชื่อร้าน + ปุ่มโทร + เมนู                      -->
+  <!--    มือถือ: กดปุ่มแฮมเบอร์เกอร์ (≡) เพื่อเปิดเมนูแบบเดรอปดาวน์          -->
+  <!--    (ใช้ checkbox + label ไม่มี JavaScript)                          -->
+  <!--    เดสก์ท็อป: ลิงก์เมนูแสดงเรียงในบรรทัดเดียว                        -->
+  <!--    มี <nav> เดียวที่ใช้ร่วมทั้งสองโหมด — เพิ่ม/ลบลิงก์ที่ตรงนี้ที่เดียว    -->
+  <!--    Mobile: tap the hamburger (≡) to open a dropdown menu          -->
+  <!--    (uses a checkbox + label, no JavaScript).                       -->
+  <!--    Desktop: nav links show inline in one row.                      -->
+  <!--    ONE <nav> serves both — add/remove links in this single list.   -->
   <!-- ================================================================ -->
   <header class="site-header">
     <div class="header-inner">
       <!-- EDIT ME / แก้ไขตรงนี้: ชื่อร้าน (แก้ทั้งใน href และข้อความ) -->
       <a href="#top" class="header-brand">{{SHOP_NAME}}</a>
 
+      <!-- เบอร์โทรดึงจาก variables.txt (PHONE_DISPLAY / PHONE_TEL) -->
+      <a href="tel:{{PHONE_TEL}}" class="header-call">
+        <span class="call-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+        </span>
+        <span class="call-text">โทร: {{PHONE_DISPLAY}}</span>
+      </a>
+
+      <input type="checkbox" id="nav-toggle" class="nav-checkbox" aria-label="เปิด/ปิดเมนูนำทาง">
+      <label for="nav-toggle" class="nav-hamburger">
+        <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16"/>
+          <path d="M4 12h16"/>
+          <path d="M4 17h16"/>
+        </svg>
+        <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12"/>
+          <path d="M18 6L6 18"/>
+        </svg>
+      </label>
+      <!-- EDIT ME / แก้ไขตรงนี้: เพิ่ม/ลบลิงก์เมนูใน <nav> นี้ที่เดียว (ใช้ร่วมทั้งมือถือและเดสก์ท็อป) -->
       <nav class="header-nav" aria-label="เมนูหลัก">
         <a href="#services">บริการ</a>
         <a href="#brands">ยี่ห้อ</a>
@@ -295,8 +376,6 @@
         <a href="#gallery">ภาพหน้าร้าน</a>
         <a href="#location">ที่ตั้ง/เวลา</a>
         <a href="#contact">ติดต่อเรา</a>
-        <!-- เบอร์โทรดึงจาก variables.txt (PHONE_DISPLAY / PHONE_TEL) -->
-        <a href="tel:{{PHONE_TEL}}" class="header-call">โทร: {{PHONE_DISPLAY}}</a>
       </nav>
     </div>
   </header>

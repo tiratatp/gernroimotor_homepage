@@ -163,8 +163,15 @@ Do not invent new wrapper structures, class names, or comment conventions.
   A pasted 5th item reflows automatically — no CSS change needed.
 - **Brand chips** (`.brand-chips` / `.chip`): flex-wrap pill list, `gap: var(--space-xs)`,
   `border-radius: 999px`, centered. Pasting a new `<li class="chip">` reflows automatically.
-- **Header nav wraps**: plain flex-wrap, no hamburger, no JS. Links reflow to a second
-  line on narrow screens.
+- **Header nav (mobile)**: checkbox hack (`#nav-toggle` + `<label class="nav-hamburger">`)
+  opens a full-width dropdown — no JavaScript. Call button
+  is icon-only on mobile (`.call-text` hidden). One shared `<nav class="header-nav">`
+  serves both mobile and desktop — add/remove links in that single list only.
+- **Header nav (desktop ≥768px)**: hamburger label hidden, `.header-nav` shown as an
+  inline row (flex `order` puts nav between brand and call button). Call button shows icon + text.
+- **Do NOT use `<details>/<summary>` for the nav**: Chrome hides closed-details children
+  with a UA `!important` rule (`content-visibility: hidden`) that author CSS cannot beat —
+  the desktop inline nav renders invisible. The checkbox hack is author-controlled and safe.
 - **Hero**: `min-height: 70vh` (mobile) / `75vh` (768px+). Background image with dark
   gradient overlay for text contrast.
 
