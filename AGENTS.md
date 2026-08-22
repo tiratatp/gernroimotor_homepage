@@ -1,9 +1,10 @@
 # AGENTS.md — Instructions for AI Agents
 
-Single-page Thai-language landing page for a Bangkok motorcycle shop. No framework,
-no JS build, no dependencies. Hosted on GitHub Pages. The human maintainer edits
-only `variables.txt` and `template.html` through the GitHub web UI; `README.md`
-(written in Thai for non-technical maintainers) is their guide — keep it accurate.
+Single-page Thai-language landing page for เกินร้อยมอเตอร์, a Bangkok motorcycle
+dealer. No framework, no JS build, no dependencies. Hosted on GitHub Pages. The
+human maintainer edits only `variables.txt` and `template.html` through the GitHub
+web UI; `README.md` (written in Thai for the shop admin) is their guide — keep it
+accurate.
 
 ## Build system (the crux)
 
