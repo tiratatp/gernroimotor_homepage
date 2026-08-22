@@ -1,0 +1,265 @@
+/* ================================================================ */
+/* style.css — สไตล์ทั้งหมดของเว็บ / all site styles                 */
+/* แก้สีได้ที่ :root ด้านล่าง / edit colors in :root below           */
+/* ส่วนอื่นคือโครงสร้างเว็บ — ระวังการแก้ / the rest is structure    */
+/* ================================================================ */
+
+/* ====================================================== */
+/* CHANGE COLORS HERE / เปลี่ยนสีที่นี่                        */
+/* เปลี่ยนค่าด้านล่าง — สีทั้งหน้าเปลี่ยนพร้อมกัน              */
+/* Change the values below to recolor the whole page.    */
+/* ====================================================== */
+:root {
+  --color-primary: #C8102E;          /* สีหลัก (ปุ่ม, ตัวเน้น) — racing red */
+  --color-primary-dark: #A00D24;     /* สีหลักเข้ม (เวลาเอาเมาส์ชี้) / hover */
+  --color-text: #1A1A1A;             /* สีตัวอักษรเข้ม / main text */
+  --color-text-muted: #5A5A5A;       /* สีตัวอักษรอ่อน / secondary text */
+  --color-bg: #FFFFFF;               /* สีพื้นหลัง / page background */
+  --color-surface: #F6F6F6;          /* สีพื้นกล่อง/การ์ด / cards */
+  --color-surface-alt: #EFEFEF;      /* สีพื้นสลับ (ส่วนสีอ่อน) / alternating sections */
+  --color-border: #E0E0E0;           /* สีเส้นขอบ / borders */
+  --color-white: #FFFFFF;
+
+  --font-family: "Sarabun", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --max-width: 1100px;
+}
+
+/* ===== Reset พื้นฐาน / base reset ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 6rem; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: var(--font-family);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+  font-size: 17px;
+  overflow-x: hidden; /* กันหน้ากว้างเกินจอมือถือ / no horizontal overflow */
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--color-primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ===== ปุ่ม / buttons ===== */
+.btn {
+  display: inline-block;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 1.05rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  text-decoration: none;
+  line-height: 1.4;
+}
+.btn svg { vertical-align: middle; margin-right: 0.4rem; }
+.btn-primary { background: var(--color-primary); color: var(--color-white); }
+.btn-primary:hover { background: var(--color-primary-dark); text-decoration: none; }
+.btn-secondary { background: transparent; color: var(--color-white); border-color: var(--color-white); }
+.btn-secondary:hover { background: rgba(255,255,255,0.15); text-decoration: none; }
+.btn:active { transform: scale(0.98); }
+
+/* ===== กล่องกลางหน้า + หัวข้อส่วน / container + section headings ===== */
+.container { max-width: var(--max-width); margin: 0 auto; padding: 0 var(--space-sm); }
+.section { padding: var(--space-xl) 0; }
+/* สลับสีพื้นทุกส่วนที่ 2, 4, 6... อัตโนมัติ — ห้ามลบ / alternating background, do not delete */
+main > section:nth-of-type(even) { background: var(--color-surface-alt); }
+.section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-sm); color: var(--color-text); }
+.section-intro { color: var(--color-text-muted); max-width: 60ch; margin-bottom: var(--space-lg); }
+
+@media (min-width: 768px) {
+  body { font-size: 18px; }
+  .section-title { font-size: 2rem; }
+  .container { padding: 0 var(--space-md); }
+}
+
+/* ===== 1. HEADER — แถบบนสุด (ชื่อร้าน + ปุ่มโทร + เมนู) ===== */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.header-inner {
+  display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between;
+  gap: var(--space-sm);
+  min-height: 64px;
+  padding: 0.5rem var(--space-sm);
+  max-width: var(--max-width); margin: 0 auto;
+}
+.header-brand { font-size: 1.2rem; font-weight: 700; color: var(--color-primary); text-decoration: none; white-space: nowrap; }
+.header-brand:hover { text-decoration: none; }
+
+/* ปุ่มโทร — มือถือ: ไอคอนอย่างเดียว / เดสก์ท็อป: ไอคอน + ข้อความ */
+.header-call {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  background: var(--color-primary); color: var(--color-white) !important;
+  font-weight: 600; padding: 0.6rem; border-radius: var(--radius-sm);
+  text-decoration: none; white-space: nowrap;
+}
+.header-call:hover { background: var(--color-primary-dark); text-decoration: none; }
+.call-icon { display: inline-flex; }
+.call-text { display: none; }
+
+/* Hamburger = checkbox hack (no JS). ห้ามใช้ details/summary: Chrome ซ่อนเนื้อหาด้วย UA !important แก้ด้วย CSS ไม่ได้ */
+.nav-checkbox {
+  position: absolute; width: 1px; height: 1px;
+  opacity: 0; pointer-events: none;
+}
+.nav-hamburger {
+  width: 44px; height: 44px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
+  color: var(--color-text); cursor: pointer;
+}
+.nav-hamburger:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.nav-checkbox:focus-visible + .nav-hamburger { outline: 3px solid var(--color-primary); outline-offset: 2px; }
+.icon-close { display: none; }
+.nav-checkbox:checked ~ .nav-hamburger .icon-open { display: none; }
+.nav-checkbox:checked ~ .nav-hamburger .icon-close { display: inline-block; }
+
+/* เมนู — มือถือ: เดรอปดาวน์เมื่อติ๊ก checkbox / เดสก์ท็อป: แถวเดียว */
+.header-nav { display: none; }
+.nav-checkbox:checked ~ .header-nav {
+  display: flex; flex-direction: column;
+  position: absolute; top: 100%; left: 0; right: 0;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+  padding: var(--space-xs) 0; z-index: 99;
+}
+.header-nav a {
+  color: var(--color-text); font-weight: 500; font-size: 0.95rem;
+  padding: 0.85rem var(--space-sm); text-decoration: none;
+}
+.header-nav a + a { border-top: 1px solid var(--color-border); }
+.header-nav a:hover { color: var(--color-primary); text-decoration: none; }
+
+@media (min-width: 768px) {
+  /* ขนาดไหลตามความกว้างจอ (768→1280) ให้เมนูภาษาไทยไม่หักบรรทัดที่ 768px
+     Fluid sizing so Thai nav labels stay on one line at 768px */
+  .header-inner { padding: 0 clamp(0.6rem, 1.8vw, 1.5rem); }
+  .header-brand { font-size: clamp(1.2rem, 0.85rem + 0.6vw, 1.35rem); }
+  .nav-hamburger { display: none; }
+  .header-nav {
+    display: flex;
+    position: static; flex-direction: row;
+    box-shadow: none; border: none; padding: 0;
+    gap: 0.25rem clamp(0.5rem, calc(-0.25rem + 1.56vw), 1rem); align-items: center;
+    order: 2;
+  }
+  .header-call {
+    order: 3;
+    padding: 0.5rem clamp(0.6rem, 1.25vw, 1rem);
+    font-size: clamp(0.85rem, 0.65rem + 0.55vw, 1.0625rem);
+  }
+  .header-nav a {
+    padding: 0.35rem clamp(0.35rem, 0.7vw, 0.5rem);
+    font-size: clamp(0.85rem, 0.65rem + 0.55vw, 0.95rem);
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+  }
+  .header-nav a + a { border-top: none; }
+  .call-text { display: inline; }
+  .call-icon { display: none; }
+}
+
+/* ===== 2. HERO — ส่วนแรก (ชื่อร้าน + ปุ่ม) ===== */
+.hero {
+  position: relative; color: var(--color-white); text-align: center;
+  padding: var(--space-xl) var(--space-sm);
+  min-height: 70vh;
+  display: flex; align-items: center; justify-content: center;
+  /* SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปพื้นหลังส่วนแรก — เปลี่ยน url("...") ด้านล่าง */
+  background: linear-gradient(rgba(26,26,26,0.55), rgba(26,26,26,0.65)),
+              url("images/shop-front.jpg")
+              center / cover no-repeat;
+}
+.hero-content { max-width: 700px; }
+.hero h1 { font-size: clamp(1.75rem, 8vw, 3rem); font-weight: 700; line-height: 1.3; margin-bottom: var(--space-sm); }
+.hero-tagline { font-size: 1.15rem; margin-bottom: var(--space-lg); opacity: 0.95; }
+.hero-buttons { display: flex; flex-wrap: wrap; gap: var(--space-sm); justify-content: center; }
+@media (min-width: 768px) {
+  .hero { min-height: 75vh; }
+  .hero h1 { font-size: 3rem; }
+  .hero-tagline { font-size: 1.3rem; }
+}
+
+/* ===== 3. ABOUT + SERVICES — เกี่ยวกับเรา + บริการ ===== */
+.about-text p { max-width: 65ch; margin-bottom: var(--space-md); color: var(--color-text); }
+.subsection-title { font-size: 1.3rem; font-weight: 600; margin-top: var(--space-lg); margin-bottom: var(--space-sm); color: var(--color-text); }
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); }
+.service-card {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius); padding: var(--space-md); text-align: center;
+}
+.service-card svg { color: var(--color-primary); margin-bottom: var(--space-sm); }
+.service-card h4 { font-size: 1.15rem; font-weight: 600; margin-bottom: var(--space-xs); }
+.service-card p { color: var(--color-text-muted); font-size: 0.95rem; }
+
+/* ===== 3b. BRANDS + MODELS — ยี่ห้อและรุ่นรถ (chip pills) ===== */
+.chip-group-label { font-size: 1.15rem; font-weight: 600; margin-top: var(--space-lg); margin-bottom: var(--space-sm); color: var(--color-text); }
+.chip-group-intro { color: var(--color-text-muted); max-width: 60ch; margin-bottom: var(--space-sm); }
+.brand-chips { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-xs); justify-content: center; }
+.chip { background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 999px; padding: 0.4rem 1rem; font-weight: 600; }
+
+/* ===== 4. FAQ — คำถามที่พบบ่อย (เส้นคั่นบาง ๆ คำตอบแสดงตลอด) ===== */
+.faq-list { display: grid; gap: 0; }
+.faq-item { background: none; border: none; border-radius: 0; border-top: 1px solid var(--color-border); padding: var(--space-sm) 0; }
+.faq-item:last-child { border-bottom: 1px solid var(--color-border); }
+.faq-item h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: var(--space-xs); }
+.faq-item p { color: var(--color-text-muted); }
+
+/* ===== 5. GALLERY — ภาพหน้าร้าน ===== */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); }
+.gallery-grid figure { border-radius: var(--radius); overflow: hidden; background: var(--color-surface); }
+.gallery-grid figcaption { padding: var(--space-xs) var(--space-sm); font-size: 0.9rem; color: var(--color-text-muted); text-align: center; }
+
+/* ===== 6. LOCATION & HOURS — ที่ตั้งและเวลาเปิดทำการ ===== */
+.location-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
+@media (min-width: 768px) { .location-grid { grid-template-columns: 1.2fr 1fr; } }
+.location-grid h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: var(--space-sm); }
+.map-embed { width: 100%; height: 350px; border: 0; border-radius: var(--radius); }
+.address-line { margin-top: var(--space-sm); color: var(--color-text-muted); }
+.hours { font-size: 1.3rem; }
+.hours strong { color: var(--color-primary); }
+
+/* ===== 7. CONTACT — ติดต่อเรา ===== */
+.contact-list { display: grid; grid-template-columns: 1fr; gap: var(--space-md); list-style: none; }
+@media (min-width: 600px) { .contact-list { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } }
+.contact-item {
+  display: flex; align-items: center; gap: var(--space-sm);
+  padding: var(--space-md); background: var(--color-surface);
+  border: 1px solid var(--color-border); border-radius: var(--radius);
+  color: var(--color-text); text-decoration: none; font-weight: 500;
+}
+.contact-item:hover { border-color: var(--color-primary); text-decoration: none; }
+.contact-item svg { color: var(--color-primary); flex-shrink: 0; }
+.contact-item span { display: flex; flex-direction: column; }
+.contact-item small { color: var(--color-text-muted); font-weight: 400; font-size: 0.85rem; }
+
+/* ===== 8. FOOTER — ส่วนล่างสุด ===== */
+.site-footer { background: var(--color-text); color: var(--color-surface-alt); padding: var(--space-lg) 0; text-align: center; }
+.site-footer .footer-brand { color: var(--color-white); font-weight: 600; margin-bottom: var(--space-xs); }
+.site-footer small { font-size: 0.85rem; opacity: 0.8; }
+
+/* ===== Accessibility: focus ring / แท็บคีย์บอร์ด ===== */
+a:focus-visible, .btn:focus-visible, .contact-item:focus-visible {
+  outline: 3px solid var(--color-primary); outline-offset: 2px; text-decoration: none;
+}
+
+/* ===== Accessibility: ลดอนิเมชัน / reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

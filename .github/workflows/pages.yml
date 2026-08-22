@@ -62,10 +62,10 @@ jobs:
       - name: Check copy-paste fences (ตรวจสอบเครื่องหมายคัดลอก)
         run: grep -q "คัดลอกตั้งแต่ตรงนี้" template.html
 
-      - name: Check embedded CSS (ตรวจสอบ CSS ในไฟล์)
+      - name: Check stylesheet (ตรวจสอบไฟล์ CSS)
         run: |
-          grep -q "<style>" template.html
-          grep -q "</style>" template.html
+          test -f style.css
+          grep -q 'rel="stylesheet" href="style.css"' template.html
 
       # Image guardrails: only JPG or PNG, each <= 5 MB.
       # This job shrinks images automatically, so phone photos are fine —
@@ -86,13 +86,13 @@ jobs:
             fi
           done
 
-      # Optimize images + minify the built index.html in this same job.
-      # template.html stays readable; only the staged deploy copy is minified.
+      # Optimize images + minify the built index.html and style.css in this
+      # same job. Sources stay readable; only the staged deploy copy is minified.
       # Tools install OUTSIDE the repo so node_modules cannot enter the artifact.
       - name: Install optimizer tools (ติดตั้งเครื่องมือย่อไฟล์)
-        run: npm install --prefix "$RUNNER_TEMP/optimizer" --no-save --no-package-lock sharp@0.35.3 html-minifier-terser@7.2.0
+        run: npm install --prefix "$RUNNER_TEMP/optimizer" --no-save --no-package-lock sharp@0.35.3 html-minifier-terser@7.2.0 clean-css@5.3.3
 
-      - name: Optimize images and minify HTML (ย่อรูปภาพและย่อไฟล์ HTML)
+      - name: Optimize images and minify HTML/CSS (ย่อรูปภาพและย่อไฟล์ HTML/CSS)
         run: node .github/optimize.mjs
         env:
           OPTIMIZER_MODULES: ${{ runner.temp }}/optimizer
@@ -113,7 +113,7 @@ jobs:
         run: |
           rm -rf _site
           mkdir -p _site/images
-          cp index.html robots.txt sitemap.xml _site/
+          cp index.html robots.txt sitemap.xml style.css _site/
           cp -R images/. _site/images/
           if [ -f CNAME ]; then cp CNAME _site/; fi
 

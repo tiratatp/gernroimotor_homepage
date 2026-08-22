@@ -1,7 +1,6 @@
 {
   "extends": ["html-validate:recommended"],
   "rules": {
-    "no-inline-style": "off",
     "no-trailing-whitespace": "off",
     "svg-focusable": "off",
     "tel-non-breaking": "off",
@@ -11,7 +10,6 @@
     "script-type": "off",
     "prefer-native-element": "off",
     "no-redundant-role": "off",
-    "no-style-tag": "off",
     "require-sri": "off",
     "require-csp-nonce": "off"
   }

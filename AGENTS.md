@@ -2,7 +2,8 @@
 
 Single-page Thai-language landing page for เกินร้อยมอเตอร์, a Bangkok motorcycle
 dealer. No framework, no JS build, no dependencies. Hosted on GitHub Pages. The
-human maintainer edits only `variables.txt` and `template.html` through the GitHub
+human maintainer edits only `variables.txt`, `template.html`, and `style.css`
+(colors section only) through the GitHub
 web UI; `README.md` (written in Thai for the shop admin) is their guide — keep it
 accurate.
 
@@ -28,23 +29,27 @@ template.html  +  variables.txt  --(python3 build.py)-->  index.html  (+ robots.
 
 ## Deploy-time optimization (CI only)
 
-The build job runs `.github/optimize.mjs` (Node, sharp + html-minifier-terser,
-installed into `$RUNNER_TEMP` so `node_modules` never enters the artifact) after
-tests and `build.py`. It validates and uploads that same **built** output;
-`template.html` stays readable:
+The build job runs `.github/optimize.mjs` (Node, sharp + html-minifier-terser +
+clean-css, installed into `$RUNNER_TEMP` so `node_modules` never enters the artifact)
+after tests and `build.py`. It validates and uploads that same **built** output;
+`template.html` and `style.css` stay readable:
 
 - Every `images/*.jpg|png` is resized to ≤1200px (no upscale), EXIF-rotated,
   recompressed, and gets a `.webp` sibling.
 - In `index.html`, relative `images/...` references are switched to the WebP:
-  `<img>` becomes `<picture>` (JPEG/PNG fallback kept), CSS `url("images/...")`
-  (hero) and `<link rel="preload">` are rewritten. **Absolute** URLs
-  (`og:image`, JSON-LD → `og-cover.jpg`) keep JPEG for Facebook/LINE crawlers.
+  `<img>` becomes `<picture>` (JPEG/PNG fallback kept) and `<link rel="preload">`
+  is rewritten. **Absolute** URLs (`og:image`, JSON-LD → `og-cover.jpg`) keep JPEG
+  for Facebook/LINE crawlers.
+- `style.css` gets its hero `url("images/...")` rewritten to the WebP (no CSS
+  fallback — background images can't do `<picture>`-style fallbacks, unchanged
+  behavior) and is then minified with clean-css level 2 (self-checks: `:root`
+  survives, no `{{` tokens).
 - `index.html` is then minified (comments/whitespace stripped) and self-checked
   (`</html>`, both JSON-LD blocks must parse, no `{{` tokens).
 - The build job rejects non-JPG/PNG files and images > 5 MB.
 - `images/*.webp` is gitignored — WebP exists only in the deployed artifact.
 - Local preview note: the script is CI-only; running it locally requires
-  `OPTIMIZER_MODULES=<dir with sharp + html-minifier-terser> node .github/optimize.mjs`
+  `OPTIMIZER_MODULES=<dir with sharp + html-minifier-terser + clean-css> node .github/optimize.mjs`
   and it rewrites `images/` in place.
 
 ## Verify after any template/variables change
@@ -58,17 +63,19 @@ open index.html                  # visual check
 ```
 
 CI (`.github/workflows/pages.yml`) additionally runs **sentinel greps** that will
-fail if you remove: `EDIT ME` and `คัดลอกตั้งแต่ตรงนี้` markers and `<style>`/`</style>`
-from `template.html`; `</html>` and `application/ld+json` from `index.html`.
+fail if you remove: `EDIT ME` and `คัดลอกตั้งแต่ตรงนี้` markers from
+`template.html`, the `style.css` stylesheet link from `template.html`,
+`style.css` itself, and `</html>` and `application/ld+json` from `index.html`.
 Deploy runs only on `main` after validate passes, so a red X never breaks the live site.
 
 ## Editing conventions (do not break these — they are the product)
 
-- Preserve bilingual maintainer comments in `template.html` and `variables.txt`.
-  Comments in `*.py` and `.github/*` are English-only; runtime errors and
+- Preserve bilingual maintainer comments in `template.html`, `variables.txt`, and
+  `style.css`. Comments in `*.py` and `.github/*` are English-only; runtime errors and
   user-facing text remain bilingual or Thai as appropriate.
 - Editable text regions carry `<!-- EDIT ME / แก้ไขตรงนี้: ... -->`; images carry
-  `<!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: ... -->`. Keep the markers when editing.
+  `<!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: ... -->` (the hero background's marker is a
+  `/* SWAP IMAGE ... */` comment in `style.css`). Keep the markers when editing.
 - Repeating blocks (service card, gallery figure, hours row, contact card, brand
   chip) are wrapped in `COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้` … `TO HERE / ถึงตรงนี้`
   fences. These are the maintainer's copy-paste units — preserve them intact.
@@ -76,9 +83,12 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
 
 ## Design constraints
 
-- All design tokens are CSS custom properties on `:root` in `template.html`
+- All design tokens are CSS custom properties on `:root` in `style.css`
   (marked `CHANGE COLORS HERE`). **One accent rule**: `--color-primary` (`#C8102E` red)
   is the only accent — no secondary accent anywhere.
+- **No inline styles, no `<style>` tag.** All CSS lives in `style.css`; enforce with
+  scoped selectors there (both rules are active in `.htmlvalidate.json` and covered
+  by tests).
 - Font: Sarabun (Google Fonts) with system fallback; Thai body line-height **1.7**.
 - **New sections must clone an existing section's markup** — same
   `<section class="section" id="…">` + `.container` + `.section-title` structure,
@@ -99,5 +109,5 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
 
 Deployed by the Actions workflow, **not** "Deploy from branch" — repo
 Settings → Pages → Source must be **GitHub Actions**. The workflow stages `_site`
-with only `index.html`, `robots.txt`, `sitemap.xml`, optimized `images/`, and an
+with only `index.html`, `style.css`, `robots.txt`, `sitemap.xml`, optimized `images/`, and an
 optional `CNAME`; source files, tests, workflows, and README are not published.
