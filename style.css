@@ -20,6 +20,9 @@
   --color-border: #E0E0E0;           /* สีเส้นขอบ / borders */
   --color-white: #FFFFFF;
 
+  --color-line: #06C755;             /* สีเขียว LINE (ปุ่ม LINE CTA ใน hero เท่านั้น — ข้อยกเว้น) / LINE green */
+  --color-line-dark: #05A847;        /* สีเขียว LINE เข้ม (hover) / LINE green hover */
+
   --font-family: "Sarabun", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
 
   --space-xs: 0.5rem;
@@ -67,6 +70,8 @@ a:hover { text-decoration: underline; }
 .btn-primary:hover { background: var(--color-primary-dark); text-decoration: none; }
 .btn-secondary { background: transparent; color: var(--color-white); border-color: var(--color-white); }
 .btn-secondary:hover { background: rgba(255,255,255,0.15); text-decoration: none; }
+.btn-line { background: var(--color-line); color: var(--color-text); }
+.btn-line:hover { background: var(--color-line-dark); text-decoration: none; }
 .btn:active { transform: scale(0.98); }
 
 /* ===== กล่องกลางหน้า + หัวข้อส่วน / container + section headings ===== */
@@ -83,12 +88,11 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   .container { padding: 0 var(--space-md); }
 }
 
-/* ===== 1. HEADER — แถบบนสุด (ชื่อร้าน + ปุ่มโทร + เมนู) ===== */
+/* ===== 1. HEADER — แถบบนสุด (ชื่อร้าน + เมนู) ===== */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: var(--color-bg);
-  border-bottom: 1px solid var(--color-border);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  background: var(--color-primary);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
 .header-inner {
   display: flex; flex-wrap: nowrap; align-items: center; justify-content: space-between;
@@ -97,22 +101,13 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   padding: 0.5rem var(--space-sm);
   max-width: var(--max-width); margin: 0 auto;
 }
-.header-brand { font-size: 1.2rem; font-weight: 700; color: var(--color-primary); text-decoration: none; white-space: nowrap; }
-.header-brand:hover { text-decoration: none; }
-
-/* ปุ่มโทร — มือถือ: ไอคอนอย่างเดียว / เดสก์ท็อป: ไอคอน + ข้อความ
-   margin-left: auto ดันปุ่มโทรไปชิดขวา เรียงข้างปุ่ม ≡ (ระยะห่างจาก gap ของ .header-inner)
-   margin-left: auto pushes the call button to the right, next to ≡ */
-.header-call {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  background: var(--color-primary); color: var(--color-white) !important;
-  font-weight: 600; padding: 0.6rem; border-radius: var(--radius-sm);
-  text-decoration: none; white-space: nowrap;
-  margin-left: auto;
+.header-brand {
+  min-height: 44px;
+  display: inline-flex; align-items: center;
+  font-size: 1.2rem; font-weight: 700; color: var(--color-white); text-decoration: none; white-space: nowrap;
 }
-.header-call:hover { background: var(--color-primary-dark); text-decoration: none; }
-.call-icon { display: inline-flex; }
-.call-text { display: none; }
+.header-brand:hover { text-decoration: none; }
+.header-brand:focus-visible { outline: 3px solid var(--color-white); outline-offset: 2px; }
 
 /* Hamburger = checkbox hack (no JS). ห้ามใช้ details/summary: Chrome ซ่อนเนื้อหาด้วย UA !important แก้ด้วย CSS ไม่ได้ */
 .nav-checkbox {
@@ -122,16 +117,16 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .nav-hamburger {
   width: 44px; height: 44px;
   display: inline-flex; align-items: center; justify-content: center;
-  border: 1px solid var(--color-border); border-radius: var(--radius-sm);
-  color: var(--color-text); cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.4); border-radius: var(--radius-sm);
+  color: var(--color-white); cursor: pointer;
 }
-.nav-hamburger:hover { border-color: var(--color-primary); color: var(--color-primary); }
-.nav-checkbox:focus-visible + .nav-hamburger { outline: 3px solid var(--color-primary); outline-offset: 2px; }
+.nav-hamburger:hover { border-color: var(--color-white); }
+.nav-checkbox:focus-visible + .nav-hamburger { outline: 3px solid var(--color-white); outline-offset: 2px; }
 .icon-close { display: none; }
 .nav-checkbox:checked ~ .nav-hamburger .icon-open { display: none; }
 .nav-checkbox:checked ~ .nav-hamburger .icon-close { display: inline-block; }
 
-/* เมนู — มือถือ: เดรอปดาวน์เมื่อติ๊ก checkbox / เดสก์ท็อป: แถวเดียว */
+/* เมนู — มือถือ: เดรอปดาวน์ขาวเมื่อติ๊ก checkbox / เดสก์ท็อป: แถวขาวบนแถบแดง */
 .header-nav { display: none; }
 .nav-checkbox:checked ~ .header-nav {
   display: flex; flex-direction: column;
@@ -147,6 +142,7 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 }
 .header-nav a + a { border-top: 1px solid var(--color-border); }
 .header-nav a:hover { color: var(--color-primary); text-decoration: none; }
+.header-nav a:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; }
 
 @media (min-width: 768px) {
   /* ขนาดไหลตามความกว้างจอ (768→1280) ให้เมนูภาษาไทยไม่หักบรรทัดที่ 768px
@@ -154,49 +150,54 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   .header-inner { padding: 0 clamp(0.6rem, 1.8vw, 1.5rem); }
   .header-brand { font-size: clamp(1.2rem, 0.85rem + 0.6vw, 1.35rem); }
   .nav-hamburger { display: none; }
-  .header-nav {
+  .header-nav,
+  .nav-checkbox:checked ~ .header-nav {
     display: flex;
     position: static; flex-direction: row;
+    background: transparent;
     box-shadow: none; border: none; padding: 0;
     gap: 0.25rem clamp(0.5rem, calc(-0.25rem + 1.56vw), 1rem); align-items: center;
-    order: 2;
-  }
-  .header-call {
-    order: 3;
-    margin-left: 0; /* เดสก์ท็อป: space-between จัดตำแหน่งเอง / desktop: space-between handles placement */
-    padding: 0.5rem clamp(0.6rem, 1.25vw, 1rem);
-    font-size: clamp(0.85rem, 0.65rem + 0.55vw, 1.0625rem);
   }
   .header-nav a {
+    min-height: 44px;
+    display: inline-flex; align-items: center;
+    color: var(--color-white); font-weight: 500;
     padding: 0.35rem clamp(0.35rem, 0.7vw, 0.5rem);
     font-size: clamp(0.85rem, 0.65rem + 0.55vw, 0.95rem);
     border-radius: var(--radius-sm);
     white-space: nowrap;
   }
   .header-nav a + a { border-top: none; }
-  .call-text { display: inline; }
-  .call-icon { display: none; }
+  .header-nav a:hover { color: var(--color-white); background: rgba(255,255,255,0.15); text-decoration: none; }
+  .header-nav a:focus-visible { outline: 3px solid var(--color-white); outline-offset: 2px; }
 }
 
-/* ===== 2. HERO — ส่วนแรก (ชื่อร้าน + ปุ่ม) ===== */
+/* ===== 2. HERO — ส่วนแรก (รูปหน้าร้าน + ชื่อร้าน + ปุ่ม LINE) ===== */
 .hero {
-  position: relative; color: var(--color-white); text-align: center;
-  padding: var(--space-xl) var(--space-sm);
-  min-height: 70vh;
-  display: flex; align-items: center; justify-content: center;
-  /* SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปพื้นหลังส่วนแรก — เปลี่ยน url("...") ด้านล่าง */
-  background: linear-gradient(rgba(26,26,26,0.55), rgba(26,26,26,0.65)),
-              url("images/shop-front.jpg")
-              center / cover no-repeat;
+  background: var(--color-bg);
+  text-align: center;
 }
-.hero-content { max-width: 700px; }
-.hero h1 { font-size: clamp(1.75rem, 8vw, 3rem); font-weight: 700; line-height: 1.3; margin-bottom: var(--space-sm); }
-.hero-tagline { font-size: 1.15rem; margin-bottom: var(--space-lg); opacity: 0.95; }
-.hero-buttons { display: flex; flex-wrap: wrap; gap: var(--space-sm); justify-content: center; }
+.hero-media { line-height: 0; }
+.hero-image { width: 100%; height: auto; display: block; }
+.hero-content {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-sm) var(--space-xl);
+}
+.hero h1 { font-size: clamp(1.75rem, 8vw, 3rem); font-weight: 700; line-height: 1.3; margin-bottom: var(--space-sm); color: var(--color-text); }
+.hero-tagline { font-size: 1.15rem; margin-bottom: var(--space-lg); color: var(--color-text-muted); }
+.nowrap { white-space: nowrap; }
+.hero-content .btn-line {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
 @media (min-width: 768px) {
-  .hero { min-height: 75vh; }
+  .hero-image { max-width: 700px; margin-left: auto; margin-right: auto; }
   .hero h1 { font-size: 3rem; }
   .hero-tagline { font-size: 1.3rem; }
+  .hero-content .btn-line { display: inline-block; width: auto; max-width: none; }
 }
 
 /* ===== 3. ABOUT + SERVICES — เกี่ยวกับเรา + บริการ ===== */

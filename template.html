@@ -27,8 +27,8 @@
   <link rel="icon" type="image/png" sizes="144x144" href="images/favicon.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
-  <!-- โหลดรูปพื้นหลังส่วนแรกล่วงหน้า หน้าเว็บจะแสดงผลเร็วขึ้น (ช่วยคะแนน LCP) -->
-  <!-- Preload the hero background image so the page renders faster (helps LCP) -->
+  <!-- โหลดรูปหน้าร้านส่วนแรกล่วงหน้า หน้าเว็บจะแสดงผลเร็วขึ้น (ช่วยคะแนน LCP) -->
+  <!-- Preload the hero image so the page renders faster (helps LCP) -->
   <link rel="preload" as="image" href="images/shop-front.jpg">
 
   <!-- โดเมนดึงจาก variables.txt (SITE_URL) — แก้ที่ไฟล์นั้นไฟล์เดียว -->
@@ -61,7 +61,7 @@
 <body>
 
   <!-- ================================================================ -->
-  <!-- 1. HEADER — แถบบนสุด: ชื่อร้าน + ปุ่มโทร + เมนู                      -->
+  <!-- 1. HEADER — แถบบนสุด: ชื่อร้าน + เมนู                              -->
   <!--    มือถือ: ปุ่ม ≡ เปิดเมนู (checkbox ไม่มี JS) / เดสก์ท็อป: เมนูแถวเดียว -->
   <!--    <nav> เดียวใช้ร่วมทั้งสองโหมด — เพิ่ม/ลบลิงก์ใน <nav> นี้ที่เดียว    -->
   <!-- ================================================================ -->
@@ -69,16 +69,6 @@
     <div class="header-inner">
       <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) -->
       <a href="#top" class="header-brand">{{SHOP_NAME}}</a>
-
-      <!-- เบอร์โทรดึงจาก variables.txt (PHONE_DISPLAY / PHONE_TEL) -->
-      <a href="tel:{{PHONE_TEL}}" class="header-call" aria-label="โทร: {{PHONE_DISPLAY}}">
-        <span class="call-icon" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-          </svg>
-        </span>
-        <span class="call-text">โทร: {{PHONE_DISPLAY}}</span>
-      </a>
 
       <input type="checkbox" id="nav-toggle" class="nav-checkbox" aria-label="เปิด/ปิดเมนูนำทาง">
       <label for="nav-toggle" class="nav-hamburger">
@@ -106,38 +96,26 @@
   <main>
 
   <!-- ================================================================ -->
-  <!-- 2. HERO — ส่วนแรกที่เห็น: ชื่อร้าน + แท็กไลน์ + ปุ่มโทร + ปุ่มแผนที่    -->
+  <!-- 2. HERO — ส่วนแรกที่เห็น: รูปหน้าร้าน + ชื่อร้าน + แท็กไลน์ + ปุ่ม LINE  -->
   <!-- ================================================================ -->
   <section class="hero" id="top">
+    <div class="hero-media">
+      <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปหน้าร้านส่วนแรก — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+      <!-- SWAP IMAGE: hero shop-front photo — change src below to your image in images/ -->
+      <img class="hero-image" src="images/shop-front.jpg" alt="หน้าร้านเกินร้อยมอเตอร์ โชคชัย 4 ลาดพร้าว มีมอเตอร์ไซค์หลายคันจอดเรียงหน้าร้าน" width="1200" height="900" loading="eager" fetchpriority="high">
+    </div>
     <div class="hero-content">
       <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) -->
       <h1>{{SHOP_NAME}}</h1>
       <!-- EDIT ME / แก้ไขตรงนี้: แท็กไลน์ 1 บรรทัด (ขายตัวเองใน 1 ประโยค) -->
-      <p class="hero-tagline">ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ มีบริการหลังการขายครบวงจร</p>
-      <div class="hero-buttons">
-        <!-- EDIT ME / แก้ไขตรงนี้: ลิงก์นำทาง Google Maps ของร้าน (destination = พิกัดร้าน) -->
-        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=13.8192369%2C100.5962201&amp;travelmode=driving" class="btn btn-primary" target="_blank" rel="noopener">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-            <circle cx="12" cy="10" r="3"/>
-          </svg>
-          นำทางไปร้าน
-        </a>
-        <!-- เบอร์โทรดึงจาก variables.txt (PHONE_TEL) -->
-        <a href="tel:{{PHONE_TEL}}" class="btn btn-secondary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-          </svg>
-          โทรเลย
-        </a>
-        <!-- LINE ID ดึงจาก variables.txt (LINE_ID) -->
-        <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="btn btn-secondary" target="_blank" rel="noopener">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-          </svg>
-          เพิ่มเพื่อน LINE
-        </a>
-      </div>
+      <p class="hero-tagline"><span class="nowrap">ร้านขายมอเตอร์ไซค์</span> <span class="nowrap">ทุกรุ่น</span> <span class="nowrap">ทุกยี่ห้อ</span> <span class="nowrap">ฮอนด้า ยามาฮ่า</span> <span class="nowrap">ฟรีดาวน์</span> <span class="nowrap">มีบริการหลังการขายครบวงจร</span></p>
+      <!-- LINE ID ดึงจาก variables.txt (LINE_ID) -->
+      <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="btn btn-line" target="_blank" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+        </svg>
+        เพิ่มเพื่อน LINE @{{LINE_ID}}
+      </a>
     </div>
   </section>
 

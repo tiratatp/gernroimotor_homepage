@@ -3,15 +3,19 @@
 Guards:
   * visible FAQ Q&A pairs in <section id="faq"> stay in lockstep with the
     FAQPage JSON-LD mainEntity.
-  * the header call anchor exposes a persistent accessible name, because on
-    mobile only the icon is rendered (.call-text { display:none }).
+  * the header-call anchor is absent from both template and stylesheet (it
+    was removed in the mobile-first header redesign).
+  * the hero contains a semantic, high-priority <img> with explicit
+    dimensions and Thai alt text.
+  * the hero LINE CTA uses the {{LINE_ID}} token in both href and visible
+    text, with target="_blank" rel="noopener".
   * style.css defines a sticky-anchor offset, so in-page anchors do not land
     beneath the sticky header.
   * template.html carries no inline style="..." attributes — all styling
     lives in style.css.
   * every images/... path referenced by template.html or style.css exists.
-  * the hero Google Maps link matches the JSON-LD hasMap URL and its
-    destination coordinates match the JSON-LD geo coordinates.
+  * the contact-section directions link matches the JSON-LD hasMap URL and
+    its destination coordinates match the JSON-LD geo coordinates.
 
 All contracts must pass before deployment.
 """
@@ -30,17 +34,27 @@ TEMPLATE_PATH = REPO_ROOT / "template.html"
 STYLESHEET_PATH = REPO_ROOT / "style.css"
 
 _WHITESPACE_RE = re.compile(r"\s+")
-_HEADER_CALL_RE = re.compile(r'<a\b[^>]*class="header-call"[^>]*>', re.DOTALL)
 _ATTR_RE = re.compile(r'''([\w-]+)\s*=\s*"([^"]*)"''')
 _DECL_NAME_RE = re.compile(r"([\w-]+)\s*:")
 _INLINE_STYLE_RE = re.compile(r"\sstyle\s*=\s*[\"']")
 _IMAGE_REF_RE = re.compile(r"images/[A-Za-z0-9._-]+")
-_HERO_MAPS_HREF_RE = re.compile(r'href="(https://www\.google\.com/maps/dir/[^"]+)"')
+_ALL_MAPS_HREFS_RE = re.compile(r'href="(https://www\.google\.com/maps/dir/[^"]+)"')
 _DESTINATION_RE = re.compile(r"destination=([^&]+)")
+_HERO_SECTION_RE = re.compile(
+    r'<section\b[^>]*class="[^"]*\bhero\b[^"]*"[^>]*>(.*?)</section>',
+    re.DOTALL,
+)
+_THAI_CHAR_RE = re.compile(r"[\u0E00-\u0E7F]")
 
 
 def _normalize(text: str) -> str:
     return _WHITESPACE_RE.sub(" ", text).strip()
+
+
+def _extract_hero(text: str) -> str:
+    """Return the inner HTML of <section class="hero">, or empty string."""
+    m = _HERO_SECTION_RE.search(text)
+    return m.group(1) if m else ""
 
 
 class _FaqVisitor(html.parser.HTMLParser):
@@ -190,19 +204,97 @@ class TestFaqSchemaSync(_TemplateMixin, unittest.TestCase):
                          msg="Visible FAQ drifted from FAQPage JSON-LD mainEntity.")
 
 
-# Given: header call anchor whose .call-text span is hidden on mobile.
-# When:  the anchor's opening tag is inspected.
-# Then:  an aria-label attribute exists and contains {{PHONE_DISPLAY}},
-#        so the accessible name survives display:none on .call-text.
-class TestHeaderCallAccessibleName(_TemplateMixin, unittest.TestCase):
-    def test_header_call_has_aria_label_with_phone_token(self) -> None:
-        m = _HEADER_CALL_RE.search(self.text)
-        self.assertIsNotNone(m, msg='Missing <a class="header-call"> in template.')
+# Given: the header was redesigned to remove the call button.
+# When:  template.html and style.css are scanned for header-call.
+# Then:  no header-call, call-icon, or call-text class remains in either file.
+class TestNoHeaderCall(_TemplateMixin, unittest.TestCase):
+    def test_header_call_absent_from_template(self) -> None:
+        self.assertNotIn("header-call", self.text,
+                         msg="header-call markup must be removed from template.html.")
+
+    def test_header_call_absent_from_stylesheet(self) -> None:
+        for dead in (".header-call", ".call-icon", ".call-text"):
+            self.assertNotIn(dead, self.style,
+                             msg=f"{dead} CSS must be removed from style.css.")
+
+
+# Given: the hero was redesigned to use a semantic <img> above the text.
+# When:  the hero section is extracted and its <img> is parsed.
+# Then:  the image uses images/shop-front.jpg with width=1200, height=900,
+#        loading=eager, fetchpriority=high, and Thai alt text.
+class TestHeroImage(_TemplateMixin, unittest.TestCase):
+    def test_hero_has_semantic_high_priority_image(self) -> None:
+        hero = _extract_hero(self.text)
+        self.assertTrue(hero, msg="No <section class='hero'> found in template.")
+        m = re.search(r"<img\b[^>]*>", hero, re.DOTALL)
+        self.assertIsNotNone(m, msg="Hero must contain a semantic <img>.")
         attrs = dict(_ATTR_RE.findall(m.group(0)))
-        self.assertIn("aria-label", attrs,
-                      msg="Mobile users see only an icon; aria-label must provide the accessible name.")
-        self.assertIn("{{PHONE_DISPLAY}}", attrs["aria-label"],
-                      msg="aria-label must reference {{PHONE_DISPLAY}} so variables.txt stays the phone source of truth.")
+        self.assertEqual(attrs.get("src"), "images/shop-front.jpg",
+                         msg="Hero image must use images/shop-front.jpg.")
+        self.assertEqual(attrs.get("width"), "1200",
+                         msg="Hero image must declare width=1200.")
+        self.assertEqual(attrs.get("height"), "900",
+                         msg="Hero image must declare height=900.")
+        self.assertEqual(attrs.get("loading"), "eager",
+                         msg="Hero image must use loading=eager for LCP.")
+        self.assertEqual(attrs.get("fetchpriority"), "high",
+                         msg="Hero image must use fetchpriority=high for LCP.")
+        alt = attrs.get("alt", "")
+        self.assertTrue(alt, msg="Hero image must have alt text.")
+        self.assertIsNotNone(_THAI_CHAR_RE.search(alt),
+                        msg="Hero image alt must contain Thai text.")
+
+
+# Given: the hero has a single LINE CTA using the {{LINE_ID}} token.
+# When:  the hero section is extracted and its LINE anchor is inspected.
+# Then:  the href uses @{{LINE_ID}}, the visible text shows @{{LINE_ID}},
+#        and the link opens safely with target=_blank rel=noopener.
+class TestHeroLineCta(_TemplateMixin, unittest.TestCase):
+    def test_hero_line_cta_uses_line_id_token(self) -> None:
+        hero = _extract_hero(self.text)
+        self.assertTrue(hero, msg="No <section class='hero'> found in template.")
+        self.assertIn('href="https://line.me/R/ti/p/@{{LINE_ID}}"', hero,
+                      msg="Hero LINE CTA href must use @{{LINE_ID}} token.")
+        self.assertIn('target="_blank"', hero,
+                      msg="Hero LINE CTA must open in a new tab.")
+        self.assertIn('rel="noopener"', hero,
+                      msg="Hero LINE CTA must use rel=noopener.")
+        visible = re.sub(r"<[^>]+>", "", hero)
+        self.assertIn("@{{LINE_ID}}", visible,
+                      msg="Hero LINE CTA visible text must show @{{LINE_ID}}.")
+
+
+# Given: the hero tagline contains Thai words/phrases that must not split.
+# When:  the tagline <p> is extracted and its nowrap spans are parsed.
+# Then:  the .nowrap class exists in style.css, and the tagline wraps each
+#        logical group in <span class="nowrap"> so Thai line-breaking cannot
+#        split protected words like ยามาฮ่า or phrases like
+#        มีบริการหลังการขายครบวงจร.
+class TestHeroTaglineNoBreak(_TemplateMixin, unittest.TestCase):
+    def test_nowrap_class_defined_in_stylesheet(self) -> None:
+        self.assertIn(".nowrap", self.style,
+                      msg="style.css must define a reusable .nowrap class.")
+        self.assertIn("white-space: nowrap", self.style,
+                      msg=".nowrap class must use white-space: nowrap.")
+
+    def test_hero_tagline_protects_logical_groups(self) -> None:
+        hero = _extract_hero(self.text)
+        self.assertTrue(hero, msg="No <section class='hero'> found in template.")
+        m = re.search(r'<p class="hero-tagline">(.*?)</p>', hero, re.DOTALL)
+        self.assertIsNotNone(m, msg="No .hero-tagline paragraph found in hero.")
+        tagline_html = m.group(1)
+        for phrase in ("ฮอนด้า ยามาฮ่า", "มีบริการหลังการขายครบวงจร"):
+            self.assertIn(f'<span class="nowrap">{phrase}</span>', tagline_html,
+                          msg=f"Tagline must wrap '{phrase}' in <span class='nowrap'>.")
+
+    def test_hero_tagline_preserves_full_sentence(self) -> None:
+        hero = _extract_hero(self.text)
+        m = re.search(r'<p class="hero-tagline">(.*?)</p>', hero, re.DOTALL)
+        self.assertIsNotNone(m, msg="No .hero-tagline paragraph found in hero.")
+        visible = re.sub(r"<[^>]+>", "", m.group(1)).strip()
+        expected = "ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ มีบริการหลังการขายครบวงจร"
+        self.assertEqual(_normalize(visible), _normalize(expected),
+                         msg="Hero tagline wording must not change.")
 
 
 # Given: a sticky header (min-height 64px) and html { scroll-behavior: smooth }.
@@ -243,21 +335,24 @@ class TestReferencedImagesExist(_TemplateMixin, unittest.TestCase):
                          msg=f"Referenced image(s) missing from disk: {missing}")
 
 
-# Given: the hero "นำทางไปร้าน" maps link and the MotorcycleDealer JSON-LD.
-# When:  both are parsed (HTML entities unescaped).
-# Then:  the href equals JSON-LD hasMap, and the destination coordinates
-#        equal the JSON-LD geo latitude/longitude.
-class TestMapsConsistency(_TemplateMixin, unittest.TestCase):
-    def test_hero_maps_link_matches_jsonld(self) -> None:
-        m = _HERO_MAPS_HREF_RE.search(self.text)
-        self.assertIsNotNone(m, msg="No hero Google Maps directions link found in template.")
-        href = html.unescape(m.group(1))
+# Given: the contact-section "นำทางไปร้าน" maps link and the MotorcycleDealer JSON-LD.
+# When:  all maps directions hrefs are collected (HTML entities unescaped).
+# Then:  exactly one exists (the hero no longer has a maps link), the href
+#        equals JSON-LD hasMap, and the destination coordinates equal the
+#        JSON-LD geo latitude/longitude.
+class TestDirectionsConsistency(_TemplateMixin, unittest.TestCase):
+    def test_directions_link_matches_jsonld(self) -> None:
+        raw_hrefs = _ALL_MAPS_HREFS_RE.findall(self.text)
+        self.assertEqual(len(raw_hrefs), 1,
+                         msg="Expected exactly one maps directions link (in #contact); "
+                             "hero must not contain one.")
+        href = html.unescape(raw_hrefs[0])
         dealer = _parse_dealer_jsonld(self.text)
         self.assertEqual(href, dealer["hasMap"],
-                         msg="Hero maps link drifted from JSON-LD hasMap.")
+                         msg="Directions link drifted from JSON-LD hasMap.")
 
         dest = _DESTINATION_RE.search(href)
-        self.assertIsNotNone(dest, msg="Hero maps link has no destination= parameter.")
+        self.assertIsNotNone(dest, msg="Directions link has no destination= parameter.")
         lat, lng = unquote(dest.group(1)).split(",")
         geo = dealer["geo"]
         self.assertEqual((lat, lng), (geo["latitude"], geo["longitude"]),
