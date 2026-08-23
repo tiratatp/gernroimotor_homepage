@@ -11,20 +11,22 @@
 | Role | Token | Value | Usage |
 |---|---|---|---|
 | Accent/primary | `--color-primary` | `#C8102E` | ปุ่มหลัก ลิงก์ ไอคอน จุดเน้น และ focus ring |
-| Accent/hover | `--color-primary-dark` | `#A00D24` | hover ของปุ่มและปุ่มโทร |
+| Accent/hover | `--color-primary-dark` | `#A00D24` | hover ของปุ่มหลัก |
 | Text/primary | `--color-text` | `#1A1A1A` | ข้อความหลัก หัวข้อ และพื้น footer |
 | Text/secondary | `--color-text-muted` | `#5A5A5A` | คำอธิบาย ที่อยู่ และข้อมูลรอง |
-| Surface/page | `--color-bg` | `#FFFFFF` | พื้นหน้าและ header |
+| Surface/page | `--color-bg` | `#FFFFFF` | พื้นหน้าและพื้น hero |
 | Surface/card | `--color-surface` | `#F6F6F6` | การ์ดและกล่องช่องทางติดต่อ |
 | Surface/alternate | `--color-surface-alt` | `#EFEFEF` | พื้น section สลับและข้อความ footer |
 | Border/default | `--color-border` | `#E0E0E0` | เส้นคั่น ขอบการ์ด และขอบเมนู |
-| Text/on-accent | `--color-white` | `#FFFFFF` | ข้อความบนปุ่มแดงและบนภาพ hero |
+| Text/on-accent | `--color-white` | `#FFFFFF` | ข้อความบนปุ่มแดงและแถบ header แดง |
+| Accent/line (exception) | `--color-line` | `#06C755` | ปุ่ม LINE CTA ใน hero เท่านั้น (ดูข้อยกเว้นด้านล่าง) |
+| Accent/line-hover (exception) | `--color-line-dark` | `#05A847` | hover ของปุ่ม LINE CTA ใน hero |
 
 ### Rules
 
 - `--color-primary` เป็น accent เพียงสีเดียว ห้ามเพิ่ม secondary accent หรือสีแบรนด์ของช่องทาง social.
+- **ข้อยกเว้นเฉพาะที่ผู้ใช้อนุญาต:** `--color-line` (LINE green `#06C755`) ใช้กับปุ่ม LINE CTA ใน hero เท่านั้น เพื่อให้ลูกค้าจดจำช่องทาง LINE ได้ทันที ตัวอักษรบนปุ่มใช้ `--color-text` (เข้ม) เพื่อครอบคลุม WCAG AA ห้ามนำ `--color-line` ไปใช้ที่อื่น และห้ามเพิ่มสีแบรนด์อื่น.
 - สีพื้น section สลับด้วย `main > section:nth-of-type(even)` เท่านั้น ห้ามใส่ background class ราย section.
-- overlay ภาพ hero ใช้สีจาก `--color-text` ในรูปแบบโปร่งใสตามค่าปัจจุบัน; hover แบบโปร่งใสบนปุ่ม hero ใช้สีขาวเดิม ห้ามสร้างสีใหม่เพื่อการตกแต่ง.
 - สีทั้งหมดที่ผู้ดูแลแก้ได้อยู่ใน `:root` ส่วน `CHANGE COLORS HERE`; ต้องเก็บ token เดิมครบทุกตัว.
 
 ## 3. Typography
@@ -97,12 +99,21 @@
 
 ### Button
 - **Structure**: `<a class="btn btn-primary|btn-secondary">` พร้อม optional SVG `aria-hidden="true"`.
-- **Variants**: primary แดง; secondary โปร่งใสขอบขาวบน hero.
+- **Variants**: primary แดง; secondary โปร่งใสขอบขาว; line เขียว LINE (hero CTA เท่านั้น ตามข้อยกเว้น ใช้ตัวอักษร `--color-text` เพื่อ AA).
 - **Spacing**: padding เดิม `0.85rem 1.75rem`; กลุ่มปุ่มใช้ `--space-sm`.
 - **States**: hover เปลี่ยนพื้น, active `scale(0.98)`, focus-visible outline 3px สี primary.
 - **Accessibility**: ใช้ `<a>` เมื่อเป็นการนำทาง/โทร, link text ชัดเจน, external links มี `target="_blank" rel="noopener"` และ touch target ไม่ต่ำกว่า 44px.
 - **Motion**: background 0.2s และ transform 0.1s; reduced-motion ลด duration.
 - **Layout**: inline cluster; wrap ได้.
+
+### Hero
+- **Structure**: `<section class="hero" id="top">` → `.hero-media` (semantic `<img>`) + `.hero-content` (`<h1>` + `.hero-tagline` + single LINE CTA). รูปอยู่เหนือข้อความบนมือถือ (image-first stack).
+- **Variants**: none — หน้าเดียวเท่านั้น.
+- **Spacing**: image full-bleed บนมือถือ; `.hero-content` ใช้ `--space-lg` / `--space-sm` / `--space-xl`.
+- **States**: LINE CTA ใช้ `.btn-line` states; ไม่มี hover บนรูป.
+- **Accessibility**: hero `<img>` มี Thai alt, `width`/`height`, `loading="eager"`, `fetchpriority="high"`; CTA link `target="_blank" rel="noopener"` และแสดง `@{{LINE_ID}}` ในข้อความ.
+- **Motion**: none.
+- **Layout**: mobile-first stacked; ที่ ≥768px รูปและข้อความจำกัด max-width และกึ่งกลาง — คงโครงเดียวกับมือถือ.
 
 ### Content Card
 - **Structure**: semantic `article`/`figure` หรือ contact `<a>` บน surface พร้อม border.
@@ -132,10 +143,10 @@
 - **Layout**: responsive sidebar grid; map/address/directions left, hours/actions right.
 
 ### Header Navigation
-- **Structure**: single shared `<nav>` controlled on mobile by `#nav-toggle` checkbox + label; inline at 768px.
-- **Variants**: mobile dropdown / desktop row.
+- **Structure**: single shared `<nav>` controlled on mobile by `#nav-toggle` checkbox + label; inline at 768px. ไม่มีปุ่มโทรใน header — ช่องทางติดต่อทั้งหมดอยู่ใน `#contact`.
+- **Variants**: mobile dropdown (white) / desktop row (on red bar).
 - **States**: open/closed icons, hover accent, focus-visible on checkbox label and links.
-- **Accessibility**: persistent header-call `aria-label`; checkbox hack must remain (no `<details>`); controls meet 44px target.
+- **Accessibility**: checkbox hack must remain (no `<details>`); brand, hamburger, and desktop nav links use `--color-white` on `--color-primary` bar (WCAG AA) with a white focus ring; mobile dropdown stays white with `--color-text` and a primary focus ring for readability; controls meet 44px target.
 - **Motion**: none.
 - **Layout**: sticky header cluster; only `#contact` represents location/contact.
 
@@ -166,9 +177,9 @@
 Strategy: **mixed border + restrained shadow**.
 
 - Cards use `--color-surface`, 1px `--color-border`, and `--radius`; they do not cast shadows.
-- Header uses a subtle existing shadow (`0 1px 3px rgba(0,0,0,0.06)`) plus border to separate it while sticky.
+- Header uses a restrained shadow (`0 2px 6px rgba(0,0,0,0.15)`) to separate the primary-red bar while sticky.
 - Mobile nav dropdown uses the existing stronger shadow (`0 8px 16px rgba(0,0,0,0.08)`) to indicate overlay depth.
-- Hero depth comes from the real shop image plus dark overlay, not gradients or decorative shapes.
+- Hero depth comes from the real shop image above a white text surface, not gradients or decorative shapes.
 - Footer is a single dark plane using `--color-text`; social links remain typographic and do not become colored badges.
 
 ## 8. Accessibility Constraints & Accepted Debt
@@ -176,7 +187,7 @@ Strategy: **mixed border + restrained shadow**.
 ### Constraints
 
 - Target WCAG 2.2 AA: body contrast at least 4.5:1, large text/UI boundaries at least 3:1.
-- All links and controls are keyboard reachable and show the 3px `--color-primary` focus-visible outline with 2px offset.
+- All links and controls are keyboard reachable and show a 3px focus-visible outline with 2px offset: primary on light surfaces and white on the primary-red header.
 - Touch controls target at least 44×44px; responsive layouts must not create horizontal scrolling at 375px.
 - Thai alt text is required for meaningful images; decorative SVGs require `aria-hidden="true"`.
 - Iframes require descriptive title, lazy loading, and referrer policy. New-tab links require `rel="noopener"`.
@@ -198,3 +209,4 @@ Strategy: **mixed border + restrained shadow**.
 | Google Fonts เป็น third-party | `template.html` | ต้องการ Sarabun และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
 | ไม่มี JavaScript ปิดเมนูหลังเลือก anchor | header mobile nav | โครงการกำหนด no-JS และ checkbox hack รักษา desktop nav ได้เสถียร | ทบทวนเมื่อข้อกำหนด no-JS เปลี่ยน |
 | มี breakpoint 600px เฉพาะ contact grid | `style.css` | เป็นข้อยกเว้นเดิมเพื่อรักษาขนาดการ์ดและ touch readability | คงไว้จน layout contact เปลี่ยนระบบ |
+| `--color-line` เป็นสีแบรนด์ LINE ใน hero | hero LINE CTA | ผู้ใช้อนุญาตเพื่อ channel recognition; ใช้ตัวอักษร `--color-text` บน `#06C755` เพื่อครอบคลุม WCAG AA | กลับไปใช้ `--color-primary` หากไม่ต้องการแยกช่องทาง LINE ด้วยสีแบรนด์ |
