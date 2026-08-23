@@ -98,8 +98,7 @@
         <a href="#brands">ยี่ห้อ</a>
         <a href="#faq">คำถาม</a>
         <a href="#gallery">ภาพหน้าร้าน</a>
-        <a href="#location">ที่ตั้ง/เวลา</a>
-        <a href="#contact">ติดต่อเรา</a>
+        <a href="#contact">ที่ตั้ง/ติดต่อ</a>
       </nav>
     </div>
   </header>
@@ -229,6 +228,11 @@
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดบริการ 1 ใบ -->
 
       </div>
+
+      <div class="section-cta">
+        <p>สนใจออกรถหรืออยากปรึกษาเรื่องเอกสาร ทีมงานพร้อมช่วยแนะนำฟรี</p>
+        <a href="#contact" class="btn btn-primary">ติดต่อทีมงาน</a>
+      </div>
     </div>
   </section>
 
@@ -339,6 +343,11 @@
         <li class="chip">Yamaha Fino</li>
         <li class="chip">GPX Demon 150GR</li>
       </ul>
+
+      <div class="section-cta">
+        <p>สอบถามรุ่นรถ สต็อก และโปรโมชั่นล่าสุดกับทีมงานได้โดยตรง</p>
+        <a href="#contact" class="btn btn-primary">สอบถามรถที่สนใจ</a>
+      </div>
     </div>
   </section>
 
@@ -403,6 +412,11 @@
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดคำถาม-คำตอบ 1 ข้อ -->
 
       </div>
+
+      <div class="section-cta">
+        <p>ยังมีคำถามเพิ่มเติม โทรหรือทัก LINE เพื่อคุยกับทีมงานได้เลย</p>
+        <a href="#contact" class="btn btn-primary">ดูช่องทางติดต่อ</a>
+      </div>
     </div>
   </section>
 
@@ -435,15 +449,17 @@
   </section>
 
   <!-- ================================================================ -->
-  <!-- 6. LOCATION & HOURS / ที่ตั้งและเวลาเปิดทำการ                       -->
-  <!--    แผนที่: Google Maps → ค้นหาร้าน → แชร์ → ฝังแผนที่ → คัดลอก src มาวาง -->
+  <!-- 6. CONTACT / ที่ตั้ง เวลาเปิดทำการ และช่องทางติดต่อ                  -->
+  <!--    ซ้าย: แผนที่/ที่อยู่/นำทาง — ขวา: เวลาเปิดและโทร/LINE             -->
+  <!--    Left: map/address/directions — right: hours and phone/LINE       -->
   <!-- ================================================================ -->
-  <section class="section" id="location">
+  <section class="section" id="contact">
     <div class="container">
-      <h2 class="section-title">ที่ตั้งและเวลาเปิดทำการ</h2>
+      <h2 class="section-title">ที่ตั้งและติดต่อเรา</h2>
+      <p class="section-intro">เข้ามาชมรถจริงที่ร้าน หรือสอบถามรุ่นรถและโปรโมชั่นได้ทุกวัน</p>
 
       <div class="location-grid">
-        <div>
+        <div class="contact-map-column">
           <!-- EDIT ME / แก้ไขตรงนี้: ฝังแผนที่จริงของร้าน
                วิธี: ไป Google Maps → ค้นหาที่อยู่ร้าน → คลิก "แชร์" → เลือก "ฝังแผนที่"
                → คัดลอกเฉพาะ URL ในส่วน src="..." มาวางแทน URL ด้านล่าง -->
@@ -453,26 +469,24 @@
             title="แผนที่ร้าน" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
           <!-- ที่อยู่ดึงจาก variables.txt (ADDRESS + POSTAL_CODE) -->
           <p class="address-line">{{ADDRESS}} กรุงเทพมหานคร {{POSTAL_CODE}}</p>
+          <!-- EDIT ME / แก้ไขตรงนี้: ลิงก์นำทาง Google Maps ของร้าน (destination = พิกัดร้าน) -->
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=13.8192369%2C100.5962201&amp;travelmode=driving" class="btn btn-primary contact-directions" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            นำทางไปร้าน
+          </a>
         </div>
 
-        <div>
-          <h3>เวลาเปิดทำการ</h3>
-          <!-- EDIT ME / แก้ไขตรงนี้: วันและเวลาเปิดทำการ -->
-          <p class="hours"><strong>เปิดทุกวัน</strong><br>08:30 - 18:30 น.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+        <div class="contact-details">
+          <div class="contact-hours">
+            <h3>เวลาเปิดทำการ</h3>
+            <!-- EDIT ME / แก้ไขตรงนี้: วันและเวลาเปิดทำการ -->
+            <p class="hours"><strong>เปิดทุกวัน</strong><br>08:30 - 18:30 น.</p>
+          </div>
 
-  <!-- ================================================================ -->
-  <!-- 7. CONTACT / ติดต่อเรา — เพิ่มช่องทาง: คัดลอกบล็อก <li> ทั้งบล็อก     -->
-  <!-- ================================================================ -->
-  <section class="section" id="contact">
-    <div class="container">
-      <h2 class="section-title">ติดต่อเรา</h2>
-      <p class="section-intro">สอบถามรุ่นรถ โปรโมชั่น หรือเข้ามาชมรถจริงที่ร้านได้ทุกวัน 8.30-18.30 น.</p>
-
-      <ul class="contact-list">
+          <ul class="contact-list">
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ช่องทางติดต่อ 1 ช่อง -->
         <!-- เบอร์โทรดึงจาก variables.txt (PHONE_TEL / PHONE_DISPLAY) -->
@@ -510,45 +524,46 @@
         </li>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางติดต่อ 1 ช่อง -->
 
-        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ช่องทางติดต่อ 1 ช่อง -->
-        <!-- เพจ Facebook ดึงจาก variables.txt (FACEBOOK_PAGE) ไม่ต้องแก้ตรงนี้ -->
-        <li>
-          <a href="https://www.facebook.com/{{FACEBOOK_PAGE}}" class="contact-item" target="_blank" rel="noopener">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-            </svg>
-            <span>Facebook<small>@{{FACEBOOK_PAGE}}</small></span>
-          </a>
-        </li>
-        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางติดต่อ 1 ช่อง -->
-
-        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ช่องทางติดต่อ 1 ช่อง -->
-        <!-- บัญชี TikTok ดึงจาก variables.txt (TIKTOK_USER) ไม่ต้องแก้ตรงนี้ -->
-        <li>
-          <a href="https://www.tiktok.com/@{{TIKTOK_USER}}" class="contact-item" target="_blank" rel="noopener">
-            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M9 18V5l12-2v13"/>
-              <circle cx="6" cy="18" r="3"/>
-              <circle cx="18" cy="16" r="3"/>
-            </svg>
-            <span>TikTok<small>@{{TIKTOK_USER}}</small></span>
-          </a>
-        </li>
-        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางติดต่อ 1 ช่อง -->
-
-      </ul>
+          </ul>
+        </div>
+      </div>
     </div>
   </section>
 
   </main>
 
   <!-- ================================================================ -->
-  <!-- 8. FOOTER — ส่วนล่างสุด: ชื่อร้าน + ลิขสิทธิ์                          -->
+  <!-- 7. FOOTER — ส่วนล่างสุด: โซเชียล + ลิขสิทธิ์ (ชื่อร้านอยู่ในลิขสิทธิ์) -->
   <!-- ================================================================ -->
   <footer class="site-footer">
     <div class="container">
-      <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) -->
-      <p class="footer-brand">{{SHOP_NAME}}</p>
+      <nav aria-label="โซเชียลมีเดียของร้าน">
+        <ul class="footer-socials">
+          <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ช่องทางโซเชียล 1 ช่อง -->
+          <!-- เพจ Facebook ดึงจาก variables.txt (FACEBOOK_PAGE) ไม่ต้องแก้ตรงนี้ -->
+          <li>
+            <a href="https://www.facebook.com/{{FACEBOOK_PAGE}}" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M24 12.073C24 5.446 18.627.073 12 .073S0 5.446 0 12.073c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953h-1.513c-1.49 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+              </svg>
+              Facebook @{{FACEBOOK_PAGE}}
+            </a>
+          </li>
+          <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางโซเชียล 1 ช่อง -->
+
+          <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ช่องทางโซเชียล 1 ช่อง -->
+          <!-- บัญชี TikTok ดึงจาก variables.txt (TIKTOK_USER) ไม่ต้องแก้ตรงนี้ -->
+          <li>
+            <a href="https://www.tiktok.com/@{{TIKTOK_USER}}" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19.589 6.686a4.793 4.793 0 0 1-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 0 1-2.88 2.823A2.896 2.896 0 0 1 6.599 15.6a2.896 2.896 0 0 1 2.895-2.895c.298 0 .584.048.852.133V9.352a6.329 6.329 0 0 0-.852-.058A6.41 6.41 0 0 0 3.082 15.7a6.41 6.41 0 0 0 6.412 6.4 6.41 6.41 0 0 0 6.412-6.4V9.369a8.16 8.16 0 0 0 4.773 1.526V7.45a4.853 4.853 0 0 1-1.09-.764z"/>
+              </svg>
+              TikTok @{{TIKTOK_USER}}
+            </a>
+          </li>
+          <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางโซเชียล 1 ช่อง -->
+        </ul>
+      </nav>
       <!-- EDIT ME: แก้ปีลิขสิทธิ์ได้ตรงนี้ — ชื่อร้านดึงจาก variables.txt -->
       <small>&copy; 2026 {{SHOP_NAME}} สงวนลิขสิทธิ์</small>
     </div>

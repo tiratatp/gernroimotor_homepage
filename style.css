@@ -211,6 +211,13 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .service-card h4 { font-size: 1.15rem; font-weight: 600; margin-bottom: var(--space-xs); }
 .service-card p { color: var(--color-text-muted); font-size: 0.95rem; }
 
+/* CTA ท้ายส่วน — พาไปยังที่ตั้งและช่องทางติดต่อ / section-end contact CTA */
+.section-cta {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-sm); margin-top: var(--space-lg);
+}
+.section-cta p { max-width: 60ch; color: var(--color-text-muted); }
+
 /* ===== 3b. TESTIMONIALS — เสียงจากลูกค้า (รีวิวจริง) ===== */
 .testimonials-grid {
   display: grid;
@@ -263,20 +270,26 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .gallery-grid figure { border-radius: var(--radius); overflow: hidden; background: var(--color-surface); }
 .gallery-grid figcaption { padding: var(--space-xs) var(--space-sm); font-size: 0.9rem; color: var(--color-text-muted); text-align: center; }
 
-/* ===== 6. LOCATION & HOURS — ที่ตั้งและเวลาเปิดทำการ ===== */
+/* ===== 6. CONTACT — แผนที่/ที่อยู่ซ้าย เวลาและช่องทางติดต่อขวา ===== */
 .location-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-lg); }
 @media (min-width: 768px) { .location-grid { grid-template-columns: 1.2fr 1fr; } }
 .location-grid h3 { font-size: 1.3rem; font-weight: 600; margin-bottom: var(--space-sm); }
 .map-embed { width: 100%; height: 350px; border: 0; border-radius: var(--radius); }
 .address-line { margin-top: var(--space-sm); color: var(--color-text-muted); }
+.contact-directions { margin-top: var(--space-sm); }
+.contact-details { display: flex; flex-direction: column; gap: var(--space-md); }
+.contact-hours {
+  padding: var(--space-md); background: var(--color-surface);
+  border: 1px solid var(--color-border); border-radius: var(--radius);
+}
 .hours { font-size: 1.3rem; }
 .hours strong { color: var(--color-primary); }
 
-/* ===== 7. CONTACT — ติดต่อเรา ===== */
 .contact-list { display: grid; grid-template-columns: 1fr; gap: var(--space-md); list-style: none; }
 @media (min-width: 600px) { .contact-list { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } }
+.contact-list > li { display: flex; }
 .contact-item {
-  display: flex; align-items: center; gap: var(--space-sm);
+  display: flex; flex: 1; align-items: center; gap: var(--space-sm);
   padding: var(--space-md); background: var(--color-surface);
   border: 1px solid var(--color-border); border-radius: var(--radius);
   color: var(--color-text); text-decoration: none; font-weight: 500;
@@ -286,9 +299,17 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .contact-item span { display: flex; flex-direction: column; }
 .contact-item small { color: var(--color-text-muted); font-weight: 400; font-size: 0.85rem; }
 
-/* ===== 8. FOOTER — ส่วนล่างสุด ===== */
+/* ===== 7. FOOTER — ส่วนล่างสุด ===== */
 .site-footer { background: var(--color-text); color: var(--color-surface-alt); padding: var(--space-lg) 0; text-align: center; }
-.site-footer .footer-brand { color: var(--color-white); font-weight: 600; margin-bottom: var(--space-xs); }
+.footer-socials {
+  list-style: none; display: flex; flex-wrap: wrap; justify-content: center;
+  gap: var(--space-sm); margin-bottom: var(--space-sm);
+}
+.footer-socials a {
+  display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px;
+  padding: 0 var(--space-xs); color: var(--color-surface-alt);
+}
+.footer-socials svg { flex-shrink: 0; }
 .site-footer small { font-size: 0.85rem; opacity: 0.8; }
 
 /* ===== Accessibility: focus ring / แท็บคีย์บอร์ด ===== */
