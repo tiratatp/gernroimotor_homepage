@@ -55,7 +55,7 @@ Golden rule: edit everything through the GitHub website — no software to insta
 1. เตรียมรูป **JPG หรือ PNG เท่านั้น** ไม่เกิน **5 MB** (ถ่ายมือถือก็ได้ ระบบย่อให้เองตอนเผยแพร่)
 2. GitHub → **Add file → Upload files** → อัปโหลดเข้าโฟลเดอร์ `images/` (เช่น `images/shop-front.jpg`)
 3. เปิด `template.html` → ค้นหา `SWAP IMAGE` (หรือ `เปลี่ยนรูปตรงนี้`) → เปลี่ยนเป็น `images/ชื่อรูป.jpg` → Commit
-   (รูปพื้นหลังส่วนแรกของหน้าอยู่ใน `style.css` — ค้นหา `SWAP IMAGE` ได้เช่นกัน)
+   (รูปแรกสุดของหน้า รูปแกลเลอรี และรูปแชร์ Facebook/LINE แก้ที่ `template.html` ทั้งหมด — ค้นหา `SWAP IMAGE` ได้ทุกรูป)
 
 **สีเว็บ:** เปิด `style.css` → ส่วน `CHANGE COLORS HERE` ต้นไฟล์ → เปลี่ยนค่าสี (เช่น `#C8102E`) → Commit — สีทั้งหน้าเปลี่ยนพร้อมกัน
 
