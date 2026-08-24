@@ -176,7 +176,7 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   /* ขนาดไหลตามความกว้างจอ (768→1280) ให้เมนูภาษาไทยไม่หักบรรทัดที่ 768px
      Fluid sizing so Thai nav labels stay on one line at 768px */
   .header-inner { padding: 0 clamp(0.6rem, 1.8vw, 1.5rem); }
-  .nav-hamburger { display: none; }
+  .nav-checkbox, .nav-hamburger { display: none; }
   .header-nav,
   .nav-checkbox:checked ~ .header-nav {
     display: flex;
