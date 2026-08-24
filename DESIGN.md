@@ -19,13 +19,11 @@
 | Surface/alternate | `--color-surface-alt` | `#EFEFEF` | พื้น section สลับและข้อความ footer |
 | Border/default | `--color-border` | `#E0E0E0` | เส้นคั่น ขอบการ์ด และขอบเมนู |
 | Text/on-accent | `--color-white` | `#FFFFFF` | ข้อความบนปุ่มแดงและแถบ header แดง |
-| Accent/line (exception) | `--color-line` | `#06C755` | ปุ่ม LINE CTA ใน hero เท่านั้น (ดูข้อยกเว้นด้านล่าง) |
-| Accent/line-hover (exception) | `--color-line-dark` | `#05A847` | hover ของปุ่ม LINE CTA ใน hero |
 
 ### Rules
 
 - `--color-primary` เป็น accent เพียงสีเดียว ห้ามเพิ่ม secondary accent หรือสีแบรนด์ของช่องทาง social.
-- **ข้อยกเว้นเฉพาะที่ผู้ใช้อนุญาต:** `--color-line` (LINE green `#06C755`) ใช้กับปุ่ม LINE CTA ใน hero เท่านั้น เพื่อให้ลูกค้าจดจำช่องทาง LINE ได้ทันที ตัวอักษรบนปุ่มใช้ `--color-text` (เข้ม) เพื่อครอบคลุม WCAG AA ห้ามนำ `--color-line` ไปใช้ที่อื่น และห้ามเพิ่มสีแบรนด์อื่น.
+- **ข้อยกเว้นสำหรับรูปภาพแบรนด์ทางการ:** รูปปุ่ม LINE Add Friend (`images/line-add-friend-th.png`) มีสีเขียวทางการของ LINE อยู่ภายในไฟล์บิตแมปอยู่แล้ว ซึ่งไม่ใช่ CSS token สีเขียวแบรนด์ LINE ถูกจำกัดอยู่เฉพาะภาพแบรนด์ทางการนี้ และคงหลักการ single-accent ใน CSS ไว้.
 - สีพื้น section สลับด้วย `main > section:nth-of-type(even)` เท่านั้น ห้ามใส่ background class ราย section.
 - สีทั้งหมดที่ผู้ดูแลแก้ได้อยู่ใน `:root` ส่วน `CHANGE COLORS HERE`; ต้องเก็บ token เดิมครบทุกตัว.
 
@@ -99,19 +97,28 @@
 
 ### Button
 - **Structure**: `<a class="btn btn-primary|btn-secondary">` พร้อม optional SVG `aria-hidden="true"`.
-- **Variants**: primary แดง; secondary โปร่งใสขอบขาว; line เขียว LINE (hero CTA เท่านั้น ตามข้อยกเว้น ใช้ตัวอักษร `--color-text` เพื่อ AA).
+- **Variants**: primary แดง; secondary โปร่งใสขอบขาว.
 - **Spacing**: padding เดิม `0.85rem 1.75rem`; กลุ่มปุ่มใช้ `--space-sm`.
 - **States**: hover เปลี่ยนพื้น, active `scale(0.98)`, focus-visible outline 3px สี primary.
 - **Accessibility**: ใช้ `<a>` เมื่อเป็นการนำทาง/โทร, link text ชัดเจน, external links มี `target="_blank" rel="noopener"` และ touch target ไม่ต่ำกว่า 44px.
 - **Motion**: background 0.2s และ transform 0.1s; reduced-motion ลด duration.
 - **Layout**: inline cluster; wrap ได้.
 
+### Official LINE CTA (`.line-cta`)
+- **Structure**: `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img src="images/line-add-friend-th.png" alt="เพิ่มเพื่อน LINE @{{LINE_ID}}" width="202" height="60"></a>`.
+- **Variants**: ใช้รูปภาพปุ่มทางการขนาดต้นฉบับ 202x60px เหมือนกันทั้งใน hero และท้าย section (บริการ, ยี่ห้อรถ, FAQ).
+- **Spacing**: inline-block display; native dimension 202×60px.
+- **States**: active `scale(0.98)`, focus-visible outline 3px สี primary พร้อม offset 2px.
+- **Accessibility**: ห้ามตัดแต่ง ครอบตัด หรือปรับขนาดรูปภาพบิตแมป; ต้องระบุ `alt` พร้อม LINE ID (`@{{LINE_ID}}`) เสมอ; `width="202"` และ `height="60"` กำหนดขนาดเพื่อป้องกัน layout shift; touch target 202×60px ครอบคลุมเกณฑ์ 44px.
+- **Motion**: active press scale 0.1s.
+- **Layout**: inline block element.
+
 ### Hero
-- **Structure**: `<section class="hero" id="top">` → `.hero-media` (semantic `<img>`) + `.hero-content` (`<h1>` + `.hero-tagline` + single LINE CTA). รูปอยู่เหนือข้อความบนมือถือ (image-first stack).
+- **Structure**: `<section class="hero" id="top">` → `.hero-media` (semantic `<img>`) + `.hero-content` (`<h1>` + `.hero-tagline` + `.line-cta`). รูปอยู่เหนือข้อความบนมือถือ (image-first stack).
 - **Variants**: none — หน้าเดียวเท่านั้น.
 - **Spacing**: image full-bleed บนมือถือ; `.hero-content` ใช้ `--space-lg` / `--space-sm` / `--space-xl`.
-- **States**: LINE CTA ใช้ `.btn-line` states; ไม่มี hover บนรูป.
-- **Accessibility**: hero `<img>` มี Thai alt, `width`/`height`, `loading="eager"`, `fetchpriority="high"`; CTA link `target="_blank" rel="noopener"` และแสดง `@{{LINE_ID}}` ในข้อความ.
+- **States**: `.line-cta` active press & focus-visible outline; ไม่มี hover บนรูป hero.
+- **Accessibility**: hero `<img>` มี Thai alt, `width`/`height`, `loading="eager"`, `fetchpriority="high"`; `.line-cta` link `target="_blank" rel="noopener"` และระบุ `@{{LINE_ID}}` ใน `alt` ของรูปภาพ.
 - **Motion**: none.
 - **Layout**: mobile-first stacked; ที่ ≥768px รูปและข้อความจำกัด max-width และกึ่งกลาง — คงโครงเดียวกับมือถือ.
 
@@ -125,12 +132,12 @@
 - **Layout**: responsive auto-fit grid.
 
 ### Section Contact CTA
-- **Structure**: compact `.section-cta` cluster หลัง main content ของ section มีข้อความสั้นและ `<a href="#contact" class="btn btn-primary">`.
-- **Variants**: ข้อความตาม context ของ about, brands, FAQ; visual treatment เดียวกัน.
+- **Structure**: compact `.section-cta` cluster หลัง main content ของ section (บริการ, ยี่ห้อรถ, FAQ) ประกอบด้วยข้อความสั้นและ `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img src="images/line-add-friend-th.png" alt="เพิ่มเพื่อน LINE @{{LINE_ID}}" width="202" height="60" loading="lazy"></a>`.
+- **Variants**: ข้อความตาม context ของบริการ, ยี่ห้อรถ, FAQ; ใช้รูปภาพปุ่มทางการ LINE Add Friend เดียวกัน.
 - **Spacing**: แยกจาก content ด้วย `--space-lg`; internal gap `--space-sm`.
-- **States**: inherited Button states.
-- **Accessibility**: link text ต้องบอกการกระทำ ไม่ใช้ “คลิกที่นี่”; touch target ใช้ Button primitive.
-- **Motion**: inherited Button motion.
+- **States**: inherited Official LINE CTA (`.line-cta`) states.
+- **Accessibility**: รูปภาพปุ่มมี `alt` ระบุ LINE ID พร้อม `loading="lazy"`; touch target 202×60px.
+- **Motion**: inherited `.line-cta` motion.
 - **Layout**: wrapping cluster, centered on narrow screens only when content naturally wraps.
 
 ### Consolidated Contact Section
@@ -209,4 +216,4 @@ Strategy: **mixed border + restrained shadow**.
 | Google Fonts เป็น third-party | `template.html` | ต้องการ Sarabun และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
 | ไม่มี JavaScript ปิดเมนูหลังเลือก anchor | header mobile nav | โครงการกำหนด no-JS และ checkbox hack รักษา desktop nav ได้เสถียร | ทบทวนเมื่อข้อกำหนด no-JS เปลี่ยน |
 | มี breakpoint 600px เฉพาะ contact grid | `style.css` | เป็นข้อยกเว้นเดิมเพื่อรักษาขนาดการ์ดและ touch readability | คงไว้จน layout contact เปลี่ยนระบบ |
-| `--color-line` เป็นสีแบรนด์ LINE ใน hero | hero LINE CTA | ผู้ใช้อนุญาตเพื่อ channel recognition; ใช้ตัวอักษร `--color-text` บน `#06C755` เพื่อครอบคลุม WCAG AA | กลับไปใช้ `--color-primary` หากไม่ต้องการแยกช่องทาง LINE ด้วยสีแบรนด์ |
+| รูปภาพแบรนด์ทางการ LINE Add Friend มีสีเขียวแบรนด์ | `.line-cta` (hero และ section-end CTAs) | ใช้รูปภาพปุ่มทางการบิตแมป 202x60px จาก LINE เพื่อการจดจำแบรนด์; สีเขียวฝังในไฟล์รูปภาพบิตแมป จึงอนุโลมเป็นข้อยกเว้นภาพแบรนด์ทางการโดยไม่สร้าง CSS accent token เพิ่ม | คงไว้ตามข้อกำหนดแบรนด์ของ LINE |
