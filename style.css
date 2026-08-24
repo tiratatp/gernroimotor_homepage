@@ -229,7 +229,7 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   border-radius: var(--radius); padding: var(--space-md); text-align: center;
 }
 .service-card svg { color: var(--color-primary); margin-bottom: var(--space-sm); }
-.service-card h4 { font-size: 1.15rem; font-weight: 600; margin-bottom: var(--space-xs); }
+.service-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: var(--space-xs); }
 .service-card p { color: var(--color-text-muted); font-size: 0.95rem; }
 
 /* CTA ท้ายส่วน — พาไปยังที่ตั้งและช่องทางติดต่อ / section-end contact CTA */
