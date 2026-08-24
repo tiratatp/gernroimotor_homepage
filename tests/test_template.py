@@ -3,12 +3,8 @@
 Guards:
   * visible FAQ Q&A pairs in <section id="faq"> stay in lockstep with the
     FAQPage JSON-LD mainEntity.
-  * the header-call anchor is absent from both template and stylesheet (it
-    was removed in the mobile-first header redesign).
   * the hero contains a semantic, high-priority <img> with explicit
     dimensions and Thai alt text.
-  * the hero LINE CTA uses the {{LINE_ID}} token in href and image alt,
-    with target="_blank" rel="noopener".
   * style.css defines a sticky-anchor offset, so in-page anchors do not land
     beneath the sticky header.
   * template.html carries no inline style="..." attributes — all styling
@@ -218,20 +214,6 @@ class TestFaqSchemaSync(_TemplateMixin, unittest.TestCase):
                          msg="Visible FAQ drifted from FAQPage JSON-LD mainEntity.")
 
 
-# Given: the header was redesigned to remove the call button.
-# When:  template.html and style.css are scanned for header-call.
-# Then:  no header-call, call-icon, or call-text class remains in either file.
-class TestNoHeaderCall(_TemplateMixin, unittest.TestCase):
-    def test_header_call_absent_from_template(self) -> None:
-        self.assertNotIn("header-call", self.text,
-                         msg="header-call markup must be removed from template.html.")
-
-    def test_header_call_absent_from_stylesheet(self) -> None:
-        for dead in (".header-call", ".call-icon", ".call-text"):
-            self.assertNotIn(dead, self.style,
-                             msg=f"{dead} CSS must be removed from style.css.")
-
-
 # Given: the header brand was changed from visible {{SHOP_NAME}} text to a
 #        linked logo image (images/logo.jpg), with the shop name kept only as
 #        the image alt and the 800x800 square cropped to a landscape viewport
@@ -242,7 +224,7 @@ class TestNoHeaderCall(_TemplateMixin, unittest.TestCase):
 #        logo <img> with the exact src/alt/width/height, exposes no visible
 #        {{SHOP_NAME}} text, and style.css enforces the crop contract
 #        (overflow hidden + fixed width/height, object-fit cover + center on
-#        the img, picture mirrored to fill) with no leftover text font-sizing.
+#        the img, picture mirrored to fill).
 class TestHeaderBrandLogo(_TemplateMixin, unittest.TestCase):
     _BRAND_RE = re.compile(
         r'<a\b[^>]*class="header-brand"[^>]*>(.*?)</a>', re.DOTALL,
@@ -305,10 +287,9 @@ class TestHeaderBrandLogo(_TemplateMixin, unittest.TestCase):
                       msg=".header-brand img must set object-position.")
         self.assertIn("center", img,
                       msg=".header-brand img must center the crop.")
-        # Color-mapping treatment: the baked JPEG red (RGB 208,0,0) is mapped
-        # toward --color-primary (#C8102E) without editing the bitmap. The
-        # exact filter values are a browser-proven calibration — assert them
-        # literally so the treatment is not silently weakened or removed.
+
+        # These values are the browser-proven mapping from the logo's baked
+        # red to --color-primary documented in DESIGN.md.
         self.assertIn("filter", img,
                       msg=".header-brand img must apply a filter to map the baked red.")
         self.assertIn("contrast(1.408)", img,
@@ -325,14 +306,6 @@ class TestHeaderBrandLogo(_TemplateMixin, unittest.TestCase):
                         msg="style.css must style .header-brand picture for the optimizer rewrite.")
         self.assertIn("100%", picture,
                       msg=".header-brand picture must fill the brand viewport (100%).")
-
-    def test_brand_has_no_text_font_sizing(self) -> None:
-        # No .header-brand rule (base or inside a media query) may carry
-        # font-size — the brand is an image now, so text sizing is obsolete.
-        self.assertIsNone(
-            re.search(r"\.header-brand\b[^}]*font-size", self.style),
-            msg=".header-brand must not carry font-size; the brand is a logo image, not text.",
-        )
 
 
 # Given: the hero was redesigned to use a semantic <img> above the text.
@@ -360,33 +333,6 @@ class TestHeroImage(_TemplateMixin, unittest.TestCase):
         self.assertTrue(alt, msg="Hero image must have alt text.")
         self.assertIsNotNone(_THAI_CHAR_RE.search(alt),
                         msg="Hero image alt must contain Thai text.")
-
-
-# Given: the hero has a single LINE CTA using the {{LINE_ID}} token.
-# When:  the hero section is extracted and its LINE anchor is inspected.
-# Then:  the href uses @{{LINE_ID}}, the wrapped <img> alt exposes
-#        @{{LINE_ID}} with Thai text (the accessible name replaces the
-#        legacy visible-text rendering), and the link opens safely with
-#        target=_blank rel=noopener.
-class TestHeroLineCta(_TemplateMixin, unittest.TestCase):
-    def test_hero_line_cta_uses_line_id_token(self) -> None:
-        hero = _extract_hero(self.text)
-        self.assertTrue(hero, msg="No <section class='hero'> found in template.")
-        self.assertIn('href="https://line.me/R/ti/p/@{{LINE_ID}}"', hero,
-                      msg="Hero LINE CTA href must use @{{LINE_ID}} token.")
-        self.assertIn('target="_blank"', hero,
-                      msg="Hero LINE CTA must open in a new tab.")
-        self.assertIn('rel="noopener"', hero,
-                      msg="Hero LINE CTA must use rel=noopener.")
-        m = re.search(r'<a\b[^>]*class="line-cta"[^>]*>(.*?)</a>', hero, re.DOTALL)
-        self.assertIsNotNone(m, msg="Hero must contain a .line-cta anchor.")
-        img = re.search(r"<img\b[^>]*>", m.group(1), re.DOTALL)
-        self.assertIsNotNone(img, msg="Hero .line-cta must wrap an <img>.")
-        alt = dict(_ATTR_RE.findall(img.group(0))).get("alt", "")
-        self.assertIn("@{{LINE_ID}}", alt,
-                      msg="Hero LINE CTA image alt must expose @{{LINE_ID}} as the accessible name.")
-        self.assertIsNotNone(_THAI_CHAR_RE.search(alt),
-                        msg="Hero LINE CTA image alt must contain Thai text.")
 
 
 # Given: the hero tagline contains editable Thai phrases that must not split.

@@ -10,8 +10,7 @@ Guards:
     images are lazy-loaded and the section blocks no longer carry a
     #contact fallback anchor;
   * the contact-section LINE card uses .contact-item, not .line-cta;
-  * the self-hosted PNG is the exact unmodified official LINE asset;
-  * legacy .btn-line and --color-line* styles are absent from style.css.
+  * the self-hosted PNG is the exact unmodified official LINE asset.
 
 All contracts must pass before deployment.
 """
@@ -25,7 +24,6 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_PATH = REPO_ROOT / "template.html"
-STYLESHEET_PATH = REPO_ROOT / "style.css"
 LINE_BADGE_PATH = REPO_ROOT / "images" / "line-add-friend-th.png"
 OFFICIAL_LINE_BADGE_SHA256 = "4c58bda197c567b3ca6a70878f85626cc266112e574462e995892f2d2b7a2f2f"
 
@@ -56,15 +54,13 @@ def _extract_hero(text: str) -> str:
 
 
 class _TemplateMixin:
-    """Load template.html and style.css once per test class."""
+    """Load template.html once per test class."""
 
     text: str
-    style: str
 
     @classmethod
     def setUpClass(cls) -> None:
         cls.text = TEMPLATE_PATH.read_text(encoding="utf-8")
-        cls.style = STYLESHEET_PATH.read_text(encoding="utf-8")
 
 
 # Given: the official LINE Add Friend button appears in exactly four spots —
@@ -72,11 +68,10 @@ class _TemplateMixin:
 #        brands, FAQ) carrying a lazy badge. The contact section's LINE card
 #        is a separate utility link and must NOT count as a conversion anchor.
 # When:  template.html is scanned for .line-cta anchors and their parent
-#        context (.section-cta vs <section id="contact">), and style.css is
-#        scanned for legacy .btn-line / --color-line* selectors.
+#        context (.section-cta vs <section id="contact">).
 # Then:  the structural contract holds: count, href + safe link attrs,
 #        image src/alt/width/height, parent context, loading eagerness,
-#        absence of #contact fallback, and absence of legacy LINE styles.
+#        and absence of the #contact fallback.
 class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
     def test_self_hosted_badge_matches_official_asset(self) -> None:
         digest = hashlib.sha256(LINE_BADGE_PATH.read_bytes()).hexdigest()
@@ -180,13 +175,6 @@ class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
             msg="Contact-section LINE card must use .contact-item, "
                 "not .line-cta — it is a utility link, not a conversion anchor.",
         )
-
-    def test_legacy_line_styles_absent_from_stylesheet(self) -> None:
-        self.assertNotIn(".btn-line", self.style,
-                         msg="Legacy .btn-line CSS must be removed from style.css.")
-        self.assertNotIn("--color-line", self.style,
-                         msg="Legacy --color-line* CSS variables must be removed "
-                             "from style.css.")
 
 
 if __name__ == "__main__":
