@@ -98,7 +98,7 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   .container { padding: 0 var(--space-md); }
 }
 
-/* ===== 1. HEADER — แถบบนสุด (ชื่อร้าน + เมนู) ===== */
+/* ===== 1. HEADER — แถบบนสุด (โลโก้ + เมนู) ===== */
 .site-header {
   position: sticky; top: 0; z-index: 100;
   background: var(--color-primary);
@@ -111,10 +111,28 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   padding: 0.5rem var(--space-sm);
   max-width: var(--max-width); margin: 0 auto;
 }
+/* โลโก้ร้าน 800x800 ครอปช่องว่างบน-ล่างเป็น landscape ในแถบ header 64px
+   800x800 shop logo cropped to a landscape viewport inside the 64px header */
 .header-brand {
-  min-height: 44px;
-  display: inline-flex; align-items: center;
-  font-size: 1.2rem; font-weight: 700; color: var(--color-white); text-decoration: none; white-space: nowrap;
+  width: 128px; height: 48px;
+  display: inline-block;
+  overflow: hidden;            /* ครอปช่องว่างบน-ล่างของรูป / crops logo whitespace */
+  text-decoration: none;
+}
+.header-brand img,
+.header-brand picture {
+  display: block;
+  width: 100%; height: 100%;
+}
+.header-brand img {
+  object-fit: cover; object-position: center;
+  /* แมปแดงที่อบในรูป (RGB 208,0,0) ให้เลื่อนเข้าหา --color-primary (#C8102E)
+     โดยไม่แก้ไฟล์รูป: contrast/brightness ดันค่าแดง, lighten ผสมกับพื้น header
+     Maps the baked logo red (RGB 208,0,0) toward --color-primary (#C8102E)
+     without editing the bitmap: contrast/brightness shift the red, lighten
+     blends it with the header bar so the rectangle disappears, white stays crisp */
+  filter: contrast(1.408) brightness(0.831);
+  mix-blend-mode: lighten;
 }
 .header-brand:hover { text-decoration: none; }
 .header-brand:focus-visible { outline: 3px solid var(--color-white); outline-offset: 2px; }
@@ -158,7 +176,6 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   /* ขนาดไหลตามความกว้างจอ (768→1280) ให้เมนูภาษาไทยไม่หักบรรทัดที่ 768px
      Fluid sizing so Thai nav labels stay on one line at 768px */
   .header-inner { padding: 0 clamp(0.6rem, 1.8vw, 1.5rem); }
-  .header-brand { font-size: clamp(1.2rem, 0.85rem + 0.6vw, 1.35rem); }
   .nav-hamburger { display: none; }
   .header-nav,
   .nav-checkbox:checked ~ .header-nav {

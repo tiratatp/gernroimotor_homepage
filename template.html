@@ -61,14 +61,15 @@
 <body>
 
   <!-- ================================================================ -->
-  <!-- 1. HEADER — แถบบนสุด: ชื่อร้าน + เมนู                              -->
+  <!-- 1. HEADER — แถบบนสุด: โลโก้ + เมนู                                -->
   <!--    มือถือ: ปุ่ม ≡ เปิดเมนู (checkbox ไม่มี JS) / เดสก์ท็อป: เมนูแถวเดียว -->
   <!--    <nav> เดียวใช้ร่วมทั้งสองโหมด — เพิ่ม/ลบลิงก์ใน <nav> นี้ที่เดียว    -->
   <!-- ================================================================ -->
   <header class="site-header">
     <div class="header-inner">
-      <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) -->
-      <a href="#top" class="header-brand">{{SHOP_NAME}}</a>
+      <!-- โลโก้ร้าน (รูป 800x800 ครอปช่องว่างบน-ล่างด้วย CSS) — ชื่อร้านอยู่ใน alt ดึงจาก variables.txt (SHOP_NAME) -->
+      <!-- Shop logo (800x800 image, CSS-crops top/bottom whitespace); shop name in alt from variables.txt (SHOP_NAME) -->
+      <a href="#top" class="header-brand"><img src="images/logo.jpg" alt="{{SHOP_NAME}}" width="800" height="800"></a>
 
       <input type="checkbox" id="nav-toggle" class="nav-checkbox" aria-label="เปิด/ปิดเมนูนำทาง">
       <label for="nav-toggle" class="nav-hamburger">

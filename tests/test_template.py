@@ -175,6 +175,20 @@ def _has_anchor_offset(style: str) -> bool:
     return False
 
 
+def _rule_body(style: str, selector: str) -> str:
+    """Return the declaration body of the first CSS rule whose selector
+    matches ``selector`` exactly (ignoring leading/trailing whitespace),
+    whether at top level or inside a media query. Returns ``''`` if not
+    found.
+
+    Only matches rules whose body has no nested braces, so a grouped
+    selector like ``.a, .b { }`` is matched by its last segment (``.b``).
+    """
+    pat = re.escape(selector) + r"\s*\{([^{}]*)\}"
+    m = re.search(pat, style)
+    return m.group(1) if m else ""
+
+
 class _TemplateMixin:
     """Load template.html and style.css once per test class."""
 
@@ -216,6 +230,109 @@ class TestNoHeaderCall(_TemplateMixin, unittest.TestCase):
         for dead in (".header-call", ".call-icon", ".call-text"):
             self.assertNotIn(dead, self.style,
                              msg=f"{dead} CSS must be removed from style.css.")
+
+
+# Given: the header brand was changed from visible {{SHOP_NAME}} text to a
+#        linked logo image (images/logo.jpg), with the shop name kept only as
+#        the image alt and the 800x800 square cropped to a landscape viewport
+#        by CSS so it reads as a logo inside the 64px sticky header.
+# When:  the .header-brand anchor and its <img> are parsed from template.html
+#        and the .header-brand rules are parsed from style.css.
+# Then:  the brand link keeps href="#top" + class="header-brand", wraps the
+#        logo <img> with the exact src/alt/width/height, exposes no visible
+#        {{SHOP_NAME}} text, and style.css enforces the crop contract
+#        (overflow hidden + fixed width/height, object-fit cover + center on
+#        the img, picture mirrored to fill) with no leftover text font-sizing.
+class TestHeaderBrandLogo(_TemplateMixin, unittest.TestCase):
+    _BRAND_RE = re.compile(
+        r'<a\b[^>]*class="header-brand"[^>]*>(.*?)</a>', re.DOTALL,
+    )
+
+    def _brand_block(self) -> str:
+        m = self._BRAND_RE.search(self.text)
+        self.assertIsNotNone(m, msg="No <a class='header-brand'> found in template.")
+        return m.group(0)
+
+    def test_brand_link_preserved(self) -> None:
+        block = self._brand_block()
+        self.assertIn('href="#top"', block,
+                      msg="header-brand must keep its href=\"#top\" link.")
+        self.assertIn('class="header-brand"', block,
+                      msg="header-brand must keep its class.")
+
+    def test_brand_contains_logo_image_with_token_alt(self) -> None:
+        block = self._brand_block()
+        m = re.search(r"<img\b[^>]*>", block, re.DOTALL)
+        self.assertIsNotNone(m, msg="header-brand must wrap a logo <img>.")
+        attrs = dict(_ATTR_RE.findall(m.group(0)))
+        self.assertEqual(attrs.get("src"), "images/logo.jpg",
+                         msg="header-brand logo must use images/logo.jpg.")
+        self.assertEqual(attrs.get("alt"), "{{SHOP_NAME}}",
+                         msg="header-brand logo alt must be the {{SHOP_NAME}} token.")
+        self.assertEqual(attrs.get("width"), "800",
+                         msg="header-brand logo must declare intrinsic width=800.")
+        self.assertEqual(attrs.get("height"), "800",
+                         msg="header-brand logo must declare intrinsic height=800.")
+
+    def test_brand_has_no_visible_shop_name_text(self) -> None:
+        block = self._brand_block()
+        # Strip all tags (including <img alt="{{SHOP_NAME}}">) so only visible
+        # text remains; the token must not survive as visible text.
+        visible = re.sub(r"<[^>]+>", "", block)
+        self.assertNotIn("{{SHOP_NAME}}", visible,
+                         msg="header-brand must not show {{SHOP_NAME}} as visible text; "
+                             "the shop name belongs only in the logo alt.")
+
+    def test_brand_css_crop_contract(self) -> None:
+        brand = _rule_body(self.style, ".header-brand")
+        self.assertTrue(brand, msg="style.css must define a .header-brand rule.")
+        self.assertIn("overflow", brand,
+                      msg=".header-brand must be a crop viewport (overflow).")
+        self.assertIn("hidden", brand,
+                      msg=".header-brand must hide overflow to crop the logo.")
+        self.assertIn("width", brand,
+                      msg=".header-brand must set a fixed landscape width.")
+        self.assertIn("height", brand,
+                      msg=".header-brand must set a fixed viewport height.")
+
+        img = _rule_body(self.style, ".header-brand img")
+        self.assertTrue(img, msg="style.css must define a .header-brand img rule.")
+        self.assertIn("object-fit", img,
+                      msg=".header-brand img must use object-fit for cover behavior.")
+        self.assertIn("cover", img,
+                      msg=".header-brand img must use object-fit: cover.")
+        self.assertIn("object-position", img,
+                      msg=".header-brand img must set object-position.")
+        self.assertIn("center", img,
+                      msg=".header-brand img must center the crop.")
+        # Color-mapping treatment: the baked JPEG red (RGB 208,0,0) is mapped
+        # toward --color-primary (#C8102E) without editing the bitmap. The
+        # exact filter values are a browser-proven calibration — assert them
+        # literally so the treatment is not silently weakened or removed.
+        self.assertIn("filter", img,
+                      msg=".header-brand img must apply a filter to map the baked red.")
+        self.assertIn("contrast(1.408)", img,
+                      msg=".header-brand img filter must include contrast(1.408).")
+        self.assertIn("brightness(0.831)", img,
+                      msg=".header-brand img filter must include brightness(0.831).")
+        self.assertIn("mix-blend-mode", img,
+                      msg=".header-brand img must set mix-blend-mode to blend with the header.")
+        self.assertIn("lighten", img,
+                      msg=".header-brand img must use mix-blend-mode: lighten.")
+
+        picture = _rule_body(self.style, ".header-brand picture")
+        self.assertTrue(picture,
+                        msg="style.css must style .header-brand picture for the optimizer rewrite.")
+        self.assertIn("100%", picture,
+                      msg=".header-brand picture must fill the brand viewport (100%).")
+
+    def test_brand_has_no_text_font_sizing(self) -> None:
+        # No .header-brand rule (base or inside a media query) may carry
+        # font-size — the brand is an image now, so text sizing is obsolete.
+        self.assertIsNone(
+            re.search(r"\.header-brand\b[^}]*font-size", self.style),
+            msg=".header-brand must not carry font-size; the brand is a logo image, not text.",
+        )
 
 
 # Given: the hero was redesigned to use a semantic <img> above the text.
