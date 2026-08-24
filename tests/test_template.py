@@ -7,8 +7,8 @@ Guards:
     was removed in the mobile-first header redesign).
   * the hero contains a semantic, high-priority <img> with explicit
     dimensions and Thai alt text.
-  * the hero LINE CTA uses the {{LINE_ID}} token in both href and visible
-    text, with target="_blank" rel="noopener".
+  * the hero LINE CTA uses the {{LINE_ID}} token in href and image alt,
+    with target="_blank" rel="noopener".
   * style.css defines a sticky-anchor offset, so in-page anchors do not land
     beneath the sticky header.
   * template.html carries no inline style="..." attributes — all styling
@@ -247,8 +247,10 @@ class TestHeroImage(_TemplateMixin, unittest.TestCase):
 
 # Given: the hero has a single LINE CTA using the {{LINE_ID}} token.
 # When:  the hero section is extracted and its LINE anchor is inspected.
-# Then:  the href uses @{{LINE_ID}}, the visible text shows @{{LINE_ID}},
-#        and the link opens safely with target=_blank rel=noopener.
+# Then:  the href uses @{{LINE_ID}}, the wrapped <img> alt exposes
+#        @{{LINE_ID}} with Thai text (the accessible name replaces the
+#        legacy visible-text rendering), and the link opens safely with
+#        target=_blank rel=noopener.
 class TestHeroLineCta(_TemplateMixin, unittest.TestCase):
     def test_hero_line_cta_uses_line_id_token(self) -> None:
         hero = _extract_hero(self.text)
@@ -259,9 +261,15 @@ class TestHeroLineCta(_TemplateMixin, unittest.TestCase):
                       msg="Hero LINE CTA must open in a new tab.")
         self.assertIn('rel="noopener"', hero,
                       msg="Hero LINE CTA must use rel=noopener.")
-        visible = re.sub(r"<[^>]+>", "", hero)
-        self.assertIn("@{{LINE_ID}}", visible,
-                      msg="Hero LINE CTA visible text must show @{{LINE_ID}}.")
+        m = re.search(r'<a\b[^>]*class="line-cta"[^>]*>(.*?)</a>', hero, re.DOTALL)
+        self.assertIsNotNone(m, msg="Hero must contain a .line-cta anchor.")
+        img = re.search(r"<img\b[^>]*>", m.group(1), re.DOTALL)
+        self.assertIsNotNone(img, msg="Hero .line-cta must wrap an <img>.")
+        alt = dict(_ATTR_RE.findall(img.group(0))).get("alt", "")
+        self.assertIn("@{{LINE_ID}}", alt,
+                      msg="Hero LINE CTA image alt must expose @{{LINE_ID}} as the accessible name.")
+        self.assertIsNotNone(_THAI_CHAR_RE.search(alt),
+                        msg="Hero LINE CTA image alt must contain Thai text.")
 
 
 # Given: the hero tagline contains Thai words/phrases that must not split.
