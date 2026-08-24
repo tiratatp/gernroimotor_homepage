@@ -389,12 +389,10 @@ class TestHeroLineCta(_TemplateMixin, unittest.TestCase):
                         msg="Hero LINE CTA image alt must contain Thai text.")
 
 
-# Given: the hero tagline contains Thai words/phrases that must not split.
+# Given: the hero tagline contains editable Thai phrases that must not split.
 # When:  the tagline <p> is extracted and its nowrap spans are parsed.
-# Then:  the .nowrap class exists in style.css, and the tagline wraps each
-#        logical group in <span class="nowrap"> so Thai line-breaking cannot
-#        split protected words like ยามาฮ่า or phrases like
-#        มีบริการหลังการขายครบวงจร.
+# Then:  the .nowrap class exists in style.css, each protected group contains
+#        Thai text, and every visible phrase is inside a nowrap span.
 class TestHeroTaglineNoBreak(_TemplateMixin, unittest.TestCase):
     def test_nowrap_class_defined_in_stylesheet(self) -> None:
         self.assertIn(".nowrap", self.style,
@@ -402,24 +400,35 @@ class TestHeroTaglineNoBreak(_TemplateMixin, unittest.TestCase):
         self.assertIn("white-space: nowrap", self.style,
                       msg=".nowrap class must use white-space: nowrap.")
 
-    def test_hero_tagline_protects_logical_groups(self) -> None:
+    def test_hero_tagline_has_thai_nowrap_groups(self) -> None:
         hero = _extract_hero(self.text)
         self.assertTrue(hero, msg="No <section class='hero'> found in template.")
         m = re.search(r'<p class="hero-tagline">(.*?)</p>', hero, re.DOTALL)
         self.assertIsNotNone(m, msg="No .hero-tagline paragraph found in hero.")
         tagline_html = m.group(1)
-        for phrase in ("ฮอนด้า ยามาฮ่า", "มีบริการหลังการขายครบวงจร"):
-            self.assertIn(f'<span class="nowrap">{phrase}</span>', tagline_html,
-                          msg=f"Tagline must wrap '{phrase}' in <span class='nowrap'>.")
+        groups = re.findall(r'<span class="nowrap">([^<]+)</span>', tagline_html)
+        self.assertGreater(len(groups), 0, msg="Hero tagline must contain nowrap groups.")
+        for group in groups:
+            self.assertTrue(_normalize(group), msg="Hero tagline nowrap groups must not be empty.")
+            self.assertIsNotNone(
+                _THAI_CHAR_RE.search(group),
+                msg="Each hero tagline nowrap group must contain Thai text.",
+            )
 
-    def test_hero_tagline_preserves_full_sentence(self) -> None:
+    def test_hero_tagline_wraps_all_visible_text(self) -> None:
         hero = _extract_hero(self.text)
         m = re.search(r'<p class="hero-tagline">(.*?)</p>', hero, re.DOTALL)
         self.assertIsNotNone(m, msg="No .hero-tagline paragraph found in hero.")
-        visible = re.sub(r"<[^>]+>", "", m.group(1)).strip()
-        expected = "ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ มีบริการหลังการขายครบวงจร"
-        self.assertEqual(_normalize(visible), _normalize(expected),
-                         msg="Hero tagline wording must not change.")
+        tagline_html = m.group(1)
+        visible = _normalize(re.sub(r"<[^>]+>", " ", tagline_html))
+        protected = _normalize(" ".join(
+            re.findall(r'<span class="nowrap">([^<]+)</span>', tagline_html)
+        ))
+        self.assertEqual(
+            visible,
+            protected,
+            msg="Every visible hero tagline phrase must be wrapped in a nowrap span.",
+        )
 
 
 # Given: a sticky header (min-height 64px) and html { scroll-behavior: smooth }.
