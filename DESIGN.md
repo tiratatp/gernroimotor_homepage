@@ -31,7 +31,7 @@
 
 ### Font Stack
 
-- Primary: `--font-family` = `"Sarabun", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif`.
+- Primary: `--font-family` = `"Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif`.
 - ไม่มี mono หรือ serif font.
 - น้ำหนักที่โหลดและใช้: 400, 500, 600, 700.
 
@@ -198,7 +198,7 @@ Strategy: **mixed border + restrained shadow**.
 - Touch controls target at least 44×44px; responsive layouts must not create horizontal scrolling at 375px.
 - Thai alt text is required for meaningful images; decorative SVGs require `aria-hidden="true"`.
 - Iframes require descriptive title, lazy loading, and referrer policy. New-tab links require `rel="noopener"`.
-- Sarabun body line-height remains 1.7; content and action labels must use direct Thai wording for low cognitive load.
+- Kanit body line-height remains 1.7; content and action labels must use direct Thai wording for low cognitive load.
 - Reduced-motion behavior in Section 6 is mandatory.
 
 ### Primary Personas / Tasks
@@ -213,7 +213,7 @@ Strategy: **mixed border + restrained shadow**.
 | Item | Location | Why accepted | Owner / Exit |
 |---|---|---|---|
 | ไม่มี dark mode | ทั้งเว็บ | เป็นข้อจำกัดผลิตภัณฑ์ที่ยอมรับไว้และลดภาระผู้ดูแล | ทบทวนเมื่อผู้ดูแลร้องขอ |
-| Google Fonts เป็น third-party | `template.html` | ต้องการ Sarabun และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
+| Google Fonts เป็น third-party | `template.html` | ต้องการ Kanit และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
 | ไม่มี JavaScript ปิดเมนูหลังเลือก anchor | header mobile nav | โครงการกำหนด no-JS และ checkbox hack รักษา desktop nav ได้เสถียร | ทบทวนเมื่อข้อกำหนด no-JS เปลี่ยน |
 | มี breakpoint 600px เฉพาะ contact grid | `style.css` | เป็นข้อยกเว้นเดิมเพื่อรักษาขนาดการ์ดและ touch readability | คงไว้จน layout contact เปลี่ยนระบบ |
 | รูปภาพแบรนด์ทางการ LINE Add Friend มีสีเขียวแบรนด์ | `.line-cta` (hero และ section-end CTAs) | ใช้รูปภาพปุ่มทางการบิตแมป 202x60px จาก LINE เพื่อการจดจำแบรนด์; สีเขียวฝังในไฟล์รูปภาพบิตแมป จึงอนุโลมเป็นข้อยกเว้นภาพแบรนด์ทางการโดยไม่สร้าง CSS accent token เพิ่ม | คงไว้ตามข้อกำหนดแบรนด์ของ LINE |
