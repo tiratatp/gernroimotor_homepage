@@ -13,8 +13,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) — แก้ description ได้ตรงนี้ (สำหรับ Google) -->
-  <title>{{SHOP_NAME}} | ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ โชคชัย 4 แยก 63</title>
-  <meta name="description" content="ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ ร้านขายมอเตอร์ไซค์ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ ออกรถง่าย ออกได้ทุกอาชีพ บริการหลังการขายครบวงจร โชคชัย 4 ซอย 63 กรุงเทพฯ เปิดทุกวัน 8.30-18.30 น.">
+  <title>{{SHOP_NAME}} | ร้านขายมอเตอร์ไซค์ โชคชัย 4 แยก 63</title>
+  <meta name="description" content="{{SHOP_NAME}} ร้านขายมอเตอร์ไซค์โชคชัย 4 แยก 63 เปิดทุกวัน 8.30-18.30 น. แอด LINE เช็กสต็อก สี โปร และค่างวดก่อนเข้าร้าน">
   <!-- บอก Google ให้เก็บหน้านี้เข้าดัชนี และอนุญาตรูปขนาดใหญ่ในผลค้นหา -->
   <!-- Tell Google to index this page and allow large image previews -->
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -36,8 +36,8 @@
 
   <!-- Open Graph — สำหรับแชร์บน Facebook/LINE/Twitter (ชื่อร้าน/โดเมนจาก variables.txt) -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="{{SHOP_NAME}} | ศูนย์จำหน่ายมอเตอร์ไซค์ชั้นนำ โชคชัย 4 แยก 63">
-  <meta property="og:description" content="ร้านขายมอเตอร์ไซค์ ทุกรุ่น ทุกยี่ห้อ ฮอนด้า ยามาฮ่า ฟรีดาวน์ บริการหลังการขายครบวงจร เปิดทุกวัน 8.30-18.30 น.">
+  <meta property="og:title" content="{{SHOP_NAME}} | ร้านขายมอเตอร์ไซค์ โชคชัย 4 แยก 63">
+  <meta property="og:description" content="{{SHOP_NAME}} ร้านขายมอเตอร์ไซค์โชคชัย 4 แยก 63 เปิดทุกวัน 8.30-18.30 น. แอด LINE เช็กสต็อก สี โปร และค่างวดก่อนเข้าร้าน">
   <meta property="og:url" content="{{SITE_URL}}">
   <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปสำหรับแชร์บน Facebook/LINE (ต้องมีขนาด 1200x630 พิกเซลพอดี) -->
   <!-- Share image for Facebook/LINE — must be exactly 1200x630 pixels -->
@@ -62,7 +62,8 @@
 
   <!-- ================================================================ -->
   <!-- 1. HEADER — แถบบนสุด: โลโก้ + เมนู                                -->
-  <!--    มือถือ: ปุ่ม ≡ เปิดเมนู (checkbox ไม่มี JS) / เดสก์ท็อป: เมนูแถวเดียว -->
+  <!--    มือถือ: ปุ่ม ≡ เปิดเมนู (checkbox hack + JS ปิดเมนูหลังคลิกลิงก์) / เดสก์ท็อป: เมนูแถวเดียว -->
+  <!--    Mobile: ≡ opens menu (checkbox hack + JS closes after link click) / Desktop: single-row nav -->
   <!--    <nav> เดียวใช้ร่วมทั้งสองโหมด — เพิ่ม/ลบลิงก์ใน <nav> นี้ที่เดียว    -->
   <!-- ================================================================ -->
   <header class="site-header">
@@ -106,9 +107,11 @@
     </div>
     <div class="hero-content">
       <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) -->
-      <h1>{{SHOP_NAME}}</h1>
+      <h1>{{SHOP_NAME}} โชคชัย 4 แยก 63</h1>
       <!-- EDIT ME / แก้ไขตรงนี้: แท็กไลน์ 1 บรรทัด (ขายตัวเองใน 1 ประโยค) -->
-      <p class="hero-tagline"><span class="nowrap">ร้านขายมอเตอร์ไซค์</span> <span class="nowrap">โชคชัย 4 แยก 63</span><br/><span class="nowrap">เราบริการด้วยความจริงใจ</span> <span class="nowrap">การันตีความพึงพอใจ 5 ดาวจากลูกค้า</span> <span class="nowrap">เปิดทุกวัน 08:30 - 18:30 น.</span></p>
+      <p class="hero-tagline"><span class="nowrap">ร้านขายมอเตอร์ไซค์</span> <span class="nowrap">พร้อมให้คำปรึกษาก่อนเข้าร้าน</span></p>
+      <!-- EDIT ME / แก้ไขตรงนี้: ข้อความชวนแอด LINE (อยู่เหนือปุ่ม LINE ทางการ) -->
+      <p class="hero-cta-lead">สนใจรุ่นไหน? แอด LINE เช็กสต็อก สี โปร และค่างวด</p>
       <!-- LINE ID ดึงจาก variables.txt (LINE_ID) -->
       <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: ปุ่มเพิ่มเพื่อน LINE ทางการ — ห้ามแก้ไข/ครอป/ปรับขนาด (คงขนาด 202x60) -->
       <!-- SWAP IMAGE: official LINE Add Friend button — do NOT edit/crop/resize (keep 202x60) -->
@@ -473,11 +476,11 @@
         <div class="contact-map-column">
           <!-- EDIT ME / แก้ไขตรงนี้: ฝังแผนที่จริงของร้าน
                วิธี: ไป Google Maps → ค้นหาที่อยู่ร้าน → คลิก "แชร์" → เลือก "ฝังแผนที่"
-               → คัดลอกเฉพาะ URL ในส่วน src="..." มาวางแทน URL ด้านล่าง -->
+               → คัดลอกเฉพาะ URL ในส่วน src="..." ไปวางใน variables.txt (MAPS_EMBED_URL) -->
           <iframe
             class="map-embed"
-            src="https://maps.google.com/maps?q=%E0%B9%80%E0%B8%81%E0%B8%B4%E0%B8%99%E0%B8%A3%E0%B9%89%E0%B8%AD%E0%B8%A2%E0%B8%A1%E0%B8%AD%E0%B9%80%E0%B8%95%E0%B8%AD%E0%B8%A3%E0%B9%8C%20%E0%B9%82%E0%B8%8A%E0%B8%84%E0%B8%8A%E0%B8%B1%E0%B8%A2%204&z=17&output=embed"
-            title="แผนที่ร้าน" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            src="{{MAPS_EMBED_URL}}"
+            title="แผนที่ร้าน" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
           <!-- ที่อยู่ดึงจาก variables.txt (ADDRESS + POSTAL_CODE) -->
           <p class="address-line">{{ADDRESS}} กรุงเทพมหานคร {{POSTAL_CODE}}</p>
           <!-- EDIT ME / แก้ไขตรงนี้: ลิงก์นำทาง Google Maps ของร้าน (destination = พิกัดร้าน) -->
@@ -614,7 +617,8 @@
     ],
     "sameAs": [
       "https://www.facebook.com/{{FACEBOOK_PAGE}}",
-      "https://www.tiktok.com/@{{TIKTOK_USER}}"
+      "https://www.tiktok.com/@{{TIKTOK_USER}}",
+      "{{BUSINESS_PROFILE_URL}}"
     ],
     "geo": {
       "@type": "GeoCoordinates",
@@ -675,6 +679,15 @@
       }
     ]
   }
+  </script>
+
+  <!-- ปิดเมนูมือถือหลังเลือกลิงก์ — คง checkbox hack ไว้ / close mobile nav after clicking a link; checkbox hack retained -->
+  <script>
+    document.querySelectorAll('.header-nav a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        document.getElementById('nav-toggle').checked = false;
+      });
+    });
   </script>
 
 </body>
