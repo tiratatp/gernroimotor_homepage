@@ -90,7 +90,7 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
 ## Design constraints
 
 - All design tokens are CSS custom properties on `:root` in `style.css`
-  (marked `CHANGE COLORS HERE`). **One accent rule**: `--color-primary` (`#C8102E` red)
+  (marked `CHANGE COLORS HERE`). **One accent rule**: `--color-primary` (`#CF0000` red)
   is the only accent — no secondary accent anywhere.
 - **No inline styles, no `<style>` tag.** All CSS lives in `style.css`; enforce with
   scoped selectors there (both rules are active in `.htmlvalidate.json` and covered
