@@ -2,9 +2,9 @@
 
 Single-page Thai-language landing page for เกินร้อยมอเตอร์, a Bangkok motorcycle
 dealer. No framework, no JS build, no dependencies. Hosted on GitHub Pages. The
-human maintainer edits only `variables.txt`, `template.html`, and `style.css`
-(colors section only) through the GitHub
-web UI; `README.md` (written in Thai for the shop admin) is their guide — keep it
+human maintainer edits `variables.txt`, `template.html`, and `style.css`
+(colors section only) through the GitHub web UI, plus uploads/replaces image assets
+in `images/`; `README.md` (written in Thai for the shop admin) is their guide — keep it
 accurate.
 
 ## Build system (the crux)
@@ -40,9 +40,8 @@ after tests and `build.py`. It validates and uploads that same **built** output;
   `<img>` becomes `<picture>` (JPEG/PNG fallback kept) and `<link rel="preload">`
   is rewritten. **Absolute** URLs (`og:image`, JSON-LD → `og-cover.jpg`) keep JPEG
   for Facebook/LINE crawlers.
-- `style.css` gets its hero `url("images/...")` rewritten to the WebP (no CSS
-  fallback — background images can't do `<picture>`-style fallbacks, unchanged
-  behavior) and is then minified with clean-css level 2 (self-checks: `:root`
+- Any relative `url("images/...")` references in `style.css` are rewritten to
+  WebP, then the stylesheet is minified with clean-css level 2 (self-checks: `:root`
   survives, no `{{` tokens).
 - `index.html` is then minified (comments/whitespace stripped) and self-checked
   (`</html>`, both JSON-LD blocks must parse, no `{{` tokens).
@@ -79,23 +78,25 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
 - Preserve bilingual maintainer comments in `template.html`, `variables.txt`, and
   `style.css`. Comments in `*.py` and `.github/*` are English-only; runtime errors and
   user-facing text remain bilingual or Thai as appropriate.
-- Editable text regions carry `<!-- EDIT ME / แก้ไขตรงนี้: ... -->`; images carry
-  `<!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: ... -->` (the hero background's marker is a
-  `/* SWAP IMAGE ... */` comment in `style.css`). Keep the markers when editing.
-- Repeating blocks (service card, gallery figure, hours row, contact card, brand
-  chip) are wrapped in `COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้` … `TO HERE / ถึงตรงนี้`
-  fences. These are the maintainer's copy-paste units — preserve them intact.
+- Editable text regions carry `<!-- EDIT ME / แก้ไขตรงนี้: ... -->`; image markers are
+  `<!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: ... -->` HTML comments in `template.html`. Keep
+  the markers when editing.
+- Repeating blocks (service cards, testimonials, FAQ items, exemplar brand/model chips,
+  delivery carousel figures, contact cards, footer socials) are wrapped in
+  `COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้` … `TO HERE / ถึงตรงนี้` fences. These are the
+  maintainer's copy-paste units — preserve them intact.
 - Site content is Thai (`<html lang="th">`); keep new user-facing text in Thai.
 
 ## Design constraints
 
 - All design tokens are CSS custom properties on `:root` in `style.css`
-  (marked `CHANGE COLORS HERE`). **One accent rule**: `--color-primary` (`#CF0000` red)
-  is the only accent — no secondary accent anywhere.
-- **No inline styles, no `<style>` tag.** All CSS lives in `style.css`; enforce with
-  scoped selectors there (both rules are active in `.htmlvalidate.json` and covered
-  by tests).
-- Font: Sarabun (Google Fonts) with system fallback; Thai body line-height **1.7**.
+  (marked `CHANGE COLORS HERE`). Custom properties are maintainer-editable, except
+  `--color-primary` (`#CF0000` red) is locked to `#CF0000` unless the logo image
+  and matching theme-color/test contracts are deliberately changed together.
+- **No inline styles, no `<style>` tag.** All CSS lives in `style.css`; unit tests
+  explicitly reject inline `style=` attributes in `template.html`, while code review and
+  HTML validation maintain the no-`<style>` contract.
+- Font: Kanit (Google Fonts) with system fallback; Thai body line-height **1.7**.
 - **New sections must clone an existing section's markup** — same
   `<section class="section" id="…">` + `.container` + `.section-title` structure,
   inside `<main>` (never between `</main>` and `<footer>`). Alternating section
@@ -109,6 +110,7 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
 - Accessibility: WCAG AA contrast minimum, Thai `alt` text on all images,
   `aria-hidden="true"` on decorative SVGs, `focus-visible` outline
   (3px `--color-primary`), `prefers-reduced-motion: reduce` disables transitions.
+- Detailed visual specifications live in `DESIGN.md`.
 - Accepted debt: no dark mode, no self-hosted fonts, single `<main>` landmark.
 
 ## Deployment
@@ -117,3 +119,6 @@ Deployed by the Actions workflow, **not** "Deploy from branch" — repo
 Settings → Pages → Source must be **GitHub Actions**. The workflow stages `_site`
 with only `index.html`, `style.css`, `robots.txt`, `sitemap.xml`, optimized `images/`, and an
 optional `CNAME`; source files, tests, workflows, and README are not published.
+Before uploading the artifact on `main`, the build job reads `SITE_URL` from
+`variables.txt`, follows redirects, and blocks deployment if the current live URL
+returns HTTP 404 or cannot be verified.
