@@ -86,6 +86,30 @@ jobs:
             fi
           done
 
+      - name: Check SITE_URL is not 404 (ตรวจสอบ URL เว็บไซต์ไม่เป็น 404)
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          SITE_URL="$(sed -n 's/^SITE_URL[[:space:]]*=[[:space:]]*//p' variables.txt)"
+          if [ -z "$SITE_URL" ]; then
+            echo "ERROR / ข้อผิดพลาด: ไม่พบ SITE_URL ใน variables.txt (SITE_URL is missing)"
+            exit 1
+          fi
+          if ! HTTP_STATUS="$(curl --silent --show-error --location --output /dev/null \
+            --write-out '%{http_code}' --connect-timeout 10 --max-time 30 \
+            --retry 2 --retry-delay 2 --retry-all-errors -- "$SITE_URL")"; then
+            echo "ERROR / ข้อผิดพลาด: ตรวจสอบ $SITE_URL ไม่สำเร็จ (could not verify SITE_URL)"
+            exit 1
+          fi
+          if [ "$HTTP_STATUS" = "404" ]; then
+            echo "ERROR / ข้อผิดพลาด: $SITE_URL ตอบกลับ HTTP 404 — ยกเลิกการเผยแพร่ (deployment blocked)"
+            exit 1
+          fi
+          if [ "$HTTP_STATUS" = "000" ]; then
+            echo "ERROR / ข้อผิดพลาด: ตรวจสอบ $SITE_URL ไม่สำเร็จ (could not verify SITE_URL)"
+            exit 1
+          fi
+          echo "OK: $SITE_URL ตอบกลับ HTTP $HTTP_STATUS (not 404)"
+
       # Optimize images + minify the built index.html and style.css in this
       # same job. Sources stay readable; only the staged deploy copy is minified.
       # Tools install OUTSIDE the repo so node_modules cannot enter the artifact.
