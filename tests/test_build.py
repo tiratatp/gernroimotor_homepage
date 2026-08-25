@@ -23,6 +23,7 @@ REQUIRED_TOKENS: tuple[str, ...] = (
     "PHONE_BACKUP_DISPLAY", "PHONE_BACKUP_TEL",
     "ADDRESS", "POSTAL_CODE", "LINE_ID", "FACEBOOK_PAGE",
     "TIKTOK_USER", "SITE_URL",
+    "MAPS_EMBED_URL", "BUSINESS_PROFILE_URL",
 )
 
 BILINGUAL_ERROR_MARKER = "ERROR / ข้อผิดพลาด:"
@@ -42,6 +43,8 @@ def _valid_variables_block() -> str:
         FACEBOOK_PAGE = gernroimotor
         TIKTOK_USER = 100motor.bkk
         SITE_URL = https://example.com/
+        MAPS_EMBED_URL = https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1!2d2!3d3!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1
+        BUSINESS_PROFILE_URL = https://maps.app.goo.gl/example
         """)
 
 
@@ -98,7 +101,7 @@ class _BuildHarness(unittest.TestCase):
             )
 
 
-# Given: 12 policy-valid variables + template referencing all of them.
+# Given: 14 policy-valid variables + template referencing all of them.
 # When: build.py runs. Then: exits 0 and prints OK — harness is wired right.
 class TestValidBuildHarness(_BuildHarness):
     def test_valid_fixtures_build_successfully(self) -> None:
@@ -180,6 +183,37 @@ class TestSocialIdentifierPolicy(_BuildHarness):
                     self.with_var(var, bad), _minimal_template(),
                 )
                 self.assertRejected(result, marker=var, label=label)
+
+
+# Given/When/Then: MAPS_EMBED_URL must be a Google Maps embed URL starting
+# with https://www.google.com/maps/embed?pb=; everything else is rejected.
+class TestMapsEmbedUrlPolicy(_BuildHarness):
+    def test_invalid_maps_embed_urls_are_rejected(self) -> None:
+        for label, bad in (
+            ("http_not_https", "http://www.google.com/maps/embed?pb=abc"),
+            ("wrong_host", "https://maps.app.goo.gl/4mWG7aJ7aAGmMYqz6"),
+            ("missing_pb_param", "https://www.google.com/maps/embed"),
+            ("plain_google_maps", "https://www.google.com/maps?q=test"),
+        ):
+            with self.subTest(case=label):
+                result = self.run_build(
+                    self.with_var("MAPS_EMBED_URL", bad), _minimal_template(),
+                )
+                self.assertRejected(result, marker="MAPS_EMBED_URL", label=label)
+
+
+# Given/When/Then: BUSINESS_PROFILE_URL must be an https URL with a host.
+class TestBusinessProfileUrlPolicy(_BuildHarness):
+    def test_invalid_business_profile_urls_are_rejected(self) -> None:
+        for label, bad in (
+            ("http_not_https", "http://maps.app.goo.gl/example"),
+            ("missing_host", "https:///"),
+        ):
+            with self.subTest(case=label):
+                result = self.run_build(
+                    self.with_var("BUSINESS_PROFILE_URL", bad), _minimal_template(),
+                )
+                self.assertRejected(result, marker="BUSINESS_PROFILE_URL", label=label)
 
 
 if __name__ == "__main__":

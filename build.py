@@ -70,6 +70,20 @@ def validate_value(key, value):
         if not SOCIAL_RE.fullmatch(value):
             fail(f"{key} '{value}' ต้องประกอบด้วยตัวอักษร ตัวเลข . _ - เท่านั้น",
                  f"{key} '{value}' must contain only letters, digits, . _ -")
+    elif key == "MAPS_EMBED_URL":
+        if not value.startswith("https://www.google.com/maps/embed?pb="):
+            fail(f"MAPS_EMBED_URL ต้องเป็น URL ฝังแผนที่จาก Google Maps "
+                 f"(เริ่มต้นด้วย https://www.google.com/maps/embed?pb=)",
+                 f"MAPS_EMBED_URL must be a Google Maps embed URL "
+                 f"(starting with https://www.google.com/maps/embed?pb=)")
+    elif key == "BUSINESS_PROFILE_URL":
+        parts = urlsplit(value)
+        if parts.scheme != "https":
+            fail(f"BUSINESS_PROFILE_URL '{value}' ต้องใช้ https (ไม่ใช่ http)",
+                 f"BUSINESS_PROFILE_URL '{value}' must use https (not http)")
+        if not parts.netloc:
+            fail(f"BUSINESS_PROFILE_URL '{value}' ไม่มี host",
+                 f"BUSINESS_PROFILE_URL '{value}' has no host")
 
 
 def main():
