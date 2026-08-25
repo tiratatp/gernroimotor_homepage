@@ -114,7 +114,7 @@
 - **Layout**: inline block element.
 
 ### Hero
-- **Structure**: `<section class="hero" id="top">` → `.hero-media` (semantic `<img>`) + `.hero-content` (`<h1>` + `.hero-tagline` + `.line-cta`). รูปอยู่เหนือข้อความบนมือถือ (image-first stack).
+- **Structure**: `<section class="hero" id="top">` → `.hero-media` (semantic `<img>`) + `.hero-content` (`<h1>` + `.hero-tagline` + `.hero-cta-lead` + `.line-cta`). รูปอยู่เหนือข้อความบนมือถือ (image-first stack). `.hero-cta-lead` เป็นข้อความชวนแอด LINE อยู่เหนือปุ่ม LINE ทางการ ใช้ `font-weight: 600` และสี `--color-text` เพื่อเน้นกว่า tagline.
 - **Variants**: none — หน้าเดียวเท่านั้น.
 - **Spacing**: image full-bleed บนมือถือ; `.hero-content` ใช้ `--space-lg` / `--space-sm` / `--space-xl`.
 - **States**: `.line-cta` active press & focus-visible outline; ไม่มี hover บนรูป hero.
@@ -141,16 +141,16 @@
 - **Layout**: wrapping cluster, centered on narrow screens only when content naturally wraps.
 
 ### Consolidated Contact Section
-- **Structure**: Section Shell → `.location-grid`; left column contains map, address, directions Button; right column contains prominent hours and `.contact-list` for phone primary, backup, LINE.
+- **Structure**: Section Shell → `.location-grid`; left column contains map iframe (src จาก `{{MAPS_EMBED_URL}}` ใน variables.txt), address, และ directions Button; right column contains prominent hours and `.contact-list` for phone primary, backup, LINE. `{{BUSINESS_PROFILE_URL}}` ไม่มีลิงก์ที่แสดงบนหน้า — ใช้เฉพาะใน JSON-LD `sameAs` เท่านั้น.
 - **Variants**: one column below 768px; map-left/contact-right from 768px. Contact list changes layout only at existing 600px convention.
 - **Spacing**: column gap `--space-lg`; card gap `--space-md`; address/action stack uses `--space-sm`.
 - **States**: map static; directions and channel links use existing Button/Content Card states.
-- **Accessibility**: iframe keeps descriptive Thai `title`, `loading="lazy"`, `referrerpolicy`; channel labels and values remain visible; external links use `rel="noopener"`.
+- **Accessibility**: iframe มี `title` ภาษาไทย, `loading="lazy"`, `allowfullscreen`, `referrerpolicy="strict-origin-when-cross-origin"` และไม่มี `width`/`height`/`style` (CSS กำหนดขนาด); channel labels and values remain visible; external links use `rel="noopener"`.
 - **Motion**: none beyond primitives.
 - **Layout**: responsive sidebar grid; map/address/directions left, hours/actions right.
 
 ### Header Navigation
-- **Structure**: `.header-brand` is a linked logo image — `<a href="#top" class="header-brand"><img src="images/logo.jpg" alt="{{SHOP_NAME}}" width="800" height="800"></a>` (intrinsic 800x800) — not visible text; the shop name survives only as the image `alt`. `.header-brand` is a fixed 128x48 landscape crop viewport (`overflow: hidden`) and `.header-brand img` uses `object-fit: cover; object-position: center` to trim the logo's top/bottom whitespace, so the 800x800 square reads as a landscape logo inside the 64px header. The logo's baked background is #CF0000, which directly matches the header `--color-primary` (#CF0000); since the bitmap and the header bar are the same red, `.header-brand img` needs no `filter` or `mix-blend-mode` treatment — the red rectangle already disappears into the header bar while the white Thai mark stays crisp. `.header-brand picture` mirrors the img sizing (`width`/`height: 100%`) so the deploy-time optimizer's `<img>`→`<picture>` rewrite behaves identically. Dimensions are the same on mobile and desktop. A single shared `<nav>` is controlled on mobile by the `#nav-toggle` checkbox + label and becomes inline at 768px. ไม่มีปุ่มโทรใน header — ช่องทางติดต่อทั้งหมดอยู่ใน `#contact`.
+- **Structure**: `.header-brand` is a linked logo image — `<a href="#top" class="header-brand"><img src="images/logo.jpg" alt="{{SHOP_NAME}}" width="800" height="800"></a>` (intrinsic 800x800) — not visible text; the shop name survives only as the image `alt`. `.header-brand` is a fixed 128x48 landscape crop viewport (`overflow: hidden`) and `.header-brand img` uses `object-fit: cover; object-position: center` to trim the logo's top/bottom whitespace, so the 800x800 square reads as a landscape logo inside the 64px header. The logo's baked background is #CF0000, which directly matches the header `--color-primary` (#CF0000); since the bitmap and the header bar are the same red, `.header-brand img` needs no `filter` or `mix-blend-mode` treatment — the red rectangle already disappears into the header bar while the white Thai mark stays crisp. `.header-brand picture` mirrors the img sizing (`width`/`height: 100%`) so the deploy-time optimizer's `<img>`→`<picture>` rewrite behaves identically. Dimensions are the same on mobile and desktop. A single shared `<nav>` is controlled on mobile by the `#nav-toggle` checkbox + label and becomes inline at 768px. มี JavaScript ขนาดเล็กก่อน `</body>` ที่ uncheck `#nav-toggle` หลังคลิกลิงก์ใน `.header-nav a` เพื่อปิดเมนูมือถือหลังเลือก anchor — คง checkbox hack ไว้สำหรับการเปิด/ปิดด้วยปุ่ม hamburger. ไม่มีปุ่มโทรใน header — ช่องทางติดต่อทั้งหมดอยู่ใน `#contact`.
 - **Variants**: mobile dropdown (white) / desktop row (on red bar).
 - **States**: open/closed icons, hover accent, focus-visible on checkbox label and links.
 - **Accessibility**: checkbox hack must remain (no `<details>`); the brand link's accessible name comes from `alt="{{SHOP_NAME}}"` (no visible text) and its 128x48 box meets the 44px touch target; the logo's baked #CF0000 background directly matches `--color-primary` (see Structure) so it blends seamlessly with the header bar with no color treatment; hamburger and desktop nav links use `--color-white` on `--color-primary` bar (WCAG AA) with a white focus ring; mobile dropdown stays white with `--color-text` and a primary focus ring for readability; controls meet 44px target.
@@ -214,6 +214,5 @@ Strategy: **mixed border + restrained shadow**.
 |---|---|---|---|
 | ไม่มี dark mode | ทั้งเว็บ | เป็นข้อจำกัดผลิตภัณฑ์ที่ยอมรับไว้และลดภาระผู้ดูแล | ทบทวนเมื่อผู้ดูแลร้องขอ |
 | Google Fonts เป็น third-party | `template.html` | ต้องการ Kanit และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
-| ไม่มี JavaScript ปิดเมนูหลังเลือก anchor | header mobile nav | โครงการกำหนด no-JS และ checkbox hack รักษา desktop nav ได้เสถียร | ทบทวนเมื่อข้อกำหนด no-JS เปลี่ยน |
 | มี breakpoint 600px เฉพาะ contact grid | `style.css` | เป็นข้อยกเว้นเดิมเพื่อรักษาขนาดการ์ดและ touch readability | คงไว้จน layout contact เปลี่ยนระบบ |
 | รูปภาพแบรนด์ทางการ LINE Add Friend มีสีเขียวแบรนด์ | `.line-cta` (hero และ section-end CTAs) | ใช้รูปภาพปุ่มทางการบิตแมป 202x60px จาก LINE เพื่อการจดจำแบรนด์; สีเขียวฝังในไฟล์รูปภาพบิตแมป จึงอนุโลมเป็นข้อยกเว้นภาพแบรนด์ทางการโดยไม่สร้าง CSS accent token เพิ่ม | คงไว้ตามข้อกำหนดแบรนด์ของ LINE |

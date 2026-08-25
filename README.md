@@ -40,8 +40,10 @@ Golden rule: edit everything through the GitHub website — no software to insta
 | `FACEBOOK_PAGE` | ชื่อเพจ Facebook (ท้ายลิงก์) | เช่นเดียวกัน — ใส่เฉพาะ `ชื่อเพจ` ไม่ใส่ facebook.com/... |
 | `TIKTOK_USER` | ชื่อบัญชี TikTok | เช่นเดียวกัน เช่น `100motor.bkk` |
 | `SITE_URL` | โดเมนจริงของเว็บ | ขึ้นต้น `https://` ลงท้าย `/` เช่น `https://www.yourshop.com/` (หากไม่มีโดเมนตัวเอง ต้องให้ตรงกับ URL ของ GitHub Pages คือ `https://<username>.github.io/<repo>/`) |
+| `MAPS_EMBED_URL` | URL ฝังแผนที่จาก Google Maps | ขึ้นต้นด้วย `https://www.google.com/maps/embed?pb=` — วิธี: Google Maps → ค้นหาที่อยู่ → "แชร์" → "ฝังแผนที่" → คัดลอกเฉพาะ URL ใน `src="..."` |
+| `BUSINESS_PROFILE_URL` | URL Google Business Profile (ข้อมูล Google/structured data — ไม่แสดงบนหน้าเว็บ) | ขึ้นต้นด้วย `https://` เช่น `https://maps.app.goo.gl/...` — ลิงก์สั้นจาก Google Maps |
 
-ตำแหน่งบนเว็บ: ปุ่มรูปภาพ LINE Add Friend Official Badge (`images/line-add-friend-th.png`) อยู่ในส่วน hero และท้ายทุกส่วนของหน้าเว็บ (ยกเว้นส่วนติดต่อที่มีการ์ด LINE ของตัวเอง) ลิงก์ตรงไปที่ LINE ID ของร้าน ส่วนช่องทางติดต่อเต็ม (เบอร์โทรหลัก เบอร์สำรอง LINE และปุ่มนำทาง) อยู่ในส่วน **“ที่ตั้งและติดต่อเรา”** (`#contact`) พร้อมแผนที่ ที่อยู่ เวลาเปิด และ Facebook กับ TikTok อยู่ในแถบล่างสุด (footer)
+ตำแหน่งบนเว็บ: ปุ่มรูปภาพ LINE Add Friend Official Badge (`images/line-add-friend-th.png`) อยู่ในส่วน hero และท้ายทุกส่วนของหน้าเว็บ (ยกเว้นส่วนติดต่อที่มีการ์ด LINE ของตัวเอง) ลิงก์ตรงไปที่ LINE ID ของร้าน ส่วนช่องทางติดต่อเต็ม (เบอร์โทรหลัก เบอร์สำรอง LINE และปุ่มนำทาง) อยู่ในส่วน **“ที่ตั้งและติดต่อเรา”** (`#contact`) พร้อมแผนที่ (URL ฝังจาก `MAPS_EMBED_URL`) ที่อยู่ เวลาเปิด ส่วน Facebook กับ TikTok อยู่ในแถบล่างสุด (footer)
 
 ## ② เปลี่ยนข้อความ / รูปภาพ / สี
 
@@ -124,7 +126,7 @@ GitHub Actions ทำงานอัตโนมัติ: ทดสอบข้
 - [ ] ยี่ห้อ/รุ่นรถในส่วน "ยี่ห้อและรุ่นรถ" ตรงกับสต็อกจริงที่ร้าน
 - [ ] เปิดเว็บบนมือถือ กดเมนู “ที่ตั้ง/ติดต่อ” ว่าเลื่อนไปส่วน `#contact` ถูกต้อง
 - [ ] กดทดสอบปุ่มรูปภาพ LINE Add Friend ใน hero และท้ายแต่ละส่วนว่าเปิดแอป/เว็บ LINE ไปยัง `@{{LINE_ID}}` ถูกต้อง
-- [ ] ในส่วน “ที่ตั้งและติดต่อเรา” กดทดสอบ: นำทาง (เปิด Google Maps), เบอร์หลัก, เบอร์สำรอง (เปิดหน้าโทรศัพท์) และ LINE
+- [ ] ในส่วน “ที่ตั้งและติดต่อเรา” กดทดสอบ: แผนที่ (แสดงที่ตั้งร้านถูกต้อง), นำทาง (เปิด Google Maps), เบอร์หลัก, เบอร์สำรอง (เปิดหน้าโทรศัพท์) และ LINE
 - [ ] ใน footer กดทดสอบลิงก์ Facebook และ TikTok
 - [ ] โทรเข้าเบอร์ที่แสดงบนเว็บจริง ๆ ว่าติด
 - [ ] ส่ง URL เข้า Google Search Console (search.google.com/search-console)
