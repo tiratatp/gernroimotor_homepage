@@ -51,7 +51,7 @@ FACEBOOK_PAGE = gernroimotor
 
 # โดเมนจริงของเว็บ เช่น https://www.yourshop.com/ (ต้องขึ้นต้นด้วย https:// และลงท้ายด้วย /)
 # The site's real domain, e.g. https://www.yourshop.com/ (must start with https:// and end with /)
-SITE_URL = https://tiratatp.github.io/aimmy_landing_page/
+SITE_URL = https://tiratatp.github.io/gernroimotor_homepage/
 
 # ชื่อบัญชี TikTok ไม่ต้องใส่เครื่องหมาย @
 # TikTok username (without the leading @)
