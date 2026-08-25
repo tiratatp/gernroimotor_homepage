@@ -10,8 +10,8 @@
 /* Change the values below to recolor the whole page.    */
 /* ====================================================== */
 :root {
-  --color-primary: #C8102E;          /* สีหลัก (ปุ่ม, ตัวเน้น) — racing red */
-  --color-primary-dark: #A00D24;     /* สีหลักเข้ม (เวลาเอาเมาส์ชี้) / hover */
+  --color-primary: #CF0000;          /* สีหลัก (ปุ่ม, ตัวเน้น) — ตรงแดงโลโก้ / logo red */
+  --color-primary-dark: #A60000;     /* สีหลักเข้ม (เวลาเอาเมาส์ชี้) / hover */
   --color-text: #1A1A1A;             /* สีตัวอักษรเข้ม / main text */
   --color-text-muted: #5A5A5A;       /* สีตัวอักษรอ่อน / secondary text */
   --color-bg: #FFFFFF;               /* สีพื้นหลัง / page background */
@@ -130,13 +130,6 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 }
 .header-brand img {
   object-fit: cover; object-position: center;
-  /* แมปแดงที่อบในรูป (RGB 208,0,0) ให้เลื่อนเข้าหา --color-primary (#C8102E)
-     โดยไม่แก้ไฟล์รูป: contrast/brightness ดันค่าแดง, lighten ผสมกับพื้น header
-     Maps the baked logo red (RGB 208,0,0) toward --color-primary (#C8102E)
-     without editing the bitmap: contrast/brightness shift the red, lighten
-     blends it with the header bar so the rectangle disappears, white stays crisp */
-  filter: contrast(1.408) brightness(0.831);
-  mix-blend-mode: lighten;
 }
 .header-brand:hover { text-decoration: none; }
 .header-brand:focus-visible { outline: 3px solid var(--color-white); outline-offset: 2px; }

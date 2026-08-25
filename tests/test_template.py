@@ -265,6 +265,12 @@ class TestHeaderBrandLogo(_TemplateMixin, unittest.TestCase):
                          msg="header-brand must not show {{SHOP_NAME}} as visible text; "
                              "the shop name belongs only in the logo alt.")
 
+    def test_brand_red_matches_logo(self) -> None:
+        self.assertIn("--color-primary: #CF0000", self.style,
+                      msg="--color-primary must match the logo's baked #CF0000 red.")
+        self.assertIn('<meta name="theme-color" content="#CF0000">', self.text,
+                      msg="theme-color must match the logo's #CF0000 red.")
+
     def test_brand_css_crop_contract(self) -> None:
         brand = _rule_body(self.style, ".header-brand")
         self.assertTrue(brand, msg="style.css must define a .header-brand rule.")
@@ -288,18 +294,10 @@ class TestHeaderBrandLogo(_TemplateMixin, unittest.TestCase):
         self.assertIn("center", img,
                       msg=".header-brand img must center the crop.")
 
-        # These values are the browser-proven mapping from the logo's baked
-        # red to --color-primary documented in DESIGN.md.
-        self.assertIn("filter", img,
-                      msg=".header-brand img must apply a filter to map the baked red.")
-        self.assertIn("contrast(1.408)", img,
-                      msg=".header-brand img filter must include contrast(1.408).")
-        self.assertIn("brightness(0.831)", img,
-                      msg=".header-brand img filter must include brightness(0.831).")
-        self.assertIn("mix-blend-mode", img,
-                      msg=".header-brand img must set mix-blend-mode to blend with the header.")
-        self.assertIn("lighten", img,
-                      msg=".header-brand img must use mix-blend-mode: lighten.")
+        self.assertNotIn("filter", img,
+                         msg="Matching logo and header reds must not need a filter hack.")
+        self.assertNotIn("mix-blend-mode", img,
+                         msg="Matching logo and header reds must not need blend-mode treatment.")
 
         picture = _rule_body(self.style, ".header-brand picture")
         self.assertTrue(picture,
