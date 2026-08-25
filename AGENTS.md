@@ -62,6 +62,12 @@ npx --yes html-validate@11.9.0 index.html   # same check CI runs; config: .htmlv
 open index.html                  # visual check
 ```
 
+**Mobile testing is mandatory.** Most site traffic comes from mobile phones, so
+no template/CSS change is done until it has been verified at phone width
+(~375px — browser device emulation or a real phone), not just desktop. At
+minimum confirm: the checkbox-hack nav opens/closes, grids reflow cleanly,
+and the LINE/phone buttons stay tappable with no horizontal overflow.
+
 CI (`.github/workflows/pages.yml`) additionally runs **sentinel greps** that will
 fail if you remove: `EDIT ME` and `คัดลอกตั้งแต่ตรงนี้` markers from
 `template.html`, the `style.css` stylesheet link from `template.html`,

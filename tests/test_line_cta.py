@@ -1,12 +1,12 @@
 """Structural tests for the official LINE Add Friend image CTA contract.
 
 Guards:
-  * exactly four .line-cta conversion anchors exist (hero + three
+  * exactly five .line-cta conversion anchors exist (hero + four
     .section-cta blocks);
   * each anchor uses the {{LINE_ID}} URL with target="_blank" rel="noopener"
     and wraps the official 202x60 image with a Thai alt that exposes
     @{{LINE_ID}};
-  * the hero anchor's image is eager-loaded; the three section-end
+  * the hero anchor's image is eager-loaded; the four section-end
     images are lazy-loaded and the section blocks no longer carry a
     #contact fallback anchor;
   * the contact-section LINE card uses .contact-item, not .line-cta;
@@ -63,10 +63,11 @@ class _TemplateMixin:
         cls.text = TEMPLATE_PATH.read_text(encoding="utf-8")
 
 
-# Given: the official LINE Add Friend button appears in exactly four spots —
-#        the hero (eager, for LCP) plus three .section-cta blocks (services,
-#        brands, FAQ) carrying a lazy badge. The contact section's LINE card
-#        is a separate utility link and must NOT count as a conversion anchor.
+# Given: the official LINE Add Friend button appears in exactly five spots —
+#        the hero (eager, for LCP) plus four .section-cta blocks (services,
+#        testimonials, brands, FAQ) carrying a lazy badge. The contact
+#        section's LINE card is a separate utility link and must NOT count as
+#        a conversion anchor.
 # When:  template.html is scanned for .line-cta anchors and their parent
 #        context (.section-cta vs <section id="contact">).
 # Then:  the structural contract holds: count, href + safe link attrs,
@@ -80,11 +81,11 @@ class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
             msg="The official LINE badge must remain unmodified.",
         )
 
-    def test_exactly_four_line_cta_anchors(self) -> None:
+    def test_exactly_five_line_cta_anchors(self) -> None:
         self.assertEqual(
-            len(_LINE_CTA_RE.findall(self.text)), 4,
-            msg="Expected exactly 4 .line-cta conversion anchors "
-                "(hero + 3 .section-cta blocks).",
+            len(_LINE_CTA_RE.findall(self.text)), 5,
+            msg="Expected exactly 5 .line-cta conversion anchors "
+                "(hero + 4 .section-cta blocks).",
         )
 
     def test_each_anchor_uses_line_id_href_and_safe_link_attrs(self) -> None:
@@ -122,11 +123,11 @@ class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
             self.assertIsNotNone(_THAI_CHAR_RE.search(alt),
                             msg=f"line-cta #{idx} alt must contain Thai text.")
 
-    def test_three_section_cta_blocks_carry_lazy_badges_and_no_contact_fallback(self) -> None:
+    def test_four_section_cta_blocks_carry_lazy_badges_and_no_contact_fallback(self) -> None:
         blocks = _SECTION_CTA_RE.findall(self.text)
         self.assertEqual(
-            len(blocks), 3,
-            msg=f"Expected exactly 3 .section-cta blocks, found {len(blocks)}.",
+            len(blocks), 4,
+            msg=f"Expected exactly 4 .section-cta blocks, found {len(blocks)}.",
         )
         for idx, block in enumerate(blocks, start=1):
             self.assertIn(

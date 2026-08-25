@@ -132,8 +132,8 @@
 - **Layout**: responsive auto-fit grid.
 
 ### Section Contact CTA
-- **Structure**: compact `.section-cta` cluster หลัง main content ของ section (บริการ, ยี่ห้อรถ, FAQ) ประกอบด้วยข้อความสั้นและ `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img src="images/line-add-friend-th.png" alt="เพิ่มเพื่อน LINE @{{LINE_ID}}" width="202" height="60" loading="lazy"></a>`.
-- **Variants**: ข้อความตาม context ของบริการ, ยี่ห้อรถ, FAQ; ใช้รูปภาพปุ่มทางการ LINE Add Friend เดียวกัน.
+- **Structure**: compact `.section-cta` cluster หลัง main content ของ section (บริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ) ประกอบด้วยข้อความสั้นและ `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img src="images/line-add-friend-th.png" alt="เพิ่มเพื่อน LINE @{{LINE_ID}}" width="202" height="60" loading="lazy"></a>`.
+- **Variants**: ข้อความตาม context ของบริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ; ใช้รูปภาพปุ่มทางการ LINE Add Friend เดียวกัน.
 - **Spacing**: แยกจาก content ด้วย `--space-lg`; internal gap `--space-sm`.
 - **States**: inherited Official LINE CTA (`.line-cta`) states.
 - **Accessibility**: รูปภาพปุ่มมี `alt` ระบุ LINE ID พร้อม `loading="lazy"`; touch target 202×60px.
