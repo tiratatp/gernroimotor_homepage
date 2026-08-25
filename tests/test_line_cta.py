@@ -1,15 +1,17 @@
 """Structural tests for the official LINE Add Friend image CTA contract.
 
-Guards:
-  * exactly five .line-cta conversion anchors exist (hero + four
-    .section-cta blocks);
+The contract is per-section, not count-based, so it keeps holding when
+sections are added to or removed from the page:
+
+  * every <section> inside <main> carries exactly one .line-cta conversion
+    anchor — except <section id="contact">, whose LINE card is a utility
+    link (.contact-item) and must NOT be a conversion anchor;
   * each anchor uses the {{LINE_ID}} URL with target="_blank" rel="noopener"
     and wraps the official 202x60 image with a Thai alt that exposes
     @{{LINE_ID}};
-  * the hero anchor's image is eager-loaded; the four section-end
-    images are lazy-loaded and the section blocks no longer carry a
-    #contact fallback anchor;
-  * the contact-section LINE card uses .contact-item, not .line-cta;
+  * the hero anchor's image is eager-loaded (LCP); every other section's
+    image is lazy-loaded;
+  * no section pairs its LINE button with a #contact fallback anchor;
   * the self-hosted PNG is the exact unmodified official LINE asset.
 
 All contracts must pass before deployment.
@@ -28,29 +30,24 @@ LINE_BADGE_PATH = REPO_ROOT / "images" / "line-add-friend-th.png"
 OFFICIAL_LINE_BADGE_SHA256 = "4c58bda197c567b3ca6a70878f85626cc266112e574462e995892f2d2b7a2f2f"
 
 _ATTR_RE = re.compile(r'''([\w-]+)\s*=\s*"([^"]*)"''')
-_HERO_SECTION_RE = re.compile(
-    r'<section\b[^>]*class="[^"]*\bhero\b[^"]*"[^>]*>(.*?)</section>',
-    re.DOTALL,
-)
-_CONTACT_SECTION_RE = re.compile(
-    r'<section\b[^>]*id="contact"[^>]*>(.*?)</section>',
-    re.DOTALL,
-)
+_MAIN_RE = re.compile(r"<main\b[^>]*>(.*?)</main>", re.DOTALL)
+_SECTION_RE = re.compile(r"<section\b([^>]*)>(.*?)</section>", re.DOTALL)
 _LINE_CTA_RE = re.compile(
     r'<a\b[^>]*class="line-cta"[^>]*>(.*?)</a>',
-    re.DOTALL,
-)
-_SECTION_CTA_RE = re.compile(
-    r'<div\b[^>]*class="[^"]*\bsection-cta\b[^"]*"[^>]*>(.*?)</div>',
     re.DOTALL,
 )
 _THAI_CHAR_RE = re.compile(r"[\u0E00-\u0E7F]")
 
 
-def _extract_hero(text: str) -> str:
-    """Return the inner HTML of <section class="hero">, or empty string."""
-    m = _HERO_SECTION_RE.search(text)
-    return m.group(1) if m else ""
+def _extract_main_sections(text: str) -> list[tuple[dict[str, str], str]]:
+    """Return (opening-tag attrs, inner HTML) for each <section> in <main>."""
+    main = _MAIN_RE.search(text)
+    if not main:
+        return []
+    return [
+        (dict(_ATTR_RE.findall(s.group(1))), s.group(2))
+        for s in _SECTION_RE.finditer(main.group(1))
+    ]
 
 
 class _TemplateMixin:
@@ -63,16 +60,15 @@ class _TemplateMixin:
         cls.text = TEMPLATE_PATH.read_text(encoding="utf-8")
 
 
-# Given: the official LINE Add Friend button appears in exactly five spots —
-#        the hero (eager, for LCP) plus four .section-cta blocks (services,
-#        testimonials, brands, FAQ) carrying a lazy badge. The contact
-#        section's LINE card is a separate utility link and must NOT count as
-#        a conversion anchor.
-# When:  template.html is scanned for .line-cta anchors and their parent
-#        context (.section-cta vs <section id="contact">).
-# Then:  the structural contract holds: count, href + safe link attrs,
-#        image src/alt/width/height, parent context, loading eagerness,
-#        and absence of the #contact fallback.
+# Given: the page is a sequence of <section> blocks inside <main> and every
+#        section is a conversion opportunity. Sections may be added or
+#        removed over time, so the contract must not depend on how many
+#        exist — only on each section carrying its own button.
+# When:  template.html is scanned section by section.
+# Then:  every section except #contact carries exactly one validated
+#        .line-cta anchor, #contact carries none, the hero badge is eager
+#        while all other badges are lazy, and no section keeps a #contact
+#        fallback anchor next to its LINE button.
 class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
     def test_self_hosted_badge_matches_official_asset(self) -> None:
         digest = hashlib.sha256(LINE_BADGE_PATH.read_bytes()).hexdigest()
@@ -81,11 +77,39 @@ class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
             msg="The official LINE badge must remain unmodified.",
         )
 
-    def test_exactly_five_line_cta_anchors(self) -> None:
-        self.assertEqual(
-            len(_LINE_CTA_RE.findall(self.text)), 5,
-            msg="Expected exactly 5 .line-cta conversion anchors "
-                "(hero + 4 .section-cta blocks).",
+    def test_main_has_multiple_sections(self) -> None:
+        self.assertGreaterEqual(
+            len(_extract_main_sections(self.text)), 3,
+            msg="Sanity check: expected several <section> blocks inside "
+                "<main>; the per-section contract would pass vacuously "
+                "otherwise.",
+        )
+
+    def test_every_section_except_contact_has_exactly_one_line_cta(self) -> None:
+        sections = _extract_main_sections(self.text)
+        self.assertTrue(sections, msg="No <section> blocks found in <main>.")
+        seen_ids = set()
+        for attrs, inner in sections:
+            section_id = attrs.get("id", "")
+            seen_ids.add(section_id)
+            label = section_id or attrs.get("class", "<unknown>")
+            count = len(_LINE_CTA_RE.findall(inner))
+            if section_id == "contact":
+                self.assertEqual(
+                    count, 0,
+                    msg="Contact-section LINE card must use .contact-item, "
+                        "not .line-cta — it is a utility link, not a "
+                        "conversion anchor.",
+                )
+            else:
+                self.assertEqual(
+                    count, 1,
+                    msg=f"Section '{label}' must carry exactly one .line-cta "
+                        f"conversion anchor, found {count}.",
+                )
+        self.assertIn(
+            "contact", seen_ids,
+            msg="Expected a <section id='contact'> inside <main>.",
         )
 
     def test_each_anchor_uses_line_id_href_and_safe_link_attrs(self) -> None:
@@ -123,58 +147,42 @@ class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
             self.assertIsNotNone(_THAI_CHAR_RE.search(alt),
                             msg=f"line-cta #{idx} alt must contain Thai text.")
 
-    def test_four_section_cta_blocks_carry_lazy_badges_and_no_contact_fallback(self) -> None:
-        blocks = _SECTION_CTA_RE.findall(self.text)
-        self.assertEqual(
-            len(blocks), 4,
-            msg=f"Expected exactly 4 .section-cta blocks, found {len(blocks)}.",
-        )
-        for idx, block in enumerate(blocks, start=1):
-            self.assertIn(
-                'class="line-cta"', block,
-                msg=f"section-cta #{idx} must contain a .line-cta anchor.",
-            )
+    def test_no_section_pairs_line_cta_with_contact_fallback(self) -> None:
+        for attrs, inner in _extract_main_sections(self.text):
+            if not _LINE_CTA_RE.search(inner):
+                continue
             self.assertNotIn(
-                'href="#contact"', block,
-                msg=f"section-cta #{idx} must not carry a #contact fallback "
-                    f"anchor; the LINE button replaces it.",
+                'href="#contact"', inner,
+                msg=f"Section '{attrs.get('id', '<unknown>')}' must not "
+                    f"carry a #contact fallback anchor; the LINE button "
+                    f"replaces it.",
             )
-            m = _LINE_CTA_RE.search(block)
-            self.assertIsNotNone(
-                m, msg=f"section-cta #{idx} .line-cta anchor not matched.",
-            )
+
+    def test_hero_badge_is_eager_and_all_other_badges_are_lazy(self) -> None:
+        hero_badges = 0
+        for attrs, inner in _extract_main_sections(self.text):
+            m = _LINE_CTA_RE.search(inner)
+            if m is None:
+                continue
             img = re.search(r"<img\b[^>]*>", m.group(1), re.DOTALL)
-            self.assertIsNotNone(
-                img, msg=f"section-cta #{idx} .line-cta must wrap an <img>.",
-            )
-            attrs = dict(_ATTR_RE.findall(img.group(0)))
-            self.assertEqual(
-                attrs.get("loading"), "lazy",
-                msg=f"section-end .line-cta #{idx} image must be loading='lazy'.",
-            )
-
-    def test_hero_badge_is_eager(self) -> None:
-        hero = _extract_hero(self.text)
-        self.assertTrue(hero, msg="No <section class='hero'> found in template.")
-        m = _LINE_CTA_RE.search(hero)
-        self.assertIsNotNone(m, msg="Hero must contain a .line-cta anchor.")
-        img = re.search(r"<img\b[^>]*>", m.group(1), re.DOTALL)
-        self.assertIsNotNone(img, msg="Hero .line-cta must wrap an <img>.")
-        attrs = dict(_ATTR_RE.findall(img.group(0)))
-        self.assertNotEqual(
-            attrs.get("loading"), "lazy",
-            msg="Hero .line-cta image must be eager-loaded for LCP "
-                "(no loading='lazy').",
-        )
-
-    def test_contact_section_line_card_excluded_from_conversion_anchors(self) -> None:
-        m = _CONTACT_SECTION_RE.search(self.text)
-        self.assertIsNotNone(m,
-                             msg="No <section id='contact'> found in template.")
-        self.assertNotIn(
-            'class="line-cta"', m.group(1),
-            msg="Contact-section LINE card must use .contact-item, "
-                "not .line-cta — it is a utility link, not a conversion anchor.",
+            self.assertIsNotNone(img, msg="line-cta must wrap an <img>.")
+            loading = dict(_ATTR_RE.findall(img.group(0))).get("loading")
+            if "hero" in attrs.get("class", "").split():
+                hero_badges += 1
+                self.assertNotEqual(
+                    loading, "lazy",
+                    msg="Hero .line-cta image must be eager-loaded for LCP "
+                        "(no loading='lazy').",
+                )
+            else:
+                self.assertEqual(
+                    loading, "lazy",
+                    msg=f"Section '{attrs.get('id', '<unknown>')}' .line-cta "
+                        f"image must be loading='lazy'.",
+                )
+        self.assertEqual(
+            hero_badges, 1,
+            msg="Expected exactly one hero section carrying a .line-cta.",
         )
 
 

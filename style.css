@@ -283,6 +283,36 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .brand-chips { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-xs); justify-content: center; }
 .chip { background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 999px; padding: 0.4rem 1rem; font-weight: 600; }
 
+/* ===== 3d. DELIVERY CAROUSEL — สไลด์รูปส่งมอบรถ (scroll-snap ล้วน ไม่ใช้ JS) ===== */
+/* แถบเลื่อนแนวนอน: ปัดบนมือถือ / ลากแถบเลื่อนบนเดสก์ท็อป — snap เข้าล็อกทีละรูป
+   Horizontal scroller: swipe on mobile / drag scrollbar on desktop, snaps per slide */
+.carousel-track {
+  display: flex;
+  gap: var(--space-sm);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: var(--space-xs); /* เผื่อที่ให้แถบเลื่อน / room for the scrollbar */
+}
+.carousel-track:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; border-radius: var(--radius); }
+.carousel-slide {
+  /* มือถือ: รูปกว้าง 85% เห็นรูปถัดไปแวบ ๆ เป็นสัญญาณว่าเลื่อนต่อได้
+     Mobile: 85% slide width lets the next photo peek as a scroll hint */
+  flex: 0 0 85%;
+  scroll-snap-align: center;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+.carousel-slide img {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* รูปทุกใบสูงเท่ากัน ครอปกลางภาพ / uniform square slides, center-cropped */
+  object-fit: cover;
+}
+@media (min-width: 768px) {
+  /* เดสก์ท็อป: เห็น 3 รูปเต็ม + รูปที่ 4 แวบ ๆ / desktop: 3 full slides + a peek of the 4th */
+  .carousel-slide { flex-basis: 31%; }
+}
+
 /* ===== 4. FAQ — คำถามที่พบบ่อย (เส้นคั่นบาง ๆ คำตอบแสดงตลอด) ===== */
 .faq-list { display: grid; gap: 0; }
 .faq-item { background: none; border: none; border-radius: 0; border-top: 1px solid var(--color-border); padding: var(--space-sm) 0; }
