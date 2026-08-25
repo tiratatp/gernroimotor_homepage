@@ -31,9 +31,10 @@
 
 ### Font Stack
 
-- Primary: `--font-family` = `"Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif`.
+- Body: `--font-body` = `"Sarabun", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif`.
+- Heading: `--font-heading` = `"Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif`.
 - ไม่มี mono หรือ serif font.
-- น้ำหนักที่โหลดและใช้: 400, 500, 600, 700.
+- น้ำหนักที่โหลดและใช้: Kanit 600, 700; Sarabun 400, 500, 600, 700.
 
 ### Scale
 
@@ -49,6 +50,7 @@
 
 ### Rules
 
+- หัวข้อ semantic h1–h6 ใช้ Kanit; ข้อความอื่นทั้งหมดใช้ Sarabun.
 - เนื้อหาผู้ใช้เป็นภาษาไทย และ body line-height ต้องคงที่ `1.7`.
 - หัวข้อใช้ลำดับ semantic ตามโครง section; ห้ามเลือก heading level จากขนาดตัวอักษร.
 - ข้อความยาวจำกัดที่ 60–65ch เพื่อความอ่านง่าย; ห้ามลด body ต่ำกว่าค่าปัจจุบัน.
@@ -198,7 +200,7 @@ Strategy: **mixed border + restrained shadow**.
 - Touch controls target at least 44×44px; responsive layouts must not create horizontal scrolling at 375px.
 - Thai alt text is required for meaningful images; decorative SVGs require `aria-hidden="true"`.
 - Iframes require descriptive title, lazy loading, and referrer policy. New-tab links require `rel="noopener"`.
-- Kanit body line-height remains 1.7; content and action labels must use direct Thai wording for low cognitive load.
+- Body line-height remains 1.7 (Sarabun body, Kanit headings); content and action labels must use direct Thai wording for low cognitive load.
 - Reduced-motion behavior in Section 6 is mandatory.
 
 ### Primary Personas / Tasks
@@ -213,6 +215,6 @@ Strategy: **mixed border + restrained shadow**.
 | Item | Location | Why accepted | Owner / Exit |
 |---|---|---|---|
 | ไม่มี dark mode | ทั้งเว็บ | เป็นข้อจำกัดผลิตภัณฑ์ที่ยอมรับไว้และลดภาระผู้ดูแล | ทบทวนเมื่อผู้ดูแลร้องขอ |
-| Google Fonts เป็น third-party | `template.html` | ต้องการ Kanit และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
+| Google Fonts เป็น third-party | `template.html` | ต้องการ Kanit (หัวข้อ) และ Sarabun (ข้อความ) และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
 | มี breakpoint 600px เฉพาะ contact grid | `style.css` | เป็นข้อยกเว้นเดิมเพื่อรักษาขนาดการ์ดและ touch readability | คงไว้จน layout contact เปลี่ยนระบบ |
 | รูปภาพแบรนด์ทางการ LINE Add Friend มีสีเขียวแบรนด์ | `.line-cta` (hero และ section-end CTAs) | ใช้รูปภาพปุ่มทางการบิตแมป 202x60px จาก LINE เพื่อการจดจำแบรนด์; สีเขียวฝังในไฟล์รูปภาพบิตแมป จึงอนุโลมเป็นข้อยกเว้นภาพแบรนด์ทางการโดยไม่สร้าง CSS accent token เพิ่ม | คงไว้ตามข้อกำหนดแบรนด์ของ LINE |

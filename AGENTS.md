@@ -96,7 +96,7 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
 - **No inline styles, no `<style>` tag.** All CSS lives in `style.css`; unit tests
   explicitly reject inline `style=` attributes in `template.html`, while code review and
   HTML validation maintain the no-`<style>` contract.
-- Font: Kanit (Google Fonts) with system fallback; Thai body line-height **1.7**.
+- Font: Kanit for headings (h1–h6) and Sarabun for everything else (Google Fonts) with system fallback; Thai body line-height **1.7**.
 - **New sections must clone an existing section's markup** — same
   `<section class="section" id="…">` + `.container` + `.section-title` structure,
   inside `<main>` (never between `</main>` and `<footer>`). Alternating section
