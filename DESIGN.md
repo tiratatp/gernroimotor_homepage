@@ -155,13 +155,13 @@
 - **Layout**: responsive auto-fit grid.
 
 ### Section Contact CTA
-- **Structure**: compact `.section-cta` cluster หลัง main content ของ section (บริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ) ประกอบด้วยข้อความสั้นและ `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy"><span class="line-cta-text">ข้อความของส่วนนี้</span></a>`.
-- **Variants**: ข้อความนำหน้าเป็นตัวเลือก — ส่วนบริการและ FAQ ไม่มีข้อความ เหลือปุ่มอย่างเดียว ส่วนรีวิวและยี่ห้อรถยังมี. ตั้งแต่ 768px `.section-cta p` ใช้ `margin-right: auto` ดันปุ่มไปขวา ส่วนที่ไม่มีข้อความจึงเหลือปุ่มเดียวอยู่กึ่งกลางแทนที่จะเลื่อนไปชิดซ้าย (ซึ่งจะเกิดขึ้นถ้าใช้ `justify-content: space-between`).
+- **Structure**: compact `.section-cta` cluster หลัง main content ของ section (บริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ) มีเพียงปุ่ม LINE ไม่มีข้อความนำหน้าแล้ว: `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy"><span class="line-cta-text">ข้อความของส่วนนี้</span></a>`.
+- **Variants**: ต่างกันเฉพาะข้อความบนปุ่ม ทุกส่วนไม่มีข้อความนำหน้าแล้ว ปุ่มอยู่กึ่งกลางทุกขนาดจอด้วย `justify-content: center` ที่ base ไม่มี override ที่ 768px.
 - **Spacing**: แยกจาก content ด้วย `--space-lg`; internal gap `--space-sm`.
 - **States**: inherited Official LINE CTA (`.line-cta`) states.
 - **Accessibility**: โลโก้ในปุ่มเป็นภาพประดับ (`alt=""`) ชื่อที่ screen reader อ่านคือข้อความในปุ่ม; ปุ่มสูง 58px เกินเกณฑ์ touch target 44px.
 - **Motion**: inherited `.line-cta` motion.
-- **Layout**: wrapping cluster, centered on narrow screens only when content naturally wraps.
+- **Layout**: ปุ่มเดียวอยู่กึ่งกลางทุกความกว้าง.
 
 ### Consolidated Contact Section
 - **Structure**: Section Shell → `.contact-hours` → `.location-grid` (ส่วนนี้ไม่มี `.section-intro`). `.contact-hours` เป็นข้อความล้วนเต็มความกว้าง อยู่ใต้ `.section-title` ทันที ไม่มีหัวข้อย่อยกำกับ ไม่มีพื้นหลังและเส้นขอบ (เป็นข้อมูล ไม่ใช่ปุ่ม) เหลือเฉพาะ padding ล่าง `--space-md` จึงชิดขอบซ้ายเดียวกับหัวข้อ วันและเวลาอยู่บรรทัดเดียวกัน (`<strong>เปิดทุกวัน</strong> 08:30 - 18:30 น.` ไม่มี `<br>`) และมี `.address-line` (ที่อยู่จาก `{{ADDRESS}}` + `{{POSTAL_CODE}}`) ต่อท้ายในบล็อกเดียวกัน เวลาเปิดกับที่อยู่จึงอ่านต่อเนื่องกันก่อนถึงแผนที่. `.location-grid` คอลัมน์ซ้ายเป็นแผนที่ (src จาก `{{MAPS_EMBED_URL}}` ใน variables.txt) และปุ่มนำทาง; คอลัมน์ขวาเป็น `.contact-list` (โทรเลย, แอด LINE, ติดตาม Facebook, ติดตาม TikTok) การ์ดใช้พื้นขาว `--color-bg` บนพื้นส่วนสีเทา พร้อมเงาบาง ๆ (`0 1px 3px rgba(0,0,0,0.10)`) เพื่อให้ดูยกขึ้นและกดได้ กดแล้วเงาหายและขยับลง 1px เหมือนปุ่มจริง ป้ายกำกับใช้คำชวนกดเพราะทุกการ์ดเป็นลิงก์ และค่าของแต่ละช่องทาง (`<small>`) ใช้สี `--color-primary` น้ำหนัก 500 ให้อ่านเหมือนลิงก์ (คอนทราสต์บนพื้นการ์ดสีขาว 5.75:1 ผ่าน AA) ไม่มีไอคอนลูกศรแล้ว — เงายกการ์ดกับค่าสีลิงก์บอกว่ากดได้เพียงพอ และลูกศรจะสื่อผิดกับการ์ดโทรศัพท์ซึ่งเปิดแป้นโทร ไม่ได้เปิดเว็บภายนอก. ส่วนการ์ดเบอร์สำรองถูกคอมเมนต์ไว้ใน `template.html` (มาร์กอัปยังอยู่ครบ เปิดกลับได้ตามคำอธิบายในคอมเมนต์). `{{BUSINESS_PROFILE_URL}}` ไม่มีลิงก์ที่แสดงบนหน้า — ใช้เฉพาะใน JSON-LD `sameAs` เท่านั้น.

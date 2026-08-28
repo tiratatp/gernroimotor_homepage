@@ -296,21 +296,13 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .service-card p { color: var(--color-text-muted); font-size: 0.95rem; }
 
 /* CTA ท้ายส่วน — พาไปยังที่ตั้งและช่องทางติดต่อ / section-end contact CTA */
-/* มือถือ: ปุ่ม LINE อยู่กลาง (ข้อความขึ้นบรรทัดบน) / เดสก์ท็อป: ข้อความซ้าย ปุ่มขวา
-   Mobile: LINE button centred below the text. Desktop: text left, button right. */
+/* ปุ่ม LINE อยู่กึ่งกลางทุกขนาดจอ ไม่มีข้อความนำหน้าแล้ว
+   The LINE button is centred at every width; the lead paragraphs are gone. */
 .section-cta {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
   gap: var(--space-sm); margin-top: var(--space-lg);
 }
 .section-cta p { max-width: 60ch; color: var(--color-text-muted); }
-
-@media (min-width: 768px) {
-  /* ข้อความดันตัวเองไปซ้ายด้วย margin auto ปุ่มจึงไปอยู่ขวา
-     ส่วนที่ไม่มีข้อความจะเหลือปุ่มเดียวและอยู่กึ่งกลางตามเดิม
-     The text claims the free space so the button sits right; a CTA with no
-     text keeps a single centred button instead of jumping to the left. */
-  .section-cta p { margin-right: auto; }
-}
 
 /* ===== 3b. TESTIMONIALS — เสียงจากลูกค้า (รีวิวจริง) ===== */
 .testimonials-grid {
