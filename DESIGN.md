@@ -43,7 +43,7 @@
 | Hero display | `clamp(2.1rem, 9.5vw, 3rem)` | `3rem` | 700 / 1.3 | ชื่อร้านใน hero (ชื่อร้าน `1.12em` / ชื่อสาขา `0.82em`) |
 | Section title | `1.95rem` | `2.4rem` | 700 / body rhythm | หัวข้อ `<h2>` — ค่ามือถือถูกจำกัดที่ `1.95rem` เพราะใหญ่กว่านี้แล้ว `ยี่ห้อและรุ่นรถที่เราจำหน่าย` จะตกบรรทัดที่จอ 375px |
 | Subsection | `1.3rem` | `1.3rem` | 600 | หัวข้อย่อย และบรรทัดเวลาเปิดทำการ (`.hours`) |
-| Card / label title | `1.05rem`–`1.15rem` | same | 600 | ชื่อบริการ chip และปุ่ม |
+| Card / label title | `1.05rem`–`1.35rem` | same | 600 | `.service-card h3` = `1.35rem` (ไม่มีไอคอนแล้ว หัวข้อจึงเป็นตัวนำของการ์ด) ส่วน chip และปุ่มยังอยู่ที่ `1.05rem`–`1.15rem` |
 | FAQ question | `1.25rem` | same | 600 | `<h3>` ในแต่ละ `.faq-item` — ใหญ่กว่าคำตอบชัดเจนเพื่อให้กวาดสายตาหาคำถามได้เร็ว |
 | Hero lead | `1.15rem` | `1.3rem` | 400 | tagline |
 | Body | `17px` | `18px` | 400 / **1.7** | เนื้อหาภาษาไทยทั้งหมด |
@@ -85,16 +85,17 @@
 ### Grid & Responsive Rules
 
 - Mobile-first; breakpoint หลักมีเพียง `768px`. ที่ `768px` body และ section title โตขึ้น, container gutter เพิ่ม, nav เปลี่ยนเป็นแถว และ layout สองคอลัมน์เริ่มทำงาน.
-- Breakpoint `600px` ใช้เฉพาะ contact-list ตามข้อยกเว้นเดิม.
+- ไม่มี breakpoint อื่นนอกจาก `768px` แล้ว — `.contact-list` เป็นคอลัมน์เดียวทุกขนาดจอ จึงไม่ต้องใช้ breakpoint `600px` อีกต่อไป.
 - `.container` กว้างไม่เกิน `--max-width`, กึ่งกลาง และใช้ gutter จาก spacing token.
-- Grid รายการใช้ `auto-fit` + `minmax()` เพื่อให้บล็อกที่ผู้ดูแลคัดลอก reflow อัตโนมัติ.
+- Grid รายการใช้ `auto-fit` + `minmax()` เพื่อให้บล็อกที่ผู้ดูแลคัดลอก reflow อัตโนมัติ ยกเว้น `.contact-list` และ `.services-grid` ที่ตั้งใจให้เป็น `1fr` คอลัมน์เดียวเสมอ การ์ดที่คัดลอกเพิ่มจะต่อลงล่างเป็นแถวใหม่.
 - Section ใหม่หรือ section ที่ปรับต้องคงโครง `<section class="section" id="…"><div class="container">…` ภายใน `<main>`.
 - Header สูงขั้นต่ำ 64px และ `html` ใช้ `scroll-padding-top: 6rem` เพื่อไม่ให้ anchor ถูก sticky header บัง.
 
 ## 5. Components
 
 ### Section Shell
-- **Structure**: `.section` → `.container` → `.section-title` + optional `.section-intro` + main content.
+- **Structure**: `.section` → `.container` → `.section-title` + optional `.section-intro` + main content. `.section-title` ใช้สี `--color-primary` (#CF0000) เหมือนหัวข้อ hero — คอนทราสต์บนพื้นขาว 5.75:1 และบนพื้น `--color-surface-alt` 5.00:1 ผ่าน WCAG AA ทั้งคู่ ส่วนหัวข้อย่อย `.subsection-title` ยังเป็น `--color-text` เพื่อคงลำดับชั้นระหว่างหัวข้อหลักกับหัวข้อย่อย.
+- **FAQ dividers**: `.faq-item` มีเส้นคั่นด้านบน แต่ `.faq-item:first-child` ถอดเส้นบนและ padding บนออก และไม่มีเส้นใต้รายการสุดท้าย เส้นคั่นจึงอยู่ระหว่างคำถามเท่านั้น ไม่กลายเป็นกรอบครอบทั้งกลุ่ม.
 - **Section marker**: `.section-title::after` วาดขีดแดง 56x4px (`--color-primary`, radius 2px) ใต้หัวข้อทุกส่วน ทำหน้าที่เป็นจุดสังเกตว่าขึ้นส่วนใหม่ ซึ่งมองเห็นได้แม้เลื่อนเร็วบนมือถือ — การเว้นช่องว่างอย่างเดียวไม่พอ เพราะบนจอเล็กผู้ใช้เห็นหน้าเว็บทีละส่วนเท่านั้น ระยะใต้หัวข้อคือ `--space-md`.
 - **Variants**: alternating background เกิดจากลำดับ section อัตโนมัติเท่านั้น.
 - **Spacing**: `--space-xl`, `--space-sm`, `--space-md`, `--space-lg`.
@@ -135,6 +136,15 @@
 - **Motion**: none.
 - **Layout**: mobile-first stacked; ที่ ≥768px รูปและข้อความจำกัด max-width และกึ่งกลาง — คงโครงเดียวกับมือถือ.
 
+### รีวิวจากครอบครัวเกินร้อย (`#testimonials`)
+- **Structure**: `.section-title` (รีวิวจากครอบครัวเกินร้อย) → `.carousel-track` → `.testimonials-grid` → `.section-cta` เดียว. หัวข้อบอกเนื้อหาครบอยู่แล้วจึงไม่มีคำโปรยและไม่มีหัวข้อย่อยคั่น รูปวันรับรถอยู่เหนือกริดรีวิวเพื่อดึงสายตาก่อน รีวิวลูกค้ากับรูปวันรับรถรวมอยู่ในส่วนเดียวกัน เพราะเล่าเรื่องเดียวกันคือลูกค้าจริงของร้าน (เดิมแยกเป็น `#delivery` ต่างหาก).
+- **Variants**: การ์ดรีวิวใช้ `.testimonial-card`; รูปส่งมอบรถใช้ `.carousel-slide` เลื่อนด้านข้างได้ ทั้งสองกลุ่มมีรั้ว COPY FROM HERE ของตัวเอง.
+- **Spacing**: `.carousel-track` มี `margin-bottom: --space-md` เพื่อไม่ให้ชนบล็อกถัดไป (จำเป็นเพราะไม่ได้อยู่ท้ายส่วนอีกแล้ว).
+- **States**: carousel track มี focus-visible outline สำหรับการเลื่อนด้วยคีย์บอร์ด.
+- **Accessibility**: `.carousel-track` คง `role="region"`, `aria-label` ภาษาไทย และ `tabindex="0"`; รูปทุกใบมี alt ภาษาไทยพร้อม `{{SHOP_NAME}}`.
+- **Motion**: การเลื่อนเป็นการ scroll ปกติ ไม่มี autoplay.
+- **Layout**: คำโปรย แล้วแถบรูปเลื่อน ตามด้วยกริดรีวิว ปิดท้ายด้วยปุ่ม LINE เดียว (หนึ่ง `.line-cta` ต่อหนึ่ง section ตามสัญญาในเทสต์).
+
 ### Content Card
 - **Structure**: semantic `article`/`figure` หรือ contact `<a>` บน surface พร้อม border.
 - **Variants**: service, testimonial, gallery, contact channel.
@@ -146,16 +156,16 @@
 
 ### Section Contact CTA
 - **Structure**: compact `.section-cta` cluster หลัง main content ของ section (บริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ) ประกอบด้วยข้อความสั้นและ `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy"><span class="line-cta-text">ข้อความของส่วนนี้</span></a>`.
-- **Variants**: ข้อความตาม context ของบริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ; ทั้งข้อความนำหน้าและข้อความบนปุ่มปรับตามส่วนได้.
+- **Variants**: ข้อความนำหน้าเป็นตัวเลือก — ส่วนบริการและ FAQ ไม่มีข้อความ เหลือปุ่มอย่างเดียว ส่วนรีวิวและยี่ห้อรถยังมี. ตั้งแต่ 768px `.section-cta p` ใช้ `margin-right: auto` ดันปุ่มไปขวา ส่วนที่ไม่มีข้อความจึงเหลือปุ่มเดียวอยู่กึ่งกลางแทนที่จะเลื่อนไปชิดซ้าย (ซึ่งจะเกิดขึ้นถ้าใช้ `justify-content: space-between`).
 - **Spacing**: แยกจาก content ด้วย `--space-lg`; internal gap `--space-sm`.
 - **States**: inherited Official LINE CTA (`.line-cta`) states.
-- **Accessibility**: รูปภาพปุ่มมี `alt` ระบุ LINE ID พร้อม `loading="lazy"`; touch target 202×60px.
+- **Accessibility**: โลโก้ในปุ่มเป็นภาพประดับ (`alt=""`) ชื่อที่ screen reader อ่านคือข้อความในปุ่ม; ปุ่มสูง 58px เกินเกณฑ์ touch target 44px.
 - **Motion**: inherited `.line-cta` motion.
 - **Layout**: wrapping cluster, centered on narrow screens only when content naturally wraps.
 
 ### Consolidated Contact Section
-- **Structure**: Section Shell → `.contact-hours` → `.location-grid` (ส่วนนี้ไม่มี `.section-intro`). `.contact-hours` เป็นข้อความล้วนเต็มความกว้าง อยู่ใต้ `.section-title` ทันที ไม่มีหัวข้อย่อยกำกับ ไม่มีพื้นหลังและเส้นขอบ (เป็นข้อมูล ไม่ใช่ปุ่ม) เหลือเฉพาะ padding ล่าง `--space-md` จึงชิดขอบซ้ายเดียวกับหัวข้อ วันและเวลาอยู่บรรทัดเดียวกัน (`<strong>เปิดทุกวัน</strong> 08:30 - 18:30 น.` ไม่มี `<br>`). `.location-grid` คอลัมน์ซ้ายเป็นแผนที่ (src จาก `{{MAPS_EMBED_URL}}` ใน variables.txt) ที่อยู่ และปุ่มนำทาง; คอลัมน์ขวาเป็น `.contact-list` (โทรเลย, แอด LINE, ไปยัง Facebook, ไปยัง TikTok) ป้ายกำกับใช้คำชวนกดเพราะทุกการ์ดเป็นลิงก์ ส่วนการ์ดเบอร์สำรองถูกคอมเมนต์ไว้ใน `template.html` (มาร์กอัปยังอยู่ครบ เปิดกลับได้ตามคำอธิบายในคอมเมนต์). `{{BUSINESS_PROFILE_URL}}` ไม่มีลิงก์ที่แสดงบนหน้า — ใช้เฉพาะใน JSON-LD `sameAs` เท่านั้น.
-- **Variants**: one column below 768px; map-left/contact-right from 768px. Contact list changes layout only at existing 600px convention.
+- **Structure**: Section Shell → `.contact-hours` → `.location-grid` (ส่วนนี้ไม่มี `.section-intro`). `.contact-hours` เป็นข้อความล้วนเต็มความกว้าง อยู่ใต้ `.section-title` ทันที ไม่มีหัวข้อย่อยกำกับ ไม่มีพื้นหลังและเส้นขอบ (เป็นข้อมูล ไม่ใช่ปุ่ม) เหลือเฉพาะ padding ล่าง `--space-md` จึงชิดขอบซ้ายเดียวกับหัวข้อ วันและเวลาอยู่บรรทัดเดียวกัน (`<strong>เปิดทุกวัน</strong> 08:30 - 18:30 น.` ไม่มี `<br>`) และมี `.address-line` (ที่อยู่จาก `{{ADDRESS}}` + `{{POSTAL_CODE}}`) ต่อท้ายในบล็อกเดียวกัน เวลาเปิดกับที่อยู่จึงอ่านต่อเนื่องกันก่อนถึงแผนที่. `.location-grid` คอลัมน์ซ้ายเป็นแผนที่ (src จาก `{{MAPS_EMBED_URL}}` ใน variables.txt) และปุ่มนำทาง; คอลัมน์ขวาเป็น `.contact-list` (โทรเลย, แอด LINE, ติดตาม Facebook, ติดตาม TikTok) การ์ดใช้พื้นขาว `--color-bg` บนพื้นส่วนสีเทา พร้อมเงาบาง ๆ (`0 1px 3px rgba(0,0,0,0.10)`) เพื่อให้ดูยกขึ้นและกดได้ กดแล้วเงาหายและขยับลง 1px เหมือนปุ่มจริง ป้ายกำกับใช้คำชวนกดเพราะทุกการ์ดเป็นลิงก์ และค่าของแต่ละช่องทาง (`<small>`) ใช้สี `--color-primary` น้ำหนัก 500 ให้อ่านเหมือนลิงก์ (คอนทราสต์บนพื้นการ์ดสีขาว 5.75:1 ผ่าน AA) ไม่มีไอคอนลูกศรแล้ว — เงายกการ์ดกับค่าสีลิงก์บอกว่ากดได้เพียงพอ และลูกศรจะสื่อผิดกับการ์ดโทรศัพท์ซึ่งเปิดแป้นโทร ไม่ได้เปิดเว็บภายนอก. ส่วนการ์ดเบอร์สำรองถูกคอมเมนต์ไว้ใน `template.html` (มาร์กอัปยังอยู่ครบ เปิดกลับได้ตามคำอธิบายในคอมเมนต์). `{{BUSINESS_PROFILE_URL}}` ไม่มีลิงก์ที่แสดงบนหน้า — ใช้เฉพาะใน JSON-LD `sameAs` เท่านั้น.
+- **Variants**: one column below 768px; map-left/contact-right from 768px. `.contact-list` stays a single column at every width, so the channel cards always read as one vertical stack.
 - **Spacing**: column gap `--space-lg`; `.contact-list` gap `--space-xs` เพื่อให้การ์ดช่องทางติดต่ออยู่ชิดกันเป็นกลุ่มเดียว; `.contact-item` padding `--space-sm var(--space-md)` (แนวตั้งบางกว่าการ์ดทั่วไป) ข้อความ `1.1rem` / `<small>` `0.95rem`; address/action stack uses `--space-sm`.
 - **States**: map static; directions and channel links use existing Button/Content Card states.
 - **Accessibility**: iframe มี `title` ภาษาไทย, `loading="lazy"`, `allowfullscreen`, `referrerpolicy="strict-origin-when-cross-origin"` และไม่มี `width`/`height`/`style` (CSS กำหนดขนาด); channel labels and values remain visible; external links use `rel="noopener"`.
@@ -227,5 +237,4 @@ Strategy: **mixed border + restrained shadow**.
 |---|---|---|---|
 | ไม่มี dark mode | ทั้งเว็บ | เป็นข้อจำกัดผลิตภัณฑ์ที่ยอมรับไว้และลดภาระผู้ดูแล | ทบทวนเมื่อผู้ดูแลร้องขอ |
 | Google Fonts เป็น third-party | `template.html` | ต้องการ Kanit (หัวข้อ) และ Sarabun (ข้อความ) และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
-| มี breakpoint 600px เฉพาะ contact grid | `style.css` | เป็นข้อยกเว้นเดิมเพื่อรักษาขนาดการ์ดและ touch readability | คงไว้จน layout contact เปลี่ยนระบบ |
 | ปุ่ม LINE ใช้สีเขียวแบรนด์ | `.line-cta` (hero และ section-end CTAs) | ปุ่มสร้างเองจากโลโก้ `images/line-logo.svg` + ข้อความ เพื่อให้แต่ละส่วนใช้ข้อความต่างกันได้; สีตามคู่มือแบรนด์ LINE — พื้น `--color-line` #06C755, hover ทับ `rgba(0,0,0,0.1)`, กดทับ `rgba(0,0,0,0.3)` ผ่าน `.line-cta::after` ซึ่งคลุมทั้งปุ่มรวมโลโก้ | คงไว้ตามข้อกำหนดแบรนด์ของ LINE |

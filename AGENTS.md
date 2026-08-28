@@ -104,8 +104,9 @@ Deploy runs only on `main` after validate passes, so a red X never breaks the li
   inside `<main>` (never between `</main>` and `<footer>`). Alternating section
   backgrounds are automatic via `main > section:nth-of-type(even)` — never add a
   background class manually.
-- Mobile-first, single breakpoint at **768px** (plus 600px for the contact grid
-  only). Grids use `auto-fit` + `minmax` so pasted items reflow with no CSS change.
+- Mobile-first, **one breakpoint only: 768px**. Grids use `auto-fit` + `minmax` so
+  pasted items reflow with no CSS change; `.contact-list` is the exception — it is
+  deliberately one column at every width, so a pasted card adds a row.
 - Header mobile nav uses the **checkbox hack** (`#nav-toggle`). Do **not** switch it
   to `<details>`/`<summary>` — Chrome's UA `content-visibility: hidden !important`
   on closed details makes the desktop inline nav invisible.

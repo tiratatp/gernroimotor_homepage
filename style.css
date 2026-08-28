@@ -124,7 +124,7 @@ a:hover { text-decoration: underline; }
 .section { padding: var(--space-xl) 0; }
 /* สลับสีพื้นทุกส่วนที่ 2, 4, 6... อัตโนมัติ — ห้ามลบ / alternating background, do not delete */
 main > section:nth-of-type(even) { background: var(--color-surface-alt); }
-.section-title { font-size: 1.95rem; font-weight: 700; margin-bottom: var(--space-md); color: var(--color-text); }
+.section-title { font-size: 1.95rem; font-weight: 700; margin-bottom: var(--space-md); color: var(--color-primary); }
 /* ขีดแดงใต้หัวข้อ — เป็นจุดสังเกตว่า "ขึ้นส่วนใหม่" ที่เห็นได้แม้เลื่อนเร็วบนมือถือ
    ซึ่งการเว้นช่องว่างเฉย ๆ ทำหน้าที่นี้ไม่ได้
    Red rule under each section title: a section-start marker that stays visible while
@@ -285,13 +285,14 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 /* ===== 3. ABOUT + SERVICES — เกี่ยวกับเรา + บริการ ===== */
 .about-text p { max-width: 65ch; margin-bottom: var(--space-md); color: var(--color-text); }
 .subsection-title { font-size: 1.3rem; font-weight: 600; margin-top: var(--space-lg); margin-bottom: var(--space-sm); color: var(--color-text); }
-.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md); }
+/* คอลัมน์เดียวทุกขนาดจอ — การ์ดบริการเรียงลงล่างเสมอ
+   One column at every width: service cards always stack vertically */
+.services-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-md); }
 .service-card {
   background: var(--color-surface); border: 1px solid var(--color-border);
   border-radius: var(--radius); padding: var(--space-md); text-align: center;
 }
-.service-card svg { color: var(--color-primary); margin-bottom: var(--space-sm); }
-.service-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: var(--space-xs); }
+.service-card h3 { font-size: 1.35rem; font-weight: 600; margin-bottom: var(--space-xs); }
 .service-card p { color: var(--color-text-muted); font-size: 0.95rem; }
 
 /* CTA ท้ายส่วน — พาไปยังที่ตั้งและช่องทางติดต่อ / section-end contact CTA */
@@ -304,7 +305,11 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .section-cta p { max-width: 60ch; color: var(--color-text-muted); }
 
 @media (min-width: 768px) {
-  .section-cta { justify-content: space-between; }
+  /* ข้อความดันตัวเองไปซ้ายด้วย margin auto ปุ่มจึงไปอยู่ขวา
+     ส่วนที่ไม่มีข้อความจะเหลือปุ่มเดียวและอยู่กึ่งกลางตามเดิม
+     The text claims the free space so the button sits right; a CTA with no
+     text keeps a single centred button instead of jumping to the left. */
+  .section-cta p { margin-right: auto; }
 }
 
 /* ===== 3b. TESTIMONIALS — เสียงจากลูกค้า (รีวิวจริง) ===== */
@@ -356,6 +361,7 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   padding-bottom: var(--space-xs); /* เผื่อที่ให้แถบเลื่อน / room for the scrollbar */
+  margin-bottom: var(--space-md);  /* เว้นระยะกับบล็อกถัดไป / keeps the next block clear */
 }
 .carousel-track:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; border-radius: var(--radius); }
 .carousel-slide {
@@ -380,7 +386,9 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 /* ===== 4. FAQ — คำถามที่พบบ่อย (เส้นคั่นบาง ๆ คำตอบแสดงตลอด) ===== */
 .faq-list { display: grid; gap: 0; }
 .faq-item { background: none; border: none; border-radius: 0; border-top: 1px solid var(--color-border); padding: var(--space-sm) 0; }
-.faq-item:last-child { border-bottom: 1px solid var(--color-border); }
+/* เส้นคั่นอยู่ระหว่างคำถามเท่านั้น ไม่มีเส้นบนสุดและล่างสุด
+   Dividers sit only between questions - none above the first or below the last */
+.faq-item:first-child { border-top: none; padding-top: 0; }
 .faq-item h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: var(--space-xs); }
 .faq-item p { color: var(--color-text-muted); }
 
@@ -403,20 +411,35 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .hours { font-size: 1.3rem; }
 .hours strong { color: var(--color-primary); }
 
+/* คอลัมน์เดียวทุกขนาดจอ — การ์ดเรียงลงล่างเสมอ ไม่แตกเป็นสองคอลัมน์
+   One column at every width: the cards always stack vertically */
 .contact-list { display: grid; grid-template-columns: 1fr; gap: var(--space-xs); list-style: none; }
-@media (min-width: 600px) { .contact-list { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } }
 .contact-list > li { display: flex; }
 .contact-item {
   display: flex; flex: 1; align-items: center; gap: var(--space-sm);
-  padding: var(--space-sm) var(--space-md); background: var(--color-surface);
+  padding: var(--space-sm) var(--space-md); background: var(--color-bg);
   border: 1px solid var(--color-border); border-radius: var(--radius);
+  /* ยกการ์ดขึ้นเล็กน้อย — เงาสื่อว่า "กดได้" ได้ตรงกว่าสีพื้น
+     A slight lift: elevation reads as pressable more directly than a fill does */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.05);
+  transition: box-shadow 0.15s ease, transform 0.1s ease;
   color: var(--color-text); text-decoration: none; font-weight: 500;
   font-size: 1.1rem;
 }
 .contact-item:hover { border-color: var(--color-primary); text-decoration: none; }
+/* สถานะกด — มือถือไม่มี hover จึงต้องมีฟีดแบ็กตอนแตะ
+   Press state: touch devices have no hover, so the tap needs its own feedback */
+/* กดแล้วยุบลง — เงาหายและขยับลง 1px ให้รู้สึกเหมือนกดปุ่มจริง
+   Pressing flattens the card: shadow drops and it shifts 1px down */
+.contact-item:active {
+  border-color: var(--color-primary);
+  box-shadow: none; transform: translateY(1px);
+}
 .contact-item svg { color: var(--color-primary); flex-shrink: 0; }
 .contact-item span { display: flex; flex-direction: column; }
-.contact-item small { color: var(--color-text-muted); font-weight: 400; font-size: 0.95rem; }
+/* ค่าของแต่ละช่องทางใช้สีลิงก์ ให้เห็นว่าการ์ดกดได้ — สัญญาณที่ผู้ใช้คุ้นอยู่แล้ว
+   The value is link-coloured so the card reads as tappable, using an affordance people already know */
+.contact-item small { color: var(--color-primary); font-weight: 500; font-size: 0.95rem; }
 
 /* ===== 7. FOOTER — ส่วนล่างสุด ===== */
 .site-footer { background: var(--color-text); color: var(--color-surface-alt); padding: var(--space-lg) 0; text-align: center; }
