@@ -31,6 +31,7 @@
 
 ### Font Stack
 
+- Kanit โหลดตัวเอียงน้ำหนัก 600 ไว้ด้วย (`ital,wght@0,600;0,700;1,600`) สำหรับคำถาม FAQ จึงเป็นตัวเอียงจริงของฟอนต์ ไม่ใช่การเอียงจำลองของเบราว์เซอร์.
 - Body: `--font-body` = `"Sarabun", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif`.
 - Heading: `--font-heading` = `"Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif`.
 - ไม่มี mono หรือ serif font.
@@ -44,7 +45,7 @@
 | Section title | `1.95rem` | `2.4rem` | 700 / body rhythm | หัวข้อ `<h2>` — ค่ามือถือถูกจำกัดที่ `1.95rem` เพราะใหญ่กว่านี้แล้ว `ยี่ห้อและรุ่นรถที่เราจำหน่าย` จะตกบรรทัดที่จอ 375px |
 | Subsection | `1.3rem` | `1.3rem` | 600 | หัวข้อย่อย และบรรทัดเวลาเปิดทำการ (`.hours`) |
 | Card / label title | `1.05rem`–`1.35rem` | same | 600 | `.service-card h3` = `1.35rem` (ไม่มีไอคอนแล้ว หัวข้อจึงเป็นตัวนำของการ์ด) ส่วน chip และปุ่มยังอยู่ที่ `1.05rem`–`1.15rem` |
-| FAQ question | `1.25rem` | same | 600 | `<h3>` ในแต่ละ `.faq-item` — ใหญ่กว่าคำตอบชัดเจนเพื่อให้กวาดสายตาหาคำถามได้เร็ว |
+| FAQ question | `1.25rem` | same | 600 italic | `<h3>` ในแต่ละ `.faq-item` ครอบด้วยอัญประกาศ “…” และเป็นตัวเอียง ใหญ่กว่าคำตอบชัดเจนเพื่อให้กวาดสายตาหาคำถามได้เร็ว |
 | Hero lead | `1.15rem` | `1.3rem` | 400 | tagline |
 | Body | `17px` | `18px` | 400 / **1.7** | เนื้อหาภาษาไทยทั้งหมด |
 | Supporting | `0.85rem`–`0.95rem` | same | 400–500 | metadata แหล่งรีวิว และข้อมูลรอง |

@@ -381,7 +381,9 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 /* เส้นคั่นอยู่ระหว่างคำถามเท่านั้น ไม่มีเส้นบนสุดและล่างสุด
    Dividers sit only between questions - none above the first or below the last */
 .faq-item:first-child { border-top: none; padding-top: 0; }
-.faq-item h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: var(--space-xs); }
+/* คำถามเป็นตัวเอียง — โหลด Kanit italic จริงไว้แล้ว ไม่ใช่การเอียงจำลอง
+   Questions in italic; the real Kanit italic is loaded, not a synthesised slant */
+.faq-item h3 { font-size: 1.25rem; font-weight: 600; font-style: italic; margin-bottom: var(--space-xs); }
 .faq-item p { color: var(--color-text-muted); }
 
 /* ===== 5. GALLERY — ภาพหน้าร้าน ===== */

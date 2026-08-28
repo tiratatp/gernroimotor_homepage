@@ -47,6 +47,17 @@ def _normalize(text: str) -> str:
     return _WHITESPACE_RE.sub(" ", text).strip()
 
 
+def _faq_text(text: str) -> str:
+    """Normalize a FAQ question/answer for comparison.
+
+    The visible questions are wrapped in typographic quotes for display;
+    the JSON-LD carries the bare question, which is what Google should
+    receive. Those quotes are presentation, so they are ignored here while
+    every other character still has to match.
+    """
+    return _normalize(text).strip("\u201c\u201d")
+
+
 def _extract_hero(text: str) -> str:
     """Return the inner HTML of <section class="hero">, or empty string."""
     m = _HERO_SECTION_RE.search(text)
@@ -208,8 +219,8 @@ class TestFaqSchemaSync(_TemplateMixin, unittest.TestCase):
                            msg="No visible FAQ items parsed; template structure changed.")
         self.assertEqual(len(visible), len(schema),
                          msg=f"FAQ count drift: visible={len(visible)} schema={len(schema)}")
-        nv = [(_normalize(q), _normalize(a)) for q, a in visible]
-        ns = [(_normalize(q), _normalize(a)) for q, a in schema]
+        nv = [(_faq_text(q), _faq_text(a)) for q, a in visible]
+        ns = [(_faq_text(q), _faq_text(a)) for q, a in schema]
         self.assertEqual(nv, ns,
                          msg="Visible FAQ drifted from FAQPage JSON-LD mainEntity.")
 

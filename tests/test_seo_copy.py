@@ -52,9 +52,9 @@ class _TemplateMixin:
 class TestSeoCopyContract(_TemplateMixin, unittest.TestCase):
     EXPECTED_TITLE = "{{SHOP_NAME}} | ร้านขายมอเตอร์ไซค์ โชคชัย 4 แยก 63"
     EXPECTED_H1 = "{{SHOP_NAME}} โชคชัย 4 แยก 63"
-    EXPECTED_TAGLINE = "ร้านขายมอเตอร์ไซค์ พร้อมให้คำปรึกษาก่อนเข้าร้าน"
+    EXPECTED_TAGLINE = "ร้านขายมอเตอร์ไซค์ใกล้คุณ พร้อมให้คำปรึกษาก่อนเข้าร้าน"
     EXPECTED_META_DESC = (
-        "{{SHOP_NAME}} ร้านขายมอเตอร์ไซค์โชคชัย 4 แยก 63 "
+        "{{SHOP_NAME}} ร้านขายมอเตอร์ไซค์ใกล้โชคชัย 4 แยก 63 ลาดพร้าว "
         "เปิดทุกวัน 8.30-18.30 น. "
         "แอด LINE เช็กสต็อก สี โปร และค่างวดก่อนเข้าร้าน"
     )
