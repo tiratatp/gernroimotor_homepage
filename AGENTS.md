@@ -45,7 +45,9 @@ after tests and `build.py`. It validates and uploads that same **built** output;
   survives, no `{{` tokens).
 - `index.html` is then minified (comments/whitespace stripped) and self-checked
   (`</html>`, both JSON-LD blocks must parse, no `{{` tokens).
-- The build job rejects non-JPG/PNG files and images > 5 MB.
+- The build job rejects images > 5 MB, and rejects any format other than
+  JPG/PNG plus SVG; SVG is reserved for committed brand marks
+  (`images/line-logo.svg`) and passes through the optimizer untouched.
 - `images/*.webp` is gitignored — WebP exists only in the deployed artifact.
 - Local preview note: the script is CI-only; running it locally requires
   `OPTIMIZER_MODULES=<dir with sharp + html-minifier-terser + clean-css> node .github/optimize.mjs`

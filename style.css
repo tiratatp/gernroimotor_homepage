@@ -19,6 +19,7 @@
   --color-surface-alt: #EFEFEF;      /* สีพื้นสลับ (ส่วนสีอ่อน) / alternating sections */
   --color-border: #E0E0E0;           /* สีเส้นขอบ / borders */
   --color-white: #FFFFFF;
+  --color-line: #06C755;             /* สีปุ่ม LINE ตามคู่มือแบรนด์ LINE — ห้ามเปลี่ยน / official LINE base color, do not change */
 
   --font-body: "Sarabun", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
   --font-heading: "Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
@@ -52,8 +53,12 @@ a:hover { text-decoration: underline; }
 
 /* ===== ปุ่ม / buttons ===== */
 .btn {
-  display: inline-block;
-  padding: 0.85rem 1.75rem;
+  /* flex จัดกึ่งกลางแนวตั้งให้ไอคอนกับข้อความตรงกันจริง — vertical-align: middle
+     อิงเส้นฐาน+ครึ่ง x-height ทำให้ไอคอนเยื้องลงเล็กน้อยกับฟอนต์ไทย
+     Flex centring truly aligns icon with text; vertical-align: middle rides the
+     baseline + half x-height, which sits the icon slightly low against Thai type */
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  padding: 0.85rem 1.4rem;
   border-radius: var(--radius-sm);
   font-size: 1.05rem;
   font-weight: 600;
@@ -64,30 +69,54 @@ a:hover { text-decoration: underline; }
   text-decoration: none;
   line-height: 1.4;
 }
-.btn svg { vertical-align: middle; margin-right: 0.4rem; }
+.btn svg { flex: none; }
 .btn-primary { background: var(--color-primary); color: var(--color-white); }
 .btn-primary:hover { background: var(--color-primary-dark); text-decoration: none; }
 .btn-secondary { background: transparent; color: var(--color-white); border-color: var(--color-white); }
 .btn-secondary:hover { background: rgba(255,255,255,0.15); text-decoration: none; }
-/* ===== ปุ่ม LINE Add Friend (รูปทางการ — ห้ามแก้ไข/ครอป/ปรับขนาดรูป) ===== */
-/* Official LINE Add Friend image button — do NOT edit/crop/resize the bitmap */
+/* ปุ่ม LINE: โลโก้ + ข้อความ (ข้อความแก้ได้รายปุ่มใน template.html)
+   สถานะสีตามคู่มือแบรนด์ LINE — พื้น #06C755, hover ทับดำ 10%, กดทับดำ 30%
+   LINE button: logo + text (per-button text lives in template.html).
+   State colors follow LINE's brand guide - base #06C755, hover +10% black, press +30% black. */
 .line-cta {
-  display: inline-block;
+  position: relative; overflow: hidden;
+  display: inline-flex; align-items: center; gap: 0.15rem;   /* โลโก้มีช่องว่างในไฟล์อยู่แล้ว จึงเว้นเพิ่มน้อย / the logo art already carries its own inset */
+  min-height: 58px;            /* 48px + 20% */
+  padding: 0 1.2rem 0 0.6rem;  /* --space-sm / --space-xs + 20% */
+  background: var(--color-line);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-size: 1.2rem; font-weight: 600; line-height: 1.4;
+  border-radius: var(--radius-sm);
   text-decoration: none;
   transition: transform 0.1s ease;
 }
-.line-cta:hover { text-decoration: none; }
-.line-cta img {
-  display: block;
-  width: 202px;
-  max-width: 100%;
-  height: auto;
-  transition: filter 0.15s ease;
+.line-cta:hover { color: var(--color-white); text-decoration: none; }
+.line-cta:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; }
+/* ทับสีดำโปร่งใสทั้งปุ่ม (รวมโลโก้) ตามสเปกสถานะของ LINE
+   One translucent black layer over the whole button, logo included, per LINE's state spec */
+.line-cta::after {
+  content: ""; position: absolute; inset: 0;
+  background: transparent;
+  transition: background 0.15s ease;
+  pointer-events: none;
 }
-/* โฮเวอร์: หรี่ภาพลงเล็กน้อย ให้ความรู้สึกเหมือน hover ของปลั๊กอินทางการ LINE */
-/* Hover: dim the badge slightly, mimicking the official LINE plugin's hover */
-.line-cta:hover img { filter: brightness(0.9); }
+.line-cta:hover::after { background: rgba(0,0,0,0.1); }
+.line-cta:active::after { background: rgba(0,0,0,0.3); }
 .line-cta:active { transform: scale(0.98); }
+/* โลโก้ LINE พื้นเขียวเดียวกับปุ่ม จึงกลืนไปกับปุ่ม เหลือเห็นเฉพาะเครื่องหมายสีขาว
+   The logo's own #06C755 plate matches the button, so only the white LINE mark reads */
+/* โลโก้สูงเท่าปุ่ม (58px) — พื้นเขียวของโลโก้กลืนกับพื้นปุ่มพอดี
+   Logo matches the 58px button height; its green plate merges with the button */
+.line-cta-logo {
+  display: block; flex: none;
+  width: 58px; height: 58px;
+}
+.line-cta-text {
+  position: relative;
+  display: flex; align-items: center;
+  padding: 0.84rem 0;          /* 0.7rem + 20% */
+}
 .btn:active { transform: scale(0.98); }
 
 /* ===== กล่องกลางหน้า + หัวข้อส่วน / container + section headings ===== */
@@ -95,12 +124,24 @@ a:hover { text-decoration: underline; }
 .section { padding: var(--space-xl) 0; }
 /* สลับสีพื้นทุกส่วนที่ 2, 4, 6... อัตโนมัติ — ห้ามลบ / alternating background, do not delete */
 main > section:nth-of-type(even) { background: var(--color-surface-alt); }
-.section-title { font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-sm); color: var(--color-text); }
+.section-title { font-size: 1.95rem; font-weight: 700; margin-bottom: var(--space-md); color: var(--color-text); }
+/* ขีดแดงใต้หัวข้อ — เป็นจุดสังเกตว่า "ขึ้นส่วนใหม่" ที่เห็นได้แม้เลื่อนเร็วบนมือถือ
+   ซึ่งการเว้นช่องว่างเฉย ๆ ทำหน้าที่นี้ไม่ได้
+   Red rule under each section title: a section-start marker that stays visible while
+   scrolling on a phone, which plain whitespace does not achieve */
+.section-title::after {
+  content: "";
+  display: block;
+  width: 56px; height: 4px;
+  margin-top: var(--space-xs);
+  background: var(--color-primary);
+  border-radius: 2px;
+}
 .section-intro { color: var(--color-text-muted); max-width: 60ch; margin-bottom: var(--space-lg); }
 
 @media (min-width: 768px) {
   body { font-size: 18px; }
-  .section-title { font-size: 2rem; }
+  .section-title { font-size: 2.4rem; }
   .container { padding: 0 var(--space-md); }
 }
 
@@ -135,6 +176,19 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 }
 .header-brand:hover { text-decoration: none; }
 .header-brand:focus-visible { outline: 3px solid var(--color-white); outline-offset: 2px; }
+
+/* ปุ่มโทร (ไอคอนอย่างเดียว) — ดันตัวเองและเมนูไปชิดขวาด้วย margin-left:auto
+   Icon-only call button; margin-left:auto pushes it and the menu to the right */
+.header-call {
+  margin-left: auto;
+  flex: none;
+  width: 44px; height: 44px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: var(--radius-sm);
+  color: var(--color-white);
+}
+.header-call:hover { background: rgba(255,255,255,0.15); text-decoration: none; }
+.header-call:focus-visible { outline: 3px solid var(--color-white); outline-offset: 2px; }
 
 /* Hamburger = checkbox hack + minimal close-on-link JS. ห้ามใช้ details/summary: Chrome ซ่อนเนื้อหาด้วย UA !important แก้ด้วย CSS ไม่ได้ */
 .nav-checkbox {
@@ -210,7 +264,15 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   margin: 0 auto;
   padding: var(--space-lg) var(--space-sm) var(--space-xl);
 }
-.hero h1 { font-size: clamp(1.75rem, 8vw, 3rem); font-weight: 700; line-height: 1.3; margin-bottom: var(--space-sm); color: var(--color-text); }
+.hero h1 { font-size: clamp(2.1rem, 9.5vw, 3rem); font-weight: 700; line-height: 1.3; margin-bottom: var(--space-sm); color: var(--color-primary); }
+/* ชื่อร้านใหญ่กว่า ชื่อสาขาเล็กกว่า — ใช้ em จึงเลื่อนตาม clamp ของ h1 ทุกขนาดจอ
+   display: block บังคับให้อยู่คนละบรรทัดเสมอ ทั้งมือถือและเดสก์ท็อป
+   Shop name larger, branch smaller; em keeps both tied to the h1's clamp at every width.
+   display: block stacks them on their own lines at every screen size. */
+.hero-title-name,
+.hero-title-branch { display: block; }
+.hero-title-name { font-size: 1.12em; }
+.hero-title-branch { font-size: 0.82em; }
 .hero-tagline { font-size: 1.15rem; margin-bottom: var(--space-lg); color: var(--color-text-muted); }
 .hero-cta-lead { font-weight: 600; margin-bottom: var(--space-sm); color: var(--color-text); }
 .nowrap { white-space: nowrap; }
@@ -233,11 +295,17 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .service-card p { color: var(--color-text-muted); font-size: 0.95rem; }
 
 /* CTA ท้ายส่วน — พาไปยังที่ตั้งและช่องทางติดต่อ / section-end contact CTA */
+/* มือถือ: ปุ่ม LINE อยู่กลาง (ข้อความขึ้นบรรทัดบน) / เดสก์ท็อป: ข้อความซ้าย ปุ่มขวา
+   Mobile: LINE button centred below the text. Desktop: text left, button right. */
 .section-cta {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
   gap: var(--space-sm); margin-top: var(--space-lg);
 }
 .section-cta p { max-width: 60ch; color: var(--color-text-muted); }
+
+@media (min-width: 768px) {
+  .section-cta { justify-content: space-between; }
+}
 
 /* ===== 3b. TESTIMONIALS — เสียงจากลูกค้า (รีวิวจริง) ===== */
 .testimonials-grid {
@@ -313,7 +381,7 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .faq-list { display: grid; gap: 0; }
 .faq-item { background: none; border: none; border-radius: 0; border-top: 1px solid var(--color-border); padding: var(--space-sm) 0; }
 .faq-item:last-child { border-bottom: 1px solid var(--color-border); }
-.faq-item h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: var(--space-xs); }
+.faq-item h3 { font-size: 1.25rem; font-weight: 600; margin-bottom: var(--space-xs); }
 .faq-item p { color: var(--color-text-muted); }
 
 /* ===== 5. GALLERY — ภาพหน้าร้าน ===== */
@@ -329,38 +397,29 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .address-line { margin-top: var(--space-sm); color: var(--color-text-muted); }
 .contact-directions { margin-top: var(--space-sm); }
 .contact-details { display: flex; flex-direction: column; gap: var(--space-md); }
-.contact-hours {
-  padding: var(--space-md); background: var(--color-surface);
-  border: 1px solid var(--color-border); border-radius: var(--radius);
-}
+/* ข้อความล้วน ไม่ใช่ปุ่ม จึงไม่มีพื้นหลังและเส้นขอบ แต่คง padding ไว้ให้ระยะเท่าเดิม
+   Plain text, not a control - no surface or border, but the padding stays so spacing is unchanged */
+.contact-hours { padding: 0 0 var(--space-md); }
 .hours { font-size: 1.3rem; }
 .hours strong { color: var(--color-primary); }
 
-.contact-list { display: grid; grid-template-columns: 1fr; gap: var(--space-md); list-style: none; }
+.contact-list { display: grid; grid-template-columns: 1fr; gap: var(--space-xs); list-style: none; }
 @media (min-width: 600px) { .contact-list { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); } }
 .contact-list > li { display: flex; }
 .contact-item {
   display: flex; flex: 1; align-items: center; gap: var(--space-sm);
-  padding: var(--space-md); background: var(--color-surface);
+  padding: var(--space-sm) var(--space-md); background: var(--color-surface);
   border: 1px solid var(--color-border); border-radius: var(--radius);
   color: var(--color-text); text-decoration: none; font-weight: 500;
+  font-size: 1.1rem;
 }
 .contact-item:hover { border-color: var(--color-primary); text-decoration: none; }
 .contact-item svg { color: var(--color-primary); flex-shrink: 0; }
 .contact-item span { display: flex; flex-direction: column; }
-.contact-item small { color: var(--color-text-muted); font-weight: 400; font-size: 0.85rem; }
+.contact-item small { color: var(--color-text-muted); font-weight: 400; font-size: 0.95rem; }
 
 /* ===== 7. FOOTER — ส่วนล่างสุด ===== */
 .site-footer { background: var(--color-text); color: var(--color-surface-alt); padding: var(--space-lg) 0; text-align: center; }
-.footer-socials {
-  list-style: none; display: flex; flex-wrap: wrap; justify-content: center;
-  gap: var(--space-sm); margin-bottom: var(--space-sm);
-}
-.footer-socials a {
-  display: inline-flex; align-items: center; gap: var(--space-xs); min-height: 44px;
-  padding: 0 var(--space-xs); color: var(--color-surface-alt);
-}
-.footer-socials svg { flex-shrink: 0; }
 .site-footer small { font-size: 0.85rem; opacity: 0.8; }
 
 /* ===== Accessibility: focus ring / แท็บคีย์บอร์ด ===== */

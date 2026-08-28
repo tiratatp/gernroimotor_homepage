@@ -43,7 +43,7 @@ POSTAL_CODE = 10230
 
 # LINE ID ของร้าน (ไม่ต้องใส่ @ ข้างหน้า)
 # Shop LINE ID (without the leading @)
-LINE_ID = 485txeto
+LINE_ID = 100motor
 
 # ชื่อเพจ Facebook (ส่วนท้ายของลิงก์ เช่น facebook.com/ชื่อเพจ)
 # Facebook page name (the part after facebook.com/)

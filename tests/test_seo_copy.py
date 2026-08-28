@@ -19,6 +19,7 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_PATH = REPO_ROOT / "template.html"
+STYLE_PATH = REPO_ROOT / "style.css"
 
 _HERO_SECTION_RE = re.compile(
     r'<section\b[^>]*class="[^"]*\bhero\b[^"]*"[^>]*>(.*?)</section>',
@@ -72,10 +73,59 @@ class TestSeoCopyContract(_TemplateMixin, unittest.TestCase):
         self.assertTrue(hero, msg="No <section class='hero'> found in template.")
         m = re.search(r"<h1>(.*?)</h1>", hero, re.DOTALL)
         self.assertIsNotNone(m, msg="No <h1> found in hero.")
+        # Visible text is the contract; nowrap spans inside the h1 are markup.
+        visible = re.sub(r"<[^>]+>", " ", m.group(1)).strip()
+        visible = re.sub(r"\s+", " ", visible)
         self.assertEqual(
-            m.group(1).strip(), self.EXPECTED_H1,
+            visible, self.EXPECTED_H1,
             msg="<h1> must use the approved SEO copy.",
         )
+
+    def test_h1_splits_only_between_shop_name_and_branch(self) -> None:
+        """The h1 may wrap only between the shop name and the branch name."""
+        hero = _extract_hero(self.text)
+        m = re.search(r"<h1>(.*?)</h1>", hero, re.DOTALL)
+        self.assertIsNotNone(m, msg="No <h1> found in hero.")
+        inner = m.group(1).strip()
+        # Spans may carry extra classes (e.g. the per-part sizing hooks); the
+        # contract is only that each part is a nowrap group.
+        span_re = r'<span class="[^"]*\bnowrap\b[^"]*">([^<]+)</span>'
+        groups = re.findall(span_re, inner)
+        self.assertEqual(
+            groups, ["{{SHOP_NAME}}", "\u0e42\u0e0a\u0e04\u0e0a\u0e31\u0e22 4 \u0e41\u0e22\u0e01 63"],
+            msg="h1 must hold exactly two nowrap groups: shop name, then branch.",
+        )
+        outside = re.sub(span_re, "", inner)
+        self.assertEqual(
+            outside.strip(), "",
+            msg="Every h1 word must sit inside a nowrap group, so the only "
+                "possible line break is between the two groups.",
+        )
+
+    def test_h1_parts_carry_their_own_size_hooks(self) -> None:
+        """Shop name and branch are sized separately, so each needs its own class."""
+        hero = _extract_hero(self.text)
+        m = re.search(r"<h1>(.*?)</h1>", hero, re.DOTALL)
+        self.assertIsNotNone(m, msg="No <h1> found in hero.")
+        inner = m.group(1)
+        for cls, part in (("hero-title-name", "{{SHOP_NAME}}"),
+                          ("hero-title-branch", "\u0e42\u0e0a\u0e04\u0e0a\u0e31\u0e22 4 \u0e41\u0e22\u0e01 63")):
+            m2 = re.search(
+                r'<span class="[^"]*\b' + cls + r'\b[^"]*">([^<]+)</span>', inner,
+            )
+            self.assertIsNotNone(
+                m2, msg=f"h1 must carry a .{cls} span for its own font-size.",
+            )
+            self.assertEqual(
+                m2.group(1).strip(), part,
+                msg=f".{cls} must wrap {part!r}.",
+            )
+        style = STYLE_PATH.read_text(encoding="utf-8")
+        for cls in ("hero-title-name", "hero-title-branch"):
+            self.assertIn(
+                "." + cls, style,
+                msg=f"style.css must define a .{cls} rule.",
+            )
 
     def test_hero_tagline_uses_approved_copy(self) -> None:
         hero = _extract_hero(self.text)

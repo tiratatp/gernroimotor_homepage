@@ -12,3 +12,6 @@ images/*.webp
 
 # Python bytecode cache from running tests
 __pycache__/
+
+# macOS Finder metadata — ไฟล์ระบบของ macOS ไม่เกี่ยวกับเว็บ
+.DS_Store

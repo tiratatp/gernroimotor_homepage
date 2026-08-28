@@ -23,7 +23,7 @@
 ### Rules
 
 - `--color-primary` เป็น accent เพียงสีเดียว ห้ามเพิ่ม secondary accent หรือสีแบรนด์ของช่องทาง social.
-- **ข้อยกเว้นสำหรับรูปภาพแบรนด์ทางการ:** รูปปุ่ม LINE Add Friend (`images/line-add-friend-th.png`) มีสีเขียวทางการของ LINE อยู่ภายในไฟล์บิตแมปอยู่แล้ว ซึ่งไม่ใช่ CSS token สีเขียวแบรนด์ LINE ถูกจำกัดอยู่เฉพาะภาพแบรนด์ทางการนี้ และคงหลักการ single-accent ใน CSS ไว้.
+- **ข้อยกเว้นสำหรับสีแบรนด์ LINE:** ปุ่ม LINE ใช้สีเขียวทางการ `--color-line: #06C755` เป็น token เดียวที่แยกจาก accent หลัก ใช้ได้เฉพาะกับ `.line-cta` เท่านั้น ห้ามนำไปใช้กับองค์ประกอบอื่น เพื่อคงหลักการ single-accent ไว้ ค่าสีนี้มาจากคู่มือแบรนด์ LINE จึงห้ามแก้.
 - สีพื้น section สลับด้วย `main > section:nth-of-type(even)` เท่านั้น ห้ามใส่ background class ราย section.
 - สีทั้งหมดที่ผู้ดูแลแก้ได้อยู่ใน `:root` ส่วน `CHANGE COLORS HERE`; ต้องเก็บ token เดิมครบทุกตัว.
 
@@ -40,10 +40,11 @@
 
 | Level | Mobile | Desktop (≥768px) | Weight / line-height | Usage |
 |---|---|---|---|---|
-| Hero display | `clamp(1.75rem, 8vw, 3rem)` | `3rem` | 700 / 1.3 | ชื่อร้านใน hero |
-| Section title | `1.75rem` | `2rem` | 700 / body rhythm | หัวข้อ `<h2>` |
-| Subsection | `1.3rem` | `1.3rem` | 600 | หัวข้อย่อยและเวลาเปิดทำการ |
-| Card / label title | `1.05rem`–`1.15rem` | same | 600 | ชื่อบริการ FAQ chip และปุ่ม |
+| Hero display | `clamp(2.1rem, 9.5vw, 3rem)` | `3rem` | 700 / 1.3 | ชื่อร้านใน hero (ชื่อร้าน `1.12em` / ชื่อสาขา `0.82em`) |
+| Section title | `1.95rem` | `2.4rem` | 700 / body rhythm | หัวข้อ `<h2>` — ค่ามือถือถูกจำกัดที่ `1.95rem` เพราะใหญ่กว่านี้แล้ว `ยี่ห้อและรุ่นรถที่เราจำหน่าย` จะตกบรรทัดที่จอ 375px |
+| Subsection | `1.3rem` | `1.3rem` | 600 | หัวข้อย่อย และบรรทัดเวลาเปิดทำการ (`.hours`) |
+| Card / label title | `1.05rem`–`1.15rem` | same | 600 | ชื่อบริการ chip และปุ่ม |
+| FAQ question | `1.25rem` | same | 600 | `<h3>` ในแต่ละ `.faq-item` — ใหญ่กว่าคำตอบชัดเจนเพื่อให้กวาดสายตาหาคำถามได้เร็ว |
 | Hero lead | `1.15rem` | `1.3rem` | 400 | tagline |
 | Body | `17px` | `18px` | 400 / **1.7** | เนื้อหาภาษาไทยทั้งหมด |
 | Supporting | `0.85rem`–`0.95rem` | same | 400–500 | metadata แหล่งรีวิว และข้อมูลรอง |
@@ -54,6 +55,10 @@
 - เนื้อหาผู้ใช้เป็นภาษาไทย และ body line-height ต้องคงที่ `1.7`.
 - หัวข้อใช้ลำดับ semantic ตามโครง section; ห้ามเลือก heading level จากขนาดตัวอักษร.
 - ข้อความยาวจำกัดที่ 60–65ch เพื่อความอ่านง่าย; ห้ามลด body ต่ำกว่าค่าปัจจุบัน.
+- วลีภาษาไทยที่ห้ามหักกลางบรรทัดให้ครอบด้วย `<span class="nowrap">` (`.nowrap` = `white-space: nowrap`) แล้วเว้นวรรคระหว่าง span เป็นจุดขึ้นบรรทัดใหม่จุดเดียวที่อนุญาต.
+- hero `<h1>` สองส่วนใช้ `display: block` จึงอยู่คนละบรรทัดเสมอ ทุกขนาดจอรวมถึงเดสก์ท็อป ขนาดต่างกัน: `.hero-title-name` = `1.12em` และ `.hero-title-branch` = `0.82em` อิงกับ `clamp(2.1rem, 9.5vw, 3rem)` ของ `.hero h1` จึงเลื่อนตามทุกขนาดจอโดยไม่ต้องเขียน breakpoint เพิ่ม.
+- hero `<h1>` ใช้สี `--color-primary` (#CF0000) เหมือนแถบ header — คอนทราสต์บนพื้นขาว 5.75:1 ผ่าน WCAG AA.
+- hero `<h1>` ใช้กติกานี้เสมอ: สองกลุ่มคือ `{{SHOP_NAME}}` และ `โชคชัย 4 แยก 63` ดังนั้นเมื่อจอแคบพอจะขึ้นสองบรรทัด จะแบ่งตรงชื่อร้าน/ชื่อสาขาเท่านั้น ไม่หักกลางวลี (หนึ่งบรรทัดตั้งแต่ ~768px ขึ้นไป, สองบรรทัดที่แคบกว่านั้น) — บังคับด้วยเทสต์ `test_h1_splits_only_between_shop_name_and_branch`.
 
 ## 4. Spacing & Layout
 
@@ -90,6 +95,7 @@
 
 ### Section Shell
 - **Structure**: `.section` → `.container` → `.section-title` + optional `.section-intro` + main content.
+- **Section marker**: `.section-title::after` วาดขีดแดง 56x4px (`--color-primary`, radius 2px) ใต้หัวข้อทุกส่วน ทำหน้าที่เป็นจุดสังเกตว่าขึ้นส่วนใหม่ ซึ่งมองเห็นได้แม้เลื่อนเร็วบนมือถือ — การเว้นช่องว่างอย่างเดียวไม่พอ เพราะบนจอเล็กผู้ใช้เห็นหน้าเว็บทีละส่วนเท่านั้น ระยะใต้หัวข้อคือ `--space-md`.
 - **Variants**: alternating background เกิดจากลำดับ section อัตโนมัติเท่านั้น.
 - **Spacing**: `--space-xl`, `--space-sm`, `--space-md`, `--space-lg`.
 - **States**: static.
@@ -103,17 +109,22 @@
 - **Spacing**: padding เดิม `0.85rem 1.75rem`; กลุ่มปุ่มใช้ `--space-sm`.
 - **States**: hover เปลี่ยนพื้น, active `scale(0.98)`, focus-visible outline 3px สี primary.
 - **Accessibility**: ใช้ `<a>` เมื่อเป็นการนำทาง/โทร, link text ชัดเจน, external links มี `target="_blank" rel="noopener"` และ touch target ไม่ต่ำกว่า 44px.
+- **Spacing**: padding `0.85rem 1.4rem` และ `gap: 0.4rem` ระหว่างไอคอนกับข้อความ.
+- **Icon alignment**: `.btn` ใช้ `inline-flex` + `align-items: center` + `gap: 0.4rem` เพื่อให้ไอคอนกับข้อความอยู่กึ่งกลางแนวตั้งตรงกันจริง ห้ามกลับไปใช้ `vertical-align: middle` ซึ่งอิงเส้นฐาน + ครึ่ง x-height ทำให้ไอคอนเยื้องต่ำกว่าข้อความไทยราว 2-3px.
 - **Motion**: background 0.2s และ transform 0.1s; reduced-motion ลด duration.
 - **Layout**: inline cluster; wrap ได้.
 
 ### Official LINE CTA (`.line-cta`)
-- **Structure**: `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img src="images/line-add-friend-th.png" alt="เพิ่มเพื่อน LINE @{{LINE_ID}}" width="202" height="60"></a>`.
-- **Variants**: ใช้รูปภาพปุ่มทางการขนาดต้นฉบับ 202x60px เหมือนกันทั้งใน hero และท้าย section (บริการ, ยี่ห้อรถ, FAQ).
-- **Spacing**: inline-block display; native dimension 202×60px.
+- **Structure**: `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320"><span class="line-cta-text">ข้อความของส่วนนี้</span></a>` — ปุ่มประกอบจากโลโก้ LINE + ข้อความ ไม่ใช่รูปปุ่มสำเร็จรูป จึงตั้งข้อความต่างกันได้ในแต่ละส่วน.
+- **Sizing**: ปุ่มสูง 58px โลโก้ 58x58px ข้อความ 1.2rem padding ซ้าย 0.6rem padding ขวา 1.2rem เว้นระยะโลโก้-ข้อความ 0.15rem — ขนาดปุ่ม/ข้อความ/padding คือค่าเดิม (48px / 1rem / `--space-xs` / `--space-sm`) บวก 20% ถ้าจะปรับขนาดอีก ให้ปรับทุกค่าพร้อมกันเพื่อคงสัดส่วน ส่วน gap ตั้งไว้ต่ำเป็นพิเศษเพราะไฟล์โลโก้มีช่องว่างรอบเครื่องหมายอยู่ในตัวแล้ว.
+- **Alignment**: `.section-cta` มือถือใช้ `justify-content: center` ปุ่มจึงอยู่กลางเมื่อขึ้นบรรทัดใหม่ ตั้งแต่ 768px ขึ้นไปกลับเป็น `space-between` (ข้อความซ้าย ปุ่มขวา) ส่วนปุ่มใน hero อยู่กลางทุกขนาดจออยู่แล้ว.
+- **Logo blend**: `line-logo.svg` มีพื้นสี่เหลี่ยมมนสี #06C755 ในตัวไฟล์ ซึ่งตรงกับพื้นปุ่มพอดี พื้นจึงกลืนหายไป เหลือเห็นเฉพาะเครื่องหมาย LINE สีขาว (หลักการเดียวกับโลโก้ร้านที่กลืนกับแถบ header สีแดง) — ด้วยเหตุนี้ overlay สถานะ hover/press จึงต้องคลุมทั้งปุ่มผ่าน `::after` ไม่ใช่เปลี่ยนแค่ `background` มิฉะนั้นโลโก้จะไม่กลืนอีกต่อไป.
+- **Variants**: โครงปุ่ม โลโก้ และสีเหมือนกันทุกที่ ต่างกันเฉพาะข้อความใน `.line-cta-text` ซึ่งเขียนให้เข้ากับบริบทของแต่ละส่วน และต้องไม่ซ้ำกัน (บังคับด้วยเทสต์ `test_each_section_label_is_distinct`).
+- **Spacing**: `inline-flex` จัดกึ่งกลางแนวตั้ง โลโก้ 58×58px ประกบข้อความโดยตรง.
 - **States**: active `scale(0.98)`, focus-visible outline 3px สี primary พร้อม offset 2px.
-- **Accessibility**: ห้ามตัดแต่ง ครอบตัด หรือปรับขนาดรูปภาพบิตแมป; ต้องระบุ `alt` พร้อม LINE ID (`@{{LINE_ID}}`) เสมอ; `width="202"` และ `height="60"` กำหนดขนาดเพื่อป้องกัน layout shift; touch target 202×60px ครอบคลุมเกณฑ์ 44px.
+- **Accessibility**: โลโก้เป็นภาพประดับ ใช้ `alt=""` เพราะข้อความในปุ่มคือชื่อที่ screen reader อ่าน; `width="320"` และ `height="320"` (ขนาดจริงของไฟล์) กำหนดไว้กัน layout shift ส่วนขนาดแสดงผลคุมด้วย CSS; ปุ่มสูง 58px เกินเกณฑ์ touch target 44px.
 - **Motion**: active press scale 0.1s.
-- **Layout**: inline block element.
+- **Layout**: inline-flex element.
 
 ### Hero
 - **Structure**: `<section class="hero" id="top">` → `.hero-media` (semantic `<img>`) + `.hero-content` (`<h1>` + `.hero-tagline` + `.hero-cta-lead` + `.line-cta`). รูปอยู่เหนือข้อความบนมือถือ (image-first stack). `.hero-cta-lead` เป็นข้อความชวนแอด LINE อยู่เหนือปุ่ม LINE ทางการ ใช้ `font-weight: 600` และสี `--color-text` เพื่อเน้นกว่า tagline.
@@ -134,8 +145,8 @@
 - **Layout**: responsive auto-fit grid.
 
 ### Section Contact CTA
-- **Structure**: compact `.section-cta` cluster หลัง main content ของ section (บริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ) ประกอบด้วยข้อความสั้นและ `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img src="images/line-add-friend-th.png" alt="เพิ่มเพื่อน LINE @{{LINE_ID}}" width="202" height="60" loading="lazy"></a>`.
-- **Variants**: ข้อความตาม context ของบริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ; ใช้รูปภาพปุ่มทางการ LINE Add Friend เดียวกัน.
+- **Structure**: compact `.section-cta` cluster หลัง main content ของ section (บริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ) ประกอบด้วยข้อความสั้นและ `<a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener"><img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy"><span class="line-cta-text">ข้อความของส่วนนี้</span></a>`.
+- **Variants**: ข้อความตาม context ของบริการ, รีวิวลูกค้า, ยี่ห้อรถ, FAQ; ทั้งข้อความนำหน้าและข้อความบนปุ่มปรับตามส่วนได้.
 - **Spacing**: แยกจาก content ด้วย `--space-lg`; internal gap `--space-sm`.
 - **States**: inherited Official LINE CTA (`.line-cta`) states.
 - **Accessibility**: รูปภาพปุ่มมี `alt` ระบุ LINE ID พร้อม `loading="lazy"`; touch target 202×60px.
@@ -143,30 +154,30 @@
 - **Layout**: wrapping cluster, centered on narrow screens only when content naturally wraps.
 
 ### Consolidated Contact Section
-- **Structure**: Section Shell → `.location-grid`; left column contains map iframe (src จาก `{{MAPS_EMBED_URL}}` ใน variables.txt), address, และ directions Button; right column contains prominent hours and `.contact-list` for phone primary, backup, LINE. `{{BUSINESS_PROFILE_URL}}` ไม่มีลิงก์ที่แสดงบนหน้า — ใช้เฉพาะใน JSON-LD `sameAs` เท่านั้น.
+- **Structure**: Section Shell → `.contact-hours` → `.location-grid` (ส่วนนี้ไม่มี `.section-intro`). `.contact-hours` เป็นข้อความล้วนเต็มความกว้าง อยู่ใต้ `.section-title` ทันที ไม่มีหัวข้อย่อยกำกับ ไม่มีพื้นหลังและเส้นขอบ (เป็นข้อมูล ไม่ใช่ปุ่ม) เหลือเฉพาะ padding ล่าง `--space-md` จึงชิดขอบซ้ายเดียวกับหัวข้อ วันและเวลาอยู่บรรทัดเดียวกัน (`<strong>เปิดทุกวัน</strong> 08:30 - 18:30 น.` ไม่มี `<br>`). `.location-grid` คอลัมน์ซ้ายเป็นแผนที่ (src จาก `{{MAPS_EMBED_URL}}` ใน variables.txt) ที่อยู่ และปุ่มนำทาง; คอลัมน์ขวาเป็น `.contact-list` (โทรเลย, แอด LINE, ไปยัง Facebook, ไปยัง TikTok) ป้ายกำกับใช้คำชวนกดเพราะทุกการ์ดเป็นลิงก์ ส่วนการ์ดเบอร์สำรองถูกคอมเมนต์ไว้ใน `template.html` (มาร์กอัปยังอยู่ครบ เปิดกลับได้ตามคำอธิบายในคอมเมนต์). `{{BUSINESS_PROFILE_URL}}` ไม่มีลิงก์ที่แสดงบนหน้า — ใช้เฉพาะใน JSON-LD `sameAs` เท่านั้น.
 - **Variants**: one column below 768px; map-left/contact-right from 768px. Contact list changes layout only at existing 600px convention.
-- **Spacing**: column gap `--space-lg`; card gap `--space-md`; address/action stack uses `--space-sm`.
+- **Spacing**: column gap `--space-lg`; `.contact-list` gap `--space-xs` เพื่อให้การ์ดช่องทางติดต่ออยู่ชิดกันเป็นกลุ่มเดียว; `.contact-item` padding `--space-sm var(--space-md)` (แนวตั้งบางกว่าการ์ดทั่วไป) ข้อความ `1.1rem` / `<small>` `0.95rem`; address/action stack uses `--space-sm`.
 - **States**: map static; directions and channel links use existing Button/Content Card states.
 - **Accessibility**: iframe มี `title` ภาษาไทย, `loading="lazy"`, `allowfullscreen`, `referrerpolicy="strict-origin-when-cross-origin"` และไม่มี `width`/`height`/`style` (CSS กำหนดขนาด); channel labels and values remain visible; external links use `rel="noopener"`.
 - **Motion**: none beyond primitives.
-- **Layout**: responsive sidebar grid; map/address/directions left, hours/actions right.
+- **Layout**: hours sit full-width under the intro; below that a responsive sidebar grid — map/address/directions left, contact channels right.
 
 ### Header Navigation
-- **Structure**: `.header-brand` is a linked logo image — `<a href="#top" class="header-brand"><img src="images/logo.jpg" alt="{{SHOP_NAME}}" width="800" height="800"></a>` (intrinsic 800x800) — not visible text; the shop name survives only as the image `alt`. `.header-brand` is a fixed 128x48 landscape crop viewport (`overflow: hidden`) and `.header-brand img` uses `object-fit: cover; object-position: center` to trim the logo's top/bottom whitespace, so the 800x800 square reads as a landscape logo inside the 64px header. The logo's baked background is #CF0000, which directly matches the header `--color-primary` (#CF0000); since the bitmap and the header bar are the same red, `.header-brand img` needs no `filter` or `mix-blend-mode` treatment — the red rectangle already disappears into the header bar while the white Thai mark stays crisp. `.header-brand picture` mirrors the img sizing (`width`/`height: 100%`) so the deploy-time optimizer's `<img>`→`<picture>` rewrite behaves identically. Dimensions are the same on mobile and desktop. A single shared `<nav>` is controlled on mobile by the `#nav-toggle` checkbox + label and becomes inline at 768px. มี JavaScript ขนาดเล็กก่อน `</body>` ที่ uncheck `#nav-toggle` หลังคลิกลิงก์ใน `.header-nav a` เพื่อปิดเมนูมือถือหลังเลือก anchor — คง checkbox hack ไว้สำหรับการเปิด/ปิดด้วยปุ่ม hamburger. ไม่มีปุ่มโทรใน header — ช่องทางติดต่อทั้งหมดอยู่ใน `#contact`.
+- **Structure**: `.header-brand` is a linked logo image — `<a href="#top" class="header-brand"><img src="images/logo.jpg" alt="{{SHOP_NAME}}" width="800" height="800"></a>` (intrinsic 800x800) — not visible text; the shop name survives only as the image `alt`. `.header-brand` is a fixed 128x48 landscape crop viewport (`overflow: hidden`) and `.header-brand img` uses `object-fit: cover; object-position: center` to trim the logo's top/bottom whitespace, so the 800x800 square reads as a landscape logo inside the 64px header. The logo's baked background is #CF0000, which directly matches the header `--color-primary` (#CF0000); since the bitmap and the header bar are the same red, `.header-brand img` needs no `filter` or `mix-blend-mode` treatment — the red rectangle already disappears into the header bar while the white Thai mark stays crisp. `.header-brand picture` mirrors the img sizing (`width`/`height: 100%`) so the deploy-time optimizer's `<img>`→`<picture>` rewrite behaves identically. Dimensions are the same on mobile and desktop. A single shared `<nav>` is controlled on mobile by the `#nav-toggle` checkbox + label and becomes inline at 768px. มี JavaScript ขนาดเล็กก่อน `</body>` ที่ uncheck `#nav-toggle` หลังคลิกลิงก์ใน `.header-nav a` เพื่อปิดเมนูมือถือหลังเลือก anchor — คง checkbox hack ไว้สำหรับการเปิด/ปิดด้วยปุ่ม hamburger. `.header-call` เป็นปุ่มโทรไอคอนอย่างเดียว (`tel:{{PHONE_TEL}}`) วางไว้ก่อนเมนูทางขวา ใช้ `margin-left: auto` ดันตัวเองและเมนูไปชิดขวา กล่อง 44x44 ไม่มีเส้นขอบ (ต่างจาก hamburger ที่มีเส้นขอบ) hover เป็นพื้นหลัง `rgba(255,255,255,0.15)` แสดงทั้งมือถือและเดสก์ท็อป ช่องทางติดต่ออื่นทั้งหมดยังอยู่ใน `#contact`.
 - **Variants**: mobile dropdown (white) / desktop row (on red bar).
 - **States**: open/closed icons, hover accent, focus-visible on checkbox label and links.
 - **Accessibility**: checkbox hack must remain (no `<details>`); the brand link's accessible name comes from `alt="{{SHOP_NAME}}"` (no visible text) and its 128x48 box meets the 44px touch target; the logo's baked #CF0000 background directly matches `--color-primary` (see Structure) so it blends seamlessly with the header bar with no color treatment; hamburger and desktop nav links use `--color-white` on `--color-primary` bar (WCAG AA) with a white focus ring; mobile dropdown stays white with `--color-text` and a primary focus ring for readability; controls meet 44px target.
 - **Motion**: none.
-- **Layout**: sticky header cluster; only `#contact` represents location/contact.
+- **Layout**: sticky header cluster; the header carries a single icon-only call shortcut (`.header-call`) and `#contact` remains the full location/contact section.
 
-### Footer Social Navigation
-- **Structure**: `<nav aria-label="โซเชียลมีเดีย"><ul class="footer-socials"><li><a><svg>…</svg><span>…` for Facebook and TikTok, followed by copyright; the shop name appears once in the copyright line only.
-- **Variants**: monochrome icon-plus-text links; no channel brand colors.
-- **Spacing**: cluster gap `--space-sm`, separation `--space-xs` / `--space-sm`.
-- **States**: default light text, hover underline, global focus-visible outline.
-- **Accessibility**: semantic nav/list, recognizable decorative SVG icons use `aria-hidden="true"` and `currentColor`, accessible visible link text includes platform name and handle, external links use `target="_blank" rel="noopener"`, touch targets at least 44px.
+### Footer
+- **Structure**: `<footer class="site-footer">` → `.container` → copyright `<small>` only; the shop name appears once, in the copyright line. Facebook and TikTok moved into `#contact` as `.contact-item` cards, so every channel now lives in one place.
+- **Variants**: none.
+- **Spacing**: `--space-lg` vertical padding.
+- **States**: static text; global focus-visible outline applies to any link added later.
+- **Accessibility**: no interactive controls; the copyright is plain text.
 - **Motion**: none.
-- **Layout**: centered wrapping cluster.
+- **Layout**: single centered line.
 
 ## 6. Motion & Interaction
 
@@ -207,7 +218,7 @@ Strategy: **mixed border + restrained shadow**.
 
 - ลูกค้ามือถือที่ต้องการโทรหรือ LINE ทันที: ต้องพบ primary phone, backup phone และ LINE ใน contact section เดียว.
 - ลูกค้าที่กำลังเดินทาง: ต้องเห็นแผนที่ ที่อยู่ และปุ่มนำทางในคอลัมน์เดียวกัน.
-- ลูกค้าที่วางแผนเข้าร้าน: ต้องเห็นเวลาเปิดทำการเด่นก่อนช่องทางติดต่อ.
+- ลูกค้าที่วางแผนเข้าร้าน: ต้องเห็นเวลาเปิดทำการเด่นก่อนช่องทางติดต่อ — จึงวางไว้บรรทัดแรกใต้หัวข้อ `ติดต่อเรา`.
 - ผู้ดูแลร้านที่แก้ผ่าน GitHub: ต้องยังค้นหา EDIT ME / SWAP IMAGE / COPY FROM HERE / TO HERE และคัดลอกบล็อกซ้ำได้โดย layout ไม่พัง.
 
 ### Accepted Debt
@@ -217,4 +228,4 @@ Strategy: **mixed border + restrained shadow**.
 | ไม่มี dark mode | ทั้งเว็บ | เป็นข้อจำกัดผลิตภัณฑ์ที่ยอมรับไว้และลดภาระผู้ดูแล | ทบทวนเมื่อผู้ดูแลร้องขอ |
 | Google Fonts เป็น third-party | `template.html` | ต้องการ Kanit (หัวข้อ) และ Sarabun (ข้อความ) และยอมรับ system fallback; ยังไม่ self-host | ทบทวนเมื่อมี asset pipeline สำหรับ font |
 | มี breakpoint 600px เฉพาะ contact grid | `style.css` | เป็นข้อยกเว้นเดิมเพื่อรักษาขนาดการ์ดและ touch readability | คงไว้จน layout contact เปลี่ยนระบบ |
-| รูปภาพแบรนด์ทางการ LINE Add Friend มีสีเขียวแบรนด์ | `.line-cta` (hero และ section-end CTAs) | ใช้รูปภาพปุ่มทางการบิตแมป 202x60px จาก LINE เพื่อการจดจำแบรนด์; สีเขียวฝังในไฟล์รูปภาพบิตแมป จึงอนุโลมเป็นข้อยกเว้นภาพแบรนด์ทางการโดยไม่สร้าง CSS accent token เพิ่ม | คงไว้ตามข้อกำหนดแบรนด์ของ LINE |
+| ปุ่ม LINE ใช้สีเขียวแบรนด์ | `.line-cta` (hero และ section-end CTAs) | ปุ่มสร้างเองจากโลโก้ `images/line-logo.svg` + ข้อความ เพื่อให้แต่ละส่วนใช้ข้อความต่างกันได้; สีตามคู่มือแบรนด์ LINE — พื้น `--color-line` #06C755, hover ทับ `rgba(0,0,0,0.1)`, กดทับ `rgba(0,0,0,0.3)` ผ่าน `.line-cta::after` ซึ่งคลุมทั้งปุ่มรวมโลโก้ | คงไว้ตามข้อกำหนดแบรนด์ของ LINE |

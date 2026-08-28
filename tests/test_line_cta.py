@@ -1,4 +1,8 @@
-"""Structural tests for the official LINE Add Friend image CTA contract.
+"""Structural tests for the LINE CTA contract.
+
+Each button is built from the LINE logo mark plus its own Thai label, so
+the label can differ per section while the link and brand styling stay
+identical everywhere.
 
 The contract is per-section, not count-based, so it keeps holding when
 sections are added to or removed from the page:
@@ -6,28 +10,32 @@ sections are added to or removed from the page:
   * every <section> inside <main> carries exactly one .line-cta conversion
     anchor — except <section id="contact">, whose LINE card is a utility
     link (.contact-item) and must NOT be a conversion anchor;
-  * each anchor uses the {{LINE_ID}} URL with target="_blank" rel="noopener"
-    and wraps the official 202x60 image with a Thai alt that exposes
-    @{{LINE_ID}};
-  * the hero anchor's image is eager-loaded (LCP); every other section's
-    image is lazy-loaded;
+  * each anchor uses the {{LINE_ID}} URL with target="_blank" rel="noopener";
+  * each anchor pairs the shared images/line-logo.svg mark (decorative,
+    empty alt) with a non-empty Thai label in .line-cta-text;
+  * every section's label is distinct — the point of the split is that each
+    button can say something different;
+  * each label is preceded by an EDIT ME marker so the maintainer can find it;
+  * the hero anchor's logo is eager-loaded (LCP); every other section's is
+    lazy-loaded;
   * no section pairs its LINE button with a #contact fallback anchor;
-  * the self-hosted PNG is the exact unmodified official LINE asset.
+  * style.css paints the button with LINE's brand states: base #06C755,
+    hover +10% black, press +30% black.
 
 All contracts must pass before deployment.
 """
 
 from __future__ import annotations
 
-import hashlib
 import re
 import unittest
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_PATH = REPO_ROOT / "template.html"
-LINE_BADGE_PATH = REPO_ROOT / "images" / "line-add-friend-th.png"
-OFFICIAL_LINE_BADGE_SHA256 = "4c58bda197c567b3ca6a70878f85626cc266112e574462e995892f2d2b7a2f2f"
+LINE_LOGO_PATH = REPO_ROOT / "images" / "line-logo.svg"
+STYLE_PATH = REPO_ROOT / "style.css"
+LINE_BASE_COLOR = "#06C755"
 
 _ATTR_RE = re.compile(r'''([\w-]+)\s*=\s*"([^"]*)"''')
 _MAIN_RE = re.compile(r"<main\b[^>]*>(.*?)</main>", re.DOTALL)
@@ -70,11 +78,17 @@ class _TemplateMixin:
 #        while all other badges are lazy, and no section keeps a #contact
 #        fallback anchor next to its LINE button.
 class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
-    def test_self_hosted_badge_matches_official_asset(self) -> None:
-        digest = hashlib.sha256(LINE_BADGE_PATH.read_bytes()).hexdigest()
-        self.assertEqual(
-            digest, OFFICIAL_LINE_BADGE_SHA256,
-            msg="The official LINE badge must remain unmodified.",
+    def test_line_logo_asset_exists(self) -> None:
+        self.assertTrue(
+            LINE_LOGO_PATH.is_file(),
+            msg="images/line-logo.svg must exist — every LINE button uses it.",
+        )
+        svg = LINE_LOGO_PATH.read_text(encoding="utf-8")
+        self.assertIn("<svg", svg, msg="line-logo.svg must be an SVG.")
+        self.assertIn(
+            LINE_BASE_COLOR.lower(), svg.lower(),
+            msg="The logo mark must keep LINE's #06C755 plate so it blends "
+                "into the button background.",
         )
 
     def test_main_has_multiple_sections(self) -> None:
@@ -128,24 +142,59 @@ class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
                 msg=f"line-cta #{idx} must use rel=noopener.",
             )
 
-    def test_each_anchor_wraps_official_image_with_native_dimensions_and_thai_alt(self) -> None:
+    def test_each_anchor_pairs_shared_logo_with_thai_label(self) -> None:
         for idx, inner in enumerate(_LINE_CTA_RE.findall(self.text), start=1):
             img = re.search(r"<img\b[^>]*>", inner, re.DOTALL)
             self.assertIsNotNone(img,
-                                 msg=f"line-cta #{idx} must wrap an <img>.")
+                                 msg=f"line-cta #{idx} must include the logo <img>.")
             attrs = dict(_ATTR_RE.findall(img.group(0)))
-            self.assertEqual(attrs.get("src"), "images/line-add-friend-th.png",
-                             msg=f"line-cta #{idx} must use the official "
-                                 f"images/line-add-friend-th.png image.")
-            self.assertEqual(attrs.get("width"), "202",
-                             msg=f"line-cta #{idx} must declare native width=202.")
-            self.assertEqual(attrs.get("height"), "60",
-                             msg=f"line-cta #{idx} must declare native height=60.")
-            alt = attrs.get("alt", "")
-            self.assertIn("@{{LINE_ID}}", alt,
-                          msg=f"line-cta #{idx} alt must expose @{{LINE_ID}}.")
-            self.assertIsNotNone(_THAI_CHAR_RE.search(alt),
-                            msg=f"line-cta #{idx} alt must contain Thai text.")
+            self.assertEqual(attrs.get("src"), "images/line-logo.svg",
+                             msg=f"line-cta #{idx} must use the shared "
+                                 f"images/line-logo.svg mark.")
+            self.assertEqual(
+                attrs.get("alt"), "",
+                msg=f"line-cta #{idx} logo is decorative (the label carries "
+                    f"the meaning) and must use alt=\"\".",
+            )
+            label = re.search(
+                r'<span class="line-cta-text">([^<]+)</span>', inner,
+            )
+            self.assertIsNotNone(
+                label,
+                msg=f"line-cta #{idx} must carry a .line-cta-text label.",
+            )
+            text = label.group(1).strip()
+            self.assertTrue(text,
+                            msg=f"line-cta #{idx} label must not be empty.")
+            self.assertIsNotNone(
+                _THAI_CHAR_RE.search(text),
+                msg=f"line-cta #{idx} label must contain Thai text.",
+            )
+
+    def test_each_section_label_is_distinct(self) -> None:
+        labels = re.findall(
+            r'<span class="line-cta-text">([^<]+)</span>', self.text,
+        )
+        self.assertGreaterEqual(
+            len(labels), 2,
+            msg="Sanity check: expected several LINE button labels.",
+        )
+        self.assertEqual(
+            len(set(l.strip() for l in labels)), len(labels),
+            msg="Each section's LINE button must carry its own label; "
+                f"found duplicates in {labels}.",
+        )
+
+    def test_each_label_is_marked_editable(self) -> None:
+        """Every button sits under an EDIT ME marker the maintainer can grep."""
+        for idx, m in enumerate(_LINE_CTA_RE.finditer(self.text), start=1):
+            preceding_lines = self.text[:m.start()].splitlines()[-3:]
+            self.assertTrue(
+                any("EDIT ME" in line for line in preceding_lines),
+                msg=f"line-cta #{idx} must be directly preceded by an EDIT ME "
+                    f"comment so the maintainer knows the label is editable; "
+                    f"saw {preceding_lines}.",
+            )
 
     def test_no_section_pairs_line_cta_with_contact_fallback(self) -> None:
         for attrs, inner in _extract_main_sections(self.text):
@@ -158,30 +207,55 @@ class TestLineCtaContract(_TemplateMixin, unittest.TestCase):
                     f"replaces it.",
             )
 
+    def test_button_uses_line_brand_state_colors(self) -> None:
+        """Base #06C755, hover +10% black, press +30% black (LINE's spec)."""
+        style = STYLE_PATH.read_text(encoding="utf-8")
+        self.assertIn(
+            LINE_BASE_COLOR, style,
+            msg="style.css must define LINE's base color #06C755.",
+        )
+        self.assertIn(
+            ".line-cta:hover::after", style,
+            msg="Hover state must be a translucent overlay covering the whole "
+                "button (logo included), not a background-only change.",
+        )
+        self.assertIn(
+            "rgba(0,0,0,0.1)", style.replace(" ", ""),
+            msg="Hover overlay must be black at 10% opacity.",
+        )
+        self.assertIn(
+            ".line-cta:active::after", style,
+            msg="Press state must use the same overlay mechanism as hover.",
+        )
+        self.assertIn(
+            "rgba(0,0,0,0.3)", style.replace(" ", ""),
+            msg="Press overlay must be black at 30% opacity.",
+        )
+
     def test_hero_badge_is_eager_and_all_other_badges_are_lazy(self) -> None:
-        hero_badges = 0
+        hero_ctas = 0
         for attrs, inner in _extract_main_sections(self.text):
             m = _LINE_CTA_RE.search(inner)
             if m is None:
                 continue
             img = re.search(r"<img\b[^>]*>", m.group(1), re.DOTALL)
-            self.assertIsNotNone(img, msg="line-cta must wrap an <img>.")
+            self.assertIsNotNone(img, msg="line-cta must include the logo <img>.")
             loading = dict(_ATTR_RE.findall(img.group(0))).get("loading")
             if "hero" in attrs.get("class", "").split():
-                hero_badges += 1
+                hero_ctas += 1
                 self.assertNotEqual(
                     loading, "lazy",
-                    msg="Hero .line-cta image must be eager-loaded for LCP "
+                    msg="Hero .line-cta logo must be eager-loaded for LCP "
                         "(no loading='lazy').",
                 )
             else:
                 self.assertEqual(
                     loading, "lazy",
                     msg=f"Section '{attrs.get('id', '<unknown>')}' .line-cta "
-                        f"image must be loading='lazy'.",
+                        f"logo must be loading='lazy'.",
                 )
         self.assertEqual(
-            hero_badges, 1,
+            hero_ctas, 1,
             msg="Expected exactly one hero section carrying a .line-cta.",
         )
 
