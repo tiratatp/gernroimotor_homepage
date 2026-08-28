@@ -51,14 +51,20 @@ class _TemplateMixin:
 #        before the badge.
 class TestSeoCopyContract(_TemplateMixin, unittest.TestCase):
     EXPECTED_TITLE = "{{SHOP_NAME}} | ร้านขายมอเตอร์ไซค์ โชคชัย 4 แยก 63"
-    EXPECTED_H1 = "{{SHOP_NAME}} โชคชัย 4 แยก 63"
-    EXPECTED_TAGLINE = "ร้านขายมอเตอร์ไซค์ใกล้คุณ พร้อมให้คำปรึกษาก่อนเข้าร้าน"
+    EXPECTED_H1 = "{{SHOP_NAME}} ร้านมอเตอร์ไซค์ ลาดพร้าว โชคชัย 4"
+    EXPECTED_TAGLINE = (
+        "มีรถให้เลือกทั้ง Honda, Yamaha และมอเตอร์ไซค์ไฟฟ้า "
+        "พร้อมเช็กโปรโมชั่น เงินดาวน์ ค่างวด และสต็อกได้ก่อนเข้าร้าน"
+    )
     EXPECTED_META_DESC = (
         "{{SHOP_NAME}} ร้านขายมอเตอร์ไซค์ใกล้โชคชัย 4 แยก 63 ลาดพร้าว "
         "เปิดทุกวัน 8.30-18.30 น. "
         "แอด LINE เช็กสต็อก สี โปร และค่างวดก่อนเข้าร้าน"
     )
-    EXPECTED_LEAD_IN = "สนใจรุ่นไหน? แอด LINE เช็กสต็อก สี โปร และค่างวด"
+    EXPECTED_LOCATION = (
+        "ร้านอยู่ โชคชัย 4 แยก 63 ลาดพร้าว "
+        "เดินทางสะดวกจากโซนนาคนิวาส ลาดพร้าววังหิน รัชดา และห้วยขวาง"
+    )
 
     def test_title_tag_uses_approved_copy(self) -> None:
         m = re.search(r"<title>(.*?)</title>", self.text, re.DOTALL)
@@ -81,25 +87,33 @@ class TestSeoCopyContract(_TemplateMixin, unittest.TestCase):
             msg="<h1> must use the approved SEO copy.",
         )
 
-    def test_h1_splits_only_between_shop_name_and_branch(self) -> None:
-        """The h1 may wrap only between the shop name and the branch name."""
+    def test_h1_shop_name_never_breaks(self) -> None:
+        """The shop name must stay on one line; the branch line may wrap.
+
+        Both parts are display:block so they always sit on separate lines. The
+        branch line is now long enough that forcing nowrap on it overflowed a
+        375px screen, so only the shop name carries the nowrap guarantee.
+        """
         hero = _extract_hero(self.text)
+        self.assertTrue(hero, msg="No hero section found.")
         m = re.search(r"<h1>(.*?)</h1>", hero, re.DOTALL)
         self.assertIsNotNone(m, msg="No <h1> found in hero.")
         inner = m.group(1).strip()
-        # Spans may carry extra classes (e.g. the per-part sizing hooks); the
-        # contract is only that each part is a nowrap group.
-        span_re = r'<span class="[^"]*\bnowrap\b[^"]*">([^<]+)</span>'
-        groups = re.findall(span_re, inner)
-        self.assertEqual(
-            groups, ["{{SHOP_NAME}}", "\u0e42\u0e0a\u0e04\u0e0a\u0e31\u0e22 4 \u0e41\u0e22\u0e01 63"],
-            msg="h1 must hold exactly two nowrap groups: shop name, then branch.",
+        name = re.search(
+            r'<span class="[^"]*\bnowrap\b[^"]*\bhero-title-name\b[^"]*">([^<]+)</span>',
+            inner,
         )
-        outside = re.sub(span_re, "", inner)
+        self.assertIsNotNone(
+            name,
+            msg="The shop name span must carry both nowrap and hero-title-name.",
+        )
         self.assertEqual(
-            outside.strip(), "",
-            msg="Every h1 word must sit inside a nowrap group, so the only "
-                "possible line break is between the two groups.",
+            name.group(1).strip(), "{{SHOP_NAME}}",
+            msg="The nowrap-protected part of the h1 must be the shop name token.",
+        )
+        self.assertNotIn(
+            "nowrap", re.search(r'<span class="[^"]*hero-title-branch[^"]*"', inner).group(0),
+            msg="The branch line must not be nowrap; it is too long to fit one line.",
         )
 
     def test_h1_parts_carry_their_own_size_hooks(self) -> None:
@@ -109,7 +123,7 @@ class TestSeoCopyContract(_TemplateMixin, unittest.TestCase):
         self.assertIsNotNone(m, msg="No <h1> found in hero.")
         inner = m.group(1)
         for cls, part in (("hero-title-name", "{{SHOP_NAME}}"),
-                          ("hero-title-branch", "\u0e42\u0e0a\u0e04\u0e0a\u0e31\u0e22 4 \u0e41\u0e22\u0e01 63")):
+                          ("hero-title-branch", "ร้านมอเตอร์ไซค์ ลาดพร้าว โชคชัย 4")):
             m2 = re.search(
                 r'<span class="[^"]*\b' + cls + r'\b[^"]*">([^<]+)</span>', inner,
             )
@@ -161,31 +175,22 @@ class TestSeoCopyContract(_TemplateMixin, unittest.TestCase):
                 "exactly.",
         )
 
-    def test_hero_cta_lead_in_exists_before_badge(self) -> None:
+    def test_hero_location_line_precedes_the_line_button(self) -> None:
+        """The location line is the last text before the hero's LINE button."""
         hero = _extract_hero(self.text)
         self.assertTrue(hero, msg="No hero section found.")
-        lead_re = re.compile(
-            r'<p class="hero-cta-lead">' + re.escape(self.EXPECTED_LEAD_IN) + r"</p>",
+        loc_re = re.compile(
+            r'<p class="hero-location">' + re.escape(self.EXPECTED_LOCATION) + r"</p>",
         )
-        lead_m = lead_re.search(hero)
+        loc_m = loc_re.search(hero)
         self.assertIsNotNone(
-            lead_m,
-            msg="Hero must contain a <p class='hero-cta-lead'> with the approved "
-                "lead-in copy.",
+            loc_m,
+            msg="Hero must contain a <p class='hero-location'> with the approved copy.",
         )
-        # The LINE badge anchor must follow the lead-in with only whitespace
-        # and HTML comments between them (immediately before the badge).
-        after = hero[lead_m.end():]
-        badge_m = re.match(
-            r'\s*(?:<!--.*?-->\s*)*<a\b[^>]*class="line-cta"',
-            after, re.DOTALL,
-        )
+        after = hero[loc_m.end():]
         self.assertIsNotNone(
-            badge_m,
-            msg="The hero CTA lead-in must sit immediately before the .line-cta "
-                "badge with nothing between them but whitespace.",
+            re.match(r'\s*(?:<!--.*?-->\s*)*<div class="hero-actions">\s*'
+                     r'(?:<!--.*?-->\s*)*<a\b[^>]*class="line-cta"', after, re.DOTALL),
+            msg="The LINE button must follow the location line, with only "
+                "whitespace and comments between them.",
         )
-
-
-if __name__ == "__main__":
-    unittest.main()

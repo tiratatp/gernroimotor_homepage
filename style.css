@@ -274,7 +274,12 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .hero-title-name { font-size: 1.12em; }
 .hero-title-branch { font-size: 0.82em; }
 .hero-tagline { font-size: 1.15rem; margin-bottom: var(--space-lg); color: var(--color-text-muted); }
-.hero-cta-lead { font-weight: 600; margin-bottom: var(--space-sm); color: var(--color-text); }
+/* บรรทัดที่ตั้งร้าน — เล็กและจางกว่าแท็กไลน์ เป็นข้อมูลประกอบ
+   Shop location line: smaller and dimmer than the tagline, it is supporting detail */
+.hero-location { font-size: 0.95rem; color: var(--color-text-muted); margin-bottom: var(--space-md); }
+/* ปุ่มนำทางอยู่ใต้ปุ่ม LINE เสมอ ทุกขนาดจอ — ไม่ใช่แค่ตอนจอแคบ
+   The directions button always sits below the LINE button, at every width */
+.hero-actions { display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); }
 .nowrap { white-space: nowrap; }
 @media (min-width: 768px) {
   .hero-image { max-width: 700px; margin-left: auto; margin-right: auto; }
@@ -340,9 +345,23 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 
 /* ===== 3c. BRANDS + MODELS — ยี่ห้อและรุ่นรถ (chip pills) ===== */
 .chip-group-label { font-size: 1.15rem; font-weight: 600; margin-top: var(--space-lg); margin-bottom: var(--space-sm); color: var(--color-text); }
-.chip-group-intro { color: var(--color-text-muted); max-width: 60ch; margin-bottom: var(--space-sm); }
+/* ไม่จำกัดที่ 60ch — ประโยคเดียวสั้น ๆ ให้กว้างเท่า container แล้วให้ขนาดจอเป็นตัวกำหนดการตัดบรรทัด
+   No 60ch cap here: it is a single short sentence, so the container (and therefore
+   the screen) decides where it wraps, not a measure limit meant for long prose */
+.chip-group-intro { color: var(--color-text-muted); margin-bottom: var(--space-sm); }
+/* ชื่อยี่ห้อเหนือกลุ่มรุ่นรถ — เล็กกว่าหัวข้อกลุ่ม เพราะเป็นชั้นย่อยลงไปอีก
+   Brand label above each model group: smaller than the group label, one level down */
+.chip-brand-label { font-size: 1rem; font-weight: 600; margin-top: var(--space-md); margin-bottom: var(--space-xs); color: var(--color-text-muted); text-align: center; }
 .brand-chips { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-xs); justify-content: center; }
 .chip { background: var(--color-surface-alt); border: 1px solid var(--color-border); border-radius: 999px; padding: 0.4rem 1rem; font-weight: 600; }
+/* โลโก้ยี่ห้อแสดงล้วน ไม่มีกรอบชิป — กรอบมนรอบโลโก้ที่มีรูปทรงต่างกันดูไม่เข้ากัน
+   Brand logos stand on their own: a pill border around marks of differing
+   shapes reads as mismatched, so only the text chips keep the pill */
+.chip-logo {
+  display: inline-flex; align-items: center;
+  padding: 0; margin: var(--space-xs) var(--space-sm);
+}
+.chip-logo img { display: block; height: 30px; width: auto; }
 
 /* ===== 3d. DELIVERY CAROUSEL — สไลด์รูปส่งมอบรถ (scroll-snap ล้วน ไม่ใช้ JS) ===== */
 /* แถบเลื่อนแนวนอน: ปัดบนมือถือ / ลากแถบเลื่อนบนเดสก์ท็อป — snap เข้าล็อกทีละรูป

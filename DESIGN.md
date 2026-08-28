@@ -55,7 +55,7 @@
 - หัวข้อ semantic h1–h6 ใช้ Kanit; ข้อความอื่นทั้งหมดใช้ Sarabun.
 - เนื้อหาผู้ใช้เป็นภาษาไทย และ body line-height ต้องคงที่ `1.7`.
 - หัวข้อใช้ลำดับ semantic ตามโครง section; ห้ามเลือก heading level จากขนาดตัวอักษร.
-- ข้อความยาวจำกัดที่ 60–65ch เพื่อความอ่านง่าย; ห้ามลด body ต่ำกว่าค่าปัจจุบัน.
+- ข้อความยาวจำกัดที่ 60–65ch เพื่อความอ่านง่าย; ห้ามลด body ต่ำกว่าค่าปัจจุบัน. ข้อยกเว้น: `.chip-group-intro` เป็นประโยคเดียวสั้น ๆ ไม่ใช่ย่อหน้ายาว จึงไม่จำกัดความกว้าง ปล่อยให้ container (สูงสุด `--max-width`) และขนาดจอเป็นตัวกำหนดการตัดบรรทัด.
 - วลีภาษาไทยที่ห้ามหักกลางบรรทัดให้ครอบด้วย `<span class="nowrap">` (`.nowrap` = `white-space: nowrap`) แล้วเว้นวรรคระหว่าง span เป็นจุดขึ้นบรรทัดใหม่จุดเดียวที่อนุญาต.
 - hero `<h1>` สองส่วนใช้ `display: block` จึงอยู่คนละบรรทัดเสมอ ทุกขนาดจอรวมถึงเดสก์ท็อป ขนาดต่างกัน: `.hero-title-name` = `1.12em` และ `.hero-title-branch` = `0.82em` อิงกับ `clamp(2.1rem, 9.5vw, 3rem)` ของ `.hero h1` จึงเลื่อนตามทุกขนาดจอโดยไม่ต้องเขียน breakpoint เพิ่ม.
 - hero `<h1>` ใช้สี `--color-primary` (#CF0000) เหมือนแถบ header — คอนทราสต์บนพื้นขาว 5.75:1 ผ่าน WCAG AA.
@@ -95,8 +95,10 @@
 ## 5. Components
 
 ### Section Shell
+- **Page order**: hero → ยี่ห้อและรุ่นรถ (`#brands`) → บริการของเรา (`#services`) → รีวิวจากครอบครัวเกินร้อย (`#testimonials`) → คำถามที่พบบ่อย (`#faq`) → ติดต่อเรา (`#contact`). รุ่นรถขึ้นก่อนเพราะเป็นสิ่งที่ลูกค้ามองหาเป็นอย่างแรก. พื้นสลับคำนวณจาก `nth-of-type` จึงเปลี่ยนตามลำดับอัตโนมัติ.
 - **Structure**: `.section` → `.container` → `.section-title` + optional `.section-intro` + main content. `.section-title` ใช้สี `--color-primary` (#CF0000) เหมือนหัวข้อ hero — คอนทราสต์บนพื้นขาว 5.75:1 และบนพื้น `--color-surface-alt` 5.00:1 ผ่าน WCAG AA ทั้งคู่ ส่วนหัวข้อย่อย `.subsection-title` ยังเป็น `--color-text` เพื่อคงลำดับชั้นระหว่างหัวข้อหลักกับหัวข้อย่อย.
 - **FAQ dividers**: `.faq-item` มีเส้นคั่นด้านบน แต่ `.faq-item:first-child` ถอดเส้นบนและ padding บนออก และไม่มีเส้นใต้รายการสุดท้าย เส้นคั่นจึงอยู่ระหว่างคำถามเท่านั้น ไม่กลายเป็นกรอบครอบทั้งกลุ่ม.
+- **Logo chips**: ยี่ห้อใช้โลโก้แทนข้อความ (`.chip-logo` + `<img>` จาก `images/<brand>-logo.svg`) และไม่มีกรอบชิป — กรอบมนรอบโลโก้ที่รูปทรงต่างกันดูไม่เข้ากัน ส่วนชิปรุ่นรถที่เป็นข้อความยังคงกรอบไว้. โลโก้สูง 30px เท่ากันทุกยี่ห้อ ความกว้างไหลตามสัดส่วนของแต่ละโลโก้ ทุกไฟล์ต้องมี `viewBox` ไม่งั้นย่อขนาดด้วย CSS ไม่ได้ และต้องใส่ `alt` เป็นชื่อยี่ห้อ เพราะไม่มีข้อความให้ Google และ screen reader อ่านแล้ว.
 - **Section marker**: `.section-title::after` วาดขีดแดง 56x4px (`--color-primary`, radius 2px) ใต้หัวข้อทุกส่วน ทำหน้าที่เป็นจุดสังเกตว่าขึ้นส่วนใหม่ ซึ่งมองเห็นได้แม้เลื่อนเร็วบนมือถือ — การเว้นช่องว่างอย่างเดียวไม่พอ เพราะบนจอเล็กผู้ใช้เห็นหน้าเว็บทีละส่วนเท่านั้น ระยะใต้หัวข้อคือ `--space-md`.
 - **Variants**: alternating background เกิดจากลำดับ section อัตโนมัติเท่านั้น.
 - **Spacing**: `--space-xl`, `--space-sm`, `--space-md`, `--space-lg`.
@@ -129,7 +131,7 @@
 - **Layout**: inline-flex element.
 
 ### Hero
-- **Structure**: `<section class="hero" id="top">` → `.hero-media` (semantic `<img>`) + `.hero-content` (`<h1>` + `.hero-tagline` + `.hero-cta-lead` + `.line-cta`). รูปอยู่เหนือข้อความบนมือถือ (image-first stack). `.hero-cta-lead` เป็นข้อความชวนแอด LINE อยู่เหนือปุ่ม LINE ทางการ ใช้ `font-weight: 600` และสี `--color-text` เพื่อเน้นกว่า tagline.
+- **Structure**: `<section class="hero" id="top">` → `.hero-media` (semantic `<img>`) + `.hero-content` (`<h1>` + `.hero-tagline` + `.hero-location` + `.hero-actions`). รูปอยู่เหนือข้อความบนมือถือ (image-first stack). `.hero-location` เป็นบรรทัดที่ตั้งร้านและย่านใกล้เคียง ใช้ `0.95rem` สี `--color-text-muted` จางกว่าแท็กไลน์. `.hero-actions` วางปุ่ม LINE ไว้บน และปุ่มนำทางไปร้านไว้ล่างเสมอ (`flex-direction: column`) ทุกขนาดจอ ไม่ใช่เฉพาะตอนจอแคบ. ใน `<h1>` มีเฉพาะชื่อร้านที่เป็น `.nowrap` — บรรทัดสาขายาวเกินกว่าจะอยู่บรรทัดเดียวที่ 375px จึงปล่อยให้ตัดบรรทัดได้.
 - **Variants**: none — หน้าเดียวเท่านั้น.
 - **Spacing**: image full-bleed บนมือถือ; `.hero-content` ใช้ `--space-lg` / `--space-sm` / `--space-xl`.
 - **States**: `.line-cta` active press & focus-visible outline; ไม่มี hover บนรูป hero.

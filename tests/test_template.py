@@ -355,35 +355,42 @@ class TestHeroTaglineNoBreak(_TemplateMixin, unittest.TestCase):
         self.assertIn("white-space: nowrap", self.style,
                       msg=".nowrap class must use white-space: nowrap.")
 
-    def test_hero_tagline_has_thai_nowrap_groups(self) -> None:
+    def test_hero_h1_has_thai_nowrap_groups(self) -> None:
+        """Phrase protection now lives on the h1, not the tagline.
+
+        The tagline used to be two short phrases that must not break mid-phrase.
+        It is now a full sentence that is meant to wrap freely, so the nowrap
+        contract moved to the h1, whose two parts must each stay intact.
+        """
         hero = _extract_hero(self.text)
         self.assertTrue(hero, msg="No <section class='hero'> found in template.")
-        m = re.search(r'<p class="hero-tagline">(.*?)</p>', hero, re.DOTALL)
-        self.assertIsNotNone(m, msg="No .hero-tagline paragraph found in hero.")
-        tagline_html = m.group(1)
-        groups = re.findall(r'<span class="nowrap">([^<]+)</span>', tagline_html)
-        self.assertGreater(len(groups), 0, msg="Hero tagline must contain nowrap groups.")
+        m = re.search(r"<h1>(.*?)</h1>", hero, re.DOTALL)
+        self.assertIsNotNone(m, msg="No <h1> found in hero.")
+        h1_html = m.group(1)
+        span_re = r'<span class="[^"]*\bnowrap\b[^"]*">([^<]+)</span>'
+        groups = re.findall(span_re, h1_html)
+        self.assertGreater(len(groups), 0, msg="Hero h1 must contain nowrap groups.")
         for group in groups:
-            self.assertTrue(_normalize(group), msg="Hero tagline nowrap groups must not be empty.")
-            self.assertIsNotNone(
-                _THAI_CHAR_RE.search(group),
-                msg="Each hero tagline nowrap group must contain Thai text.",
-            )
+            self.assertTrue(_normalize(group),
+                            msg="Hero h1 nowrap groups must not be empty.")
 
-    def test_hero_tagline_wraps_all_visible_text(self) -> None:
+    def test_hero_h1_shop_name_is_protected(self) -> None:
+        """The shop name is the phrase that must never break mid-word.
+
+        The branch line wraps freely - it no longer fits on one line at 375px -
+        so the nowrap guarantee covers the shop name only.
+        """
         hero = _extract_hero(self.text)
-        m = re.search(r'<p class="hero-tagline">(.*?)</p>', hero, re.DOTALL)
-        self.assertIsNotNone(m, msg="No .hero-tagline paragraph found in hero.")
-        tagline_html = m.group(1)
-        visible = _normalize(re.sub(r"<[^>]+>", " ", tagline_html))
-        protected = _normalize(" ".join(
-            re.findall(r'<span class="nowrap">([^<]+)</span>', tagline_html)
-        ))
+        m = re.search(r"<h1>(.*?)</h1>", hero, re.DOTALL)
+        self.assertIsNotNone(m, msg="No <h1> found in hero.")
+        h1_html = m.group(1)
+        groups = re.findall(r'<span class="[^"]*\bnowrap\b[^"]*">([^<]+)</span>', h1_html)
         self.assertEqual(
-            visible,
-            protected,
-            msg="Every visible hero tagline phrase must be wrapped in a nowrap span.",
+            len(groups), 1,
+            msg="Exactly one h1 phrase (the shop name) should be nowrap-protected.",
         )
+        self.assertTrue(_normalize(groups[0]),
+                        msg="The protected h1 phrase must not be empty.")
 
 
 # Given: a sticky header (min-height 64px) and html { scroll-behavior: smooth }.
@@ -432,20 +439,23 @@ class TestReferencedImagesExist(_TemplateMixin, unittest.TestCase):
 class TestDirectionsConsistency(_TemplateMixin, unittest.TestCase):
     def test_directions_link_matches_jsonld(self) -> None:
         raw_hrefs = _ALL_MAPS_HREFS_RE.findall(self.text)
-        self.assertEqual(len(raw_hrefs), 1,
-                         msg="Expected exactly one maps directions link (in #contact); "
-                             "hero must not contain one.")
-        href = html.unescape(raw_hrefs[0])
+        self.assertGreaterEqual(len(raw_hrefs), 1,
+                                msg="Expected at least one maps directions link.")
         dealer = _parse_dealer_jsonld(self.text)
-        self.assertEqual(href, dealer["hasMap"],
-                         msg="Directions link drifted from JSON-LD hasMap.")
-
-        dest = _DESTINATION_RE.search(href)
-        self.assertIsNotNone(dest, msg="Directions link has no destination= parameter.")
-        lat, lng = unquote(dest.group(1)).split(",")
         geo = dealer["geo"]
-        self.assertEqual((lat, lng), (geo["latitude"], geo["longitude"]),
-                         msg="Maps destination coordinates drifted from JSON-LD geo.")
+        # The directions button appears in both the hero and #contact. Each copy
+        # is checked, so a coordinate edited in one place cannot silently differ
+        # from the other or from the JSON-LD.
+        for raw in raw_hrefs:
+            href = html.unescape(raw)
+            self.assertEqual(href, dealer["hasMap"],
+                             msg="Directions link drifted from JSON-LD hasMap.")
+            dest = _DESTINATION_RE.search(href)
+            self.assertIsNotNone(dest,
+                                 msg="Directions link has no destination= parameter.")
+            lat, lng = unquote(dest.group(1)).split(",")
+            self.assertEqual((lat, lng), (geo["latitude"], geo["longitude"]),
+                             msg="Maps destination coordinates drifted from JSON-LD geo.")
 
 
 if __name__ == "__main__":

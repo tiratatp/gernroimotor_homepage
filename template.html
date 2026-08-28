@@ -94,8 +94,8 @@
       </label>
       <!-- EDIT ME / แก้ไขตรงนี้: เพิ่ม/ลบลิงก์เมนูใน <nav> นี้ที่เดียว (ใช้ร่วมทั้งมือถือและเดสก์ท็อป) -->
       <nav class="header-nav" aria-label="เมนูหลัก">
-        <a href="#services">บริการของเรา</a>
         <a href="#brands">ยี่ห้อ</a>
+        <a href="#services">บริการของเรา</a>
         <a href="#faq">คำถาม</a>
         <a href="#contact">ติดต่อ</a>
       </nav>
@@ -115,24 +115,94 @@
     </div>
     <div class="hero-content">
       <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) -->
-      <!-- แบ่งบรรทัดได้เฉพาะระหว่างชื่อร้านกับชื่อสาขา — .nowrap กันไม่ให้แต่ละกลุ่มหักกลาง -->
-      <!-- The only allowed line break is between shop name and branch; .nowrap keeps each group intact -->
-      <h1><span class="nowrap hero-title-name">{{SHOP_NAME}}</span> <span class="nowrap hero-title-branch">โชคชัย 4 แยก 63</span></h1>
-      <!-- EDIT ME / แก้ไขตรงนี้: แท็กไลน์ 1 บรรทัด (ขายตัวเองใน 1 ประโยค) -->
-      <p class="hero-tagline"><span class="nowrap">ร้านขายมอเตอร์ไซค์ใกล้คุณ</span> <span class="nowrap">พร้อมให้คำปรึกษาก่อนเข้าร้าน</span></p>
-      <!-- EDIT ME / แก้ไขตรงนี้: ข้อความชวนแอด LINE (อยู่เหนือปุ่ม LINE ทางการ) -->
-      <p class="hero-cta-lead">สนใจรุ่นไหน? แอด LINE เช็กสต็อก สี โปร และค่างวด</p>
+      <!-- ชื่อร้านห้ามหักกลาง (.nowrap) ส่วนบรรทัดสาขายาวกว่า จึงปล่อยให้ตัดบรรทัดเองได้ -->
+      <!-- The shop name never breaks (.nowrap); the longer branch line is free to wrap -->
+      <h1><span class="nowrap hero-title-name">{{SHOP_NAME}}</span> <span class="hero-title-branch">ร้านมอเตอร์ไซค์ ลาดพร้าว โชคชัย 4</span></h1>
+      <!-- EDIT ME / แก้ไขตรงนี้: แท็กไลน์ (ขายตัวเองใน 1 ประโยค) -->
+      <p class="hero-tagline">มีรถให้เลือกทั้ง Honda, Yamaha และมอเตอร์ไซค์ไฟฟ้า พร้อมเช็กโปรโมชั่น เงินดาวน์ ค่างวด และสต็อกได้ก่อนเข้าร้าน</p>
+      <!-- EDIT ME / แก้ไขตรงนี้: ที่ตั้งร้านและย่านใกล้เคียง -->
+      <p class="hero-location">ร้านอยู่ โชคชัย 4 แยก 63 ลาดพร้าว เดินทางสะดวกจากโซนนาคนิวาส ลาดพร้าววังหิน รัชดา และห้วยขวาง</p>
       <!-- LINE ID ดึงจาก variables.txt (LINE_ID) -->
       <!-- EDIT ME / แก้ไขตรงนี้: ข้อความบนปุ่ม LINE ของส่วนนี้ (แก้ได้เฉพาะข้อความใน <span> — โลโก้และลิงก์ห้ามแก้) -->
-      <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener">
-        <img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320">
-        <span class="line-cta-text">เพิ่มเพื่อน</span>
-      </a>
+      <div class="hero-actions">
+        <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener">
+          <img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320">
+          <span class="line-cta-text">แอด LINE ปรึกษาออกรถ</span>
+        </a>
+        <!-- EDIT ME / แก้ไขตรงนี้: ลิงก์นำทาง Google Maps ของร้าน (destination = พิกัดร้าน) -->
+        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=13.8192369%2C100.5962201&amp;travelmode=driving" class="btn btn-primary" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          นำทางไปร้าน
+        </a>
+      </div>
     </div>
   </section>
 
   <!-- ================================================================ -->
-  <!-- 3. SERVICES / บริการของเรา                                        -->
+  <!-- 3. BRANDS + MODELS / ยี่ห้อและรุ่นรถ — chip pills 2 กลุ่ม           -->
+  <!--    ชื่อรุ่นช่วยให้คนค้น Google เจอ / model names help Google searches -->
+  <!--    เพิ่มยี่ห้อ/รุ่น: คัดลอกบล็อก <li>...</li> / copy an <li> to add one -->
+  <!-- ================================================================ -->
+  <section class="section" id="brands">
+    <div class="container">
+      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อส่วนยี่ห้อและรุ่นรถ -->
+      <h2 class="section-title">ยี่ห้อและรุ่นรถ</h2>
+
+      <!-- กลุ่มที่ 1: ยี่ห้อ / Group 1: brands -->
+      <h3 class="chip-group-label">ยี่ห้อที่เราจำหน่าย</h3>
+      <!-- EDIT ME / แก้ไขตรงนี้: เปลี่ยนชื่อยี่ห้อ หรือก๊อปปี้ li เพื่อเพิ่มยี่ห้อ -->
+      <ul class="brand-chips">
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ยี่ห้อ 1 ยี่ห้อ -->
+        <li class="chip-logo"><img src="images/honda-logo.svg" alt="Honda" width="176" height="28"></li>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดยี่ห้อ 1 ยี่ห้อ -->
+        <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: โลโก้ยี่ห้อ (ใช้รูปแทนข้อความได้) -->
+        <li class="chip-logo"><img src="images/yamaha-logo.svg" alt="Yamaha" width="236" height="50"></li>
+        <li class="chip-logo"><img src="images/em-logo.svg" alt="EM Motor" width="76" height="25"></li>
+        <li class="chip-logo"><img src="images/yadea-logo.svg" alt="Yadea" width="140" height="38"></li>
+        <li class="chip-logo"><img src="images/i-motor-logo.svg" alt="I-motor" width="157" height="28"></li>
+      </ul>
+
+      <!-- กลุ่มที่ 2: รุ่นรถ แยกตามยี่ห้อ / Group 2: models, grouped by brand -->
+      <h3 class="chip-group-label">รุ่นมอเตอร์ไซค์ยอดนิยม</h3>
+      <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้นของรุ่นยอดนิยม -->
+      <p class="chip-group-intro">เลือกรุ่นที่สนใจ แล้วทักมาเช็ก ราคาล่าสุด โปรโมชั่น เงินดาวน์ ค่างวด และรถพร้อมส่ง ได้ก่อนเข้าร้าน</p>
+
+      <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รุ่นรถของ 1 ยี่ห้อ -->
+      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ และรายชื่อรุ่นด้านล่าง -->
+      <h4 class="chip-brand-label">Yamaha</h4>
+      <ul class="brand-chips">
+        <li class="chip">Grand Filano</li>
+        <li class="chip">Fazzio</li>
+        <li class="chip">NMAX</li>
+      </ul>
+      <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรุ่นรถของ 1 ยี่ห้อ -->
+
+      <h4 class="chip-brand-label">Honda</h4>
+      <ul class="brand-chips">
+        <li class="chip">PCX160</li>
+        <li class="chip">Lead125</li>
+        <li class="chip">Giorno+</li>
+        <li class="chip">Wave125</li>
+        <li class="chip">Wave110</li>
+        <li class="chip">Click160</li>
+        <li class="chip">Scoopy</li>
+      </ul>
+
+      <div class="section-cta">
+        <!-- EDIT ME / แก้ไขตรงนี้: ข้อความบนปุ่ม LINE ของส่วนนี้ (แก้ได้เฉพาะข้อความใน <span> — โลโก้และลิงก์ห้ามแก้) -->
+        <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener">
+          <img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy">
+          <span class="line-cta-text">เช็กโปรโมชั่นล่าสุด — ทักแชท</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- 3b. SERVICES / บริการของเรา                                       -->
   <!--    เพิ่มย่อหน้า: คัดลอกบล็อก <p>...</p> / เพิ่มการ์ด: คัดลอก service-card -->
   <!--    Copy a <p> block to add a paragraph; a service-card to add a card -->
   <!-- ================================================================ -->
@@ -191,7 +261,7 @@
   </section>
 
   <!-- ================================================================ -->
-  <!-- 3b. ครอบครัวเกินร้อย — รีวิวจริงจาก Facebook/Google + รูปส่งมอบรถ  -->
+  <!-- 3c. ครอบครัวเกินร้อย — รีวิวจริงจาก Facebook/Google + รูปส่งมอบรถ  -->
   <!--    เพิ่มรีวิว: คัดลอกบล็อก testimonial-card ทั้งบล็อก              -->
   <!--    Add a review: copy a testimonial-card block                    -->
   <!--    สำคัญ: คัดลอกข้อความรีวิวมาตรง ๆ ห้ามแก้คำ/แต่งดาว/คะแนน/วันที่  -->
@@ -292,51 +362,6 @@
         <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener">
           <img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy">
           <span class="line-cta-text">อยากออกรถ ติดต่อเลย</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================================================ -->
-  <!-- 3c. BRANDS + MODELS / ยี่ห้อและรุ่นรถ — chip pills 2 กลุ่ม          -->
-  <!--    ชื่อรุ่นช่วยให้คนค้น Google เจอ / model names help Google searches -->
-  <!--    เพิ่มยี่ห้อ/รุ่น: คัดลอกบล็อก <li>...</li> / copy an <li> to add one -->
-  <!-- ================================================================ -->
-  <section class="section" id="brands">
-    <div class="container">
-      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อส่วนยี่ห้อและรุ่นรถ -->
-      <h2 class="section-title">ยี่ห้อและรุ่นรถที่เราจำหน่าย</h2>
-      <!-- กลุ่มที่ 1: ยี่ห้อ / Group 1: brands -->
-      <h3 class="chip-group-label">ยี่ห้อที่เราจำหน่าย</h3>
-      <!-- EDIT ME / แก้ไขตรงนี้: เปลี่ยนชื่อยี่ห้อ หรือก๊อปปี้ li เพื่อเพิ่มยี่ห้อ -->
-      <ul class="brand-chips">
-        <li class="chip">Honda</li>
-        <li class="chip">Yamaha</li>
-        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ยี่ห้อ 1 ยี่ห้อ -->
-        <li class="chip">GPX</li>
-        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดยี่ห้อ 1 ยี่ห้อ -->
-        <li class="chip">รถมอเตอร์ไซค์ไฟฟ้า</li>
-      </ul>
-
-      <!-- กลุ่มที่ 2: รุ่นรถ / Group 2: models -->
-      <h3 class="chip-group-label">รุ่นยอดนิยม</h3>
-      <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้นของรุ่นยอดนิยม -->
-      <ul class="brand-chips">
-        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รุ่นรถ 1 รุ่น -->
-        <li class="chip">Honda Click 125i</li>
-        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรุ่นรถ 1 รุ่น -->
-        <li class="chip">Honda Wave 110i</li>
-        <li class="chip">Honda Scoopy i</li>
-        <li class="chip">Honda PCX160</li>
-        <li class="chip">Yamaha NMAX</li>
-        <li class="chip">Yamaha Aerox</li>
-      </ul>
-
-      <div class="section-cta">
-        <!-- EDIT ME / แก้ไขตรงนี้: ข้อความบนปุ่ม LINE ของส่วนนี้ (แก้ได้เฉพาะข้อความใน <span> — โลโก้และลิงก์ห้ามแก้) -->
-        <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener">
-          <img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy">
-          <span class="line-cta-text">เช็กรุ่นและโปรวันนี้</span>
         </a>
       </div>
     </div>

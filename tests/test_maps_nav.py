@@ -87,16 +87,19 @@ class TestMapEmbedContract(_TemplateMixin, unittest.TestCase):
             r'href="(https://www\.google\.com/maps/dir/[^"]+)"',
         )
         raw_hrefs = dirs_re.findall(self.text)
-        self.assertEqual(
+        self.assertGreaterEqual(
             len(raw_hrefs), 1,
-            msg="Expected exactly one coordinate directions link (unchanged).",
+            msg="Expected at least one coordinate directions link.",
         )
-        href = html.unescape(raw_hrefs[0])
         dealer = _parse_dealer_jsonld(self.text)
-        self.assertEqual(
-            href, dealer["hasMap"],
-            msg="Directions link must still match JSON-LD hasMap.",
-        )
+        # The page may carry the directions button more than once (hero and
+        # contact); every copy must point at the same coordinates as hasMap,
+        # so none of them can drift.
+        for href in raw_hrefs:
+            self.assertEqual(
+                html.unescape(href), dealer["hasMap"],
+                msg="Every directions link must match JSON-LD hasMap.",
+            )
 
 
 # Given/When/Then: iframe has class/title/loading/allowfullscreen/referrerpolicy
