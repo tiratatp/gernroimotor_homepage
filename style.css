@@ -372,23 +372,20 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .faq-item h3 { font-size: 1.25rem; font-weight: 600; font-style: italic; margin-bottom: var(--space-xs); }
 .faq-item p { color: var(--color-text-muted); }
 
-/* รูปรีวิวจาก Google — 1 คอลัมน์บนมือถือ ขยายเป็น 2-3 คอลัมน์เมื่อจอกว้างพอ
-   auto-fit + minmax ทำให้เพิ่ม/ลบรูปได้โดยไม่ต้องแก้ CSS
-   Google review screenshots: one column on phones, growing to two or three
-   when there is room. auto-fit + minmax means pasted images reflow by themselves */
-.review-gallery {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-md);
-  margin-bottom: var(--space-lg);
-}
-.review-gallery img {
-  display: block;
-  width: 100%; height: auto;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+/* สไลด์ภาพรีวิว — ใช้พฤติกรรมเลื่อนเดียวกับสไลด์ด้านบน แต่รูปเป็นแนวนอน 2:1
+   จึงต้องทับ aspect-ratio 1:1 ของสไลด์ปกติ ไม่งั้นข้อความรีวิวจะโดนครอป
+   และให้กว้างกว่าเพื่อให้อ่านตัวหนังสือในรูปได้
+   Review slider: same scroll behaviour as the slider above, but these images
+   are 2:1 landscape, so the square aspect-ratio must be overridden or the
+   review text gets cropped. Slides are wider so the text stays readable. */
+.review-carousel .carousel-slide {
+  flex: 0 0 clamp(260px, 80vw, 560px);   /* 80vw เท่าสไลด์ด้านบน จึงเห็นรูปถัดไปแวบ ๆ / same 80vw as the slider above, so the next slide peeks */
   background: var(--color-bg);
+  border: 1px solid var(--color-border);
+}
+.review-carousel .carousel-slide img {
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
 }
 
 /* ===== 5. GALLERY — ภาพหน้าร้าน ===== */

@@ -264,8 +264,8 @@
   <!-- 3c. ครอบครัวเกินร้อย — ภาพความประทับใจ + ภาพรีวิวจริงจาก Google  -->
   <!--    เพิ่มรูปสไลด์: อัปโหลดเข้า images/ แล้วคัดลอกบล็อก carousel-slide -->
   <!--    Add a slide: upload to images/ then copy a carousel-slide block -->
-  <!--    เพิ่มรูปรีวิว: อัปโหลดเข้า images/ แล้วคัดลอกบล็อก <li> ใน review-gallery -->
-  <!--    Add a review image: upload to images/ then copy an <li> block  -->
+  <!--    เพิ่มรูปรีวิว: อัปโหลดเข้า images/ แล้วคัดลอกบล็อก carousel-slide ในสไลด์รีวิว -->
+  <!--    Add a review image: upload to images/ then copy a slide block   -->
   <!--    สำคัญ: ใช้ภาพรีวิวจริงเท่านั้น ห้ามแต่งดาว/คะแนน/วันที่          -->
   <!--    IMPORTANT: real review screenshots only - no invented stars,   -->
   <!--    ratings or dates                                              -->
@@ -301,75 +301,75 @@
       </div>
 
       <!-- ================================================================ -->
-      <!--    รูปรีวิวจริงจาก Google — 1 คอลัมน์บนมือถือ ถึง 3 คอลัมน์บนจอกว้าง   -->
-      <!--    Google review screenshots: 1 column on phones, up to 3 when wide -->
+      <!--    รูปรีวิวจริงจาก Google — สไลด์ ปัดซ้าย-ขวาเพื่อดูรีวิวถัดไป          -->
+      <!--    Google review screenshots in a slider; swipe sideways for more  -->
       <!-- ================================================================ -->
-      <ul class="review-gallery">
+      <div class="carousel-track review-carousel" role="region" aria-label="ภาพรีวิวจากลูกค้าบน Google" tabindex="0">
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-1.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-2.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-3.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-4.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-5.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-6.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-7.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-8.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
         <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รูปรีวิว 1 รูป -->
-        <li>
+        <figure class="carousel-slide">
           <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
           <img src="images/review-9.jpg" alt="รีวิว 5 ดาวจากลูกค้าบน Google เกี่ยวกับบริการของ{{SHOP_NAME}}" width="1200" height="600" loading="lazy">
-        </li>
+        </figure>
         <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรูปรีวิว 1 รูป -->
 
-      </ul>
+      </div>
 
       <div class="section-cta">
         <!-- EDIT ME / แก้ไขตรงนี้: ข้อความบนปุ่ม LINE ของส่วนนี้ (แก้ได้เฉพาะข้อความใน <span> — โลโก้และลิงก์ห้ามแก้) -->
