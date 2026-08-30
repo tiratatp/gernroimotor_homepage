@@ -310,38 +310,6 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 .section-cta p { max-width: 60ch; color: var(--color-text-muted); }
 
 /* ===== 3b. TESTIMONIALS — เสียงจากลูกค้า (รีวิวจริง) ===== */
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: var(--space-md);
-}
-.testimonial-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  padding: var(--space-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-}
-.testimonial-card blockquote {
-  flex: 1;
-  margin: 0;
-  padding-left: var(--space-sm);
-  border-left: 3px solid var(--color-primary);
-  color: var(--color-text);
-  font-size: 1rem;
-  line-height: 1.7;
-}
-.testimonial-card blockquote p { margin: 0; text-wrap: balance; }
-.testimonial-card figcaption {
-  border-top: 1px solid var(--color-border);
-  padding-top: var(--space-sm);
-  display: flex;
-  flex-direction: column;
-}
-.testimonial-name { font-weight: 600; color: var(--color-text); font-size: 1rem; }
-.testimonial-source { color: var(--color-text-muted); font-size: 0.9rem; }
 
 /* ===== 3c. BRANDS + MODELS — ยี่ห้อและรุ่นรถ (chip pills) ===== */
 .chip-group-label { font-size: 1.15rem; font-weight: 600; margin-top: var(--space-lg); margin-bottom: var(--space-sm); color: var(--color-text); }
@@ -376,9 +344,13 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 }
 .carousel-track:focus-visible { outline: 3px solid var(--color-primary); outline-offset: 2px; border-radius: var(--radius); }
 .carousel-slide {
-  /* มือถือ: รูปกว้าง 85% เห็นรูปถัดไปแวบ ๆ เป็นสัญญาณว่าเลื่อนต่อได้
-     Mobile: 85% slide width lets the next photo peek as a scroll hint */
-  flex: 0 0 85%;
+  /* ความกว้างไหลตามจอแบบต่อเนื่อง ไม่กระโดดที่ breakpoint และหยุดโตที่ 360px
+     บนมือถือได้ราว 80vw จึงยังเห็นรูปถัดไปแวบ ๆ เป็นสัญญาณว่าเลื่อนต่อได้
+     รูปเป็นสี่เหลี่ยมจัตุรัส ความสูงจึงเท่าความกว้าง = สูงสุด 360px
+     Width scales continuously instead of jumping at a breakpoint, and stops
+     growing at 360px. On phones ~80vw still lets the next slide peek.
+     Slides are square, so height tracks width and tops out at 360px too. */
+  flex: 0 0 clamp(260px, 80vw, 360px);
   scroll-snap-align: center;
   border-radius: var(--radius);
   overflow: hidden;
@@ -389,11 +361,6 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
   aspect-ratio: 1 / 1; /* รูปทุกใบสูงเท่ากัน ครอปกลางภาพ / uniform square slides, center-cropped */
   object-fit: cover;
 }
-@media (min-width: 768px) {
-  /* เดสก์ท็อป: เห็น 3 รูปเต็ม + รูปที่ 4 แวบ ๆ / desktop: 3 full slides + a peek of the 4th */
-  .carousel-slide { flex-basis: 31%; }
-}
-
 /* ===== 4. FAQ — คำถามที่พบบ่อย (เส้นคั่นบาง ๆ คำตอบแสดงตลอด) ===== */
 .faq-list { display: grid; gap: 0; }
 .faq-item { background: none; border: none; border-radius: 0; border-top: 1px solid var(--color-border); padding: var(--space-sm) 0; }
@@ -404,6 +371,25 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
    Questions in italic; the real Kanit italic is loaded, not a synthesised slant */
 .faq-item h3 { font-size: 1.25rem; font-weight: 600; font-style: italic; margin-bottom: var(--space-xs); }
 .faq-item p { color: var(--color-text-muted); }
+
+/* รูปรีวิวจาก Google — 1 คอลัมน์บนมือถือ ขยายเป็น 2-3 คอลัมน์เมื่อจอกว้างพอ
+   auto-fit + minmax ทำให้เพิ่ม/ลบรูปได้โดยไม่ต้องแก้ CSS
+   Google review screenshots: one column on phones, growing to two or three
+   when there is room. auto-fit + minmax means pasted images reflow by themselves */
+.review-gallery {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+.review-gallery img {
+  display: block;
+  width: 100%; height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+}
 
 /* ===== 5. GALLERY — ภาพหน้าร้าน ===== */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); }
