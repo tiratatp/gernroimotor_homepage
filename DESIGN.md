@@ -145,7 +145,6 @@
 - **Spacing**: `.carousel-track` มี `margin-bottom: --space-md` เพื่อไม่ให้ชนบล็อกถัดไป.
 - **Slide sizing**: `.carousel-slide` ใช้ `flex: 0 0 clamp(260px, 80vw, 360px)` ไม่ใช้ breakpoint ความกว้างจึงไหลต่อเนื่องและหยุดโตที่ 360px (เดิมเป็น `85%` แล้วกระโดดเป็น `31%` ที่ 768px ทำให้สไลด์หดฮวบทันที) รูปเป็นจัตุรัส ความสูงจึงเท่าความกว้างและสูงสุด 360px เช่นกัน.
 - **States**: carousel track มี focus-visible outline สำหรับการเลื่อนด้วยคีย์บอร์ด.
-- **Elevation**: `.carousel-slide` ทุกใบมีเงา `0 1px 3px rgba(0,0,0,0.10)` ค่าเดียวกับการ์ดช่องทางติดต่อ ให้สไลด์ดูยกขึ้นจากพื้นส่วน ส่วน `.review-carousel` มีเส้นขอบเพิ่มเพราะรูปรีวิวพื้นขาวกลืนกับการ์ดขาว.
 - **Accessibility**: `.carousel-track` คง `role="region"`, `aria-label` ภาษาไทย และ `tabindex="0"`; รูปทุกใบมี alt ภาษาไทยพร้อม `{{SHOP_NAME}}`.
 - **Motion**: การเลื่อนเป็นการ scroll ปกติ ไม่มี autoplay.
 - **Layout**: แถบรูปความประทับใจ แล้วแถบภาพรีวิว ปิดท้ายด้วยปุ่ม LINE เดียว (หนึ่ง `.line-cta` ต่อหนึ่ง section ตามสัญญาในเทสต์).

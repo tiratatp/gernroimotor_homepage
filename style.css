@@ -362,11 +362,6 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
    not loaded yet (a browser holding a cached stylesheet after a deploy), images
    still render uncropped instead of being squashed into the wrong shape. */
 .carousel-slide img { width: 100%; height: auto; }
-/* เงาบาง ๆ ให้สไลด์ดูยกขึ้นจากพื้นส่วน ใช้ค่าเดียวกับการ์ดช่องทางติดต่อ
-   A light lift so slides sit above the section background, same value as the contact cards */
-.carousel-slide {
-  box-shadow: 0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.05);
-}
 /* สไลด์ภาพความประทับใจ: บังคับจัตุรัสให้ทุกใบสูงเท่ากัน แม้รูปที่อัปโหลดมาไม่ใช่จัตุรัส
    Impressions slider: force square so every slide matches, even if a pasted photo is not */
 .proof-carousel .carousel-slide img {
