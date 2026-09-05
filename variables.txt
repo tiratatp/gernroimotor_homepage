@@ -75,4 +75,4 @@ BUSINESS_PROFILE_URL = https://maps.app.goo.gl/4mWG7aJ7aAGmMYqz6
 # Google Analytics 4 (GA4) Measurement ID, for traffic tracking and linking to Google Ads.
 # How to get one: analytics.google.com → Admin → create a property → Data Streams → Web → copy the "Measurement ID" (starts with G-)
 # If you don't have one yet, leave it as G-XXXXXXXXXX (the site still works fine, it just won't collect data)
-GOOGLE_ANALYTICS_ID = G-XXXXXXXXXX
+GOOGLE_ANALYTICS_ID = G-Q5YND60S1S
