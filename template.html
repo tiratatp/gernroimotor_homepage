@@ -57,6 +57,25 @@
 
   <!-- สไตล์ทั้งหมดอยู่ใน style.css — เปลี่ยนสีได้ที่ต้นไฟล์นั้น / all styles live in style.css -->
   <link rel="stylesheet" href="style.css">
+
+  <!-- Google tag (gtag.js) — วัดผู้เข้าชมเว็บ ใช้เชื่อมกับ Google Ads เพื่อดูผลโฆษณา -->
+  <!-- แก้ค่า GOOGLE_ANALYTICS_ID ใน variables.txt เพื่อเปิดใช้งาน (ถ้ายังเป็นค่าเริ่มต้นจะไม่โหลดแท็กนี้) -->
+  <!-- Google tag (gtag.js) — site analytics, links to Google Ads for conversion reporting -->
+  <!-- Set GOOGLE_ANALYTICS_ID in variables.txt to enable (this tag stays off while it's the placeholder value) -->
+  <script>
+    (function() {
+      var GA_ID = '{{GOOGLE_ANALYTICS_ID}}';
+      if (!GA_ID || GA_ID.indexOf('XXXX') !== -1) return;
+      var tag = document.createElement('script');
+      tag.async = true;
+      tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(tag);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() { dataLayer.push(arguments); };
+      gtag('js', new Date());
+      gtag('config', GA_ID);
+    })();
+  </script>
 </head>
 <body>
 
@@ -702,6 +721,20 @@
       a.addEventListener('click', function() {
         document.getElementById('nav-toggle').checked = false;
       });
+    });
+  </script>
+
+  <!-- ส่ง event ไป Google Analytics ทุกครั้งที่กดปุ่ม LINE หรือเบอร์โทร — ใช้ตั้งเป็น Conversion ใน Google Ads ได้ -->
+  <!-- Report a Google Analytics event on every LINE/phone click — mark these as conversions in Google Ads -->
+  <script>
+    function reportClick(eventName) {
+      if (typeof gtag === 'function') gtag('event', eventName);
+    }
+    document.querySelectorAll('.line-cta').forEach(function(a) {
+      a.addEventListener('click', function() { reportClick('line_click'); });
+    });
+    document.querySelectorAll('a[href^="tel:"]').forEach(function(a) {
+      a.addEventListener('click', function() { reportClick('call_click'); });
     });
   </script>
 

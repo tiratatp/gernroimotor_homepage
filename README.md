@@ -137,3 +137,18 @@ GitHub Actions ทำงานอัตโนมัติ: ทดสอบข้
 - [ ] โทรเข้าเบอร์ที่แสดงบนเว็บจริง ๆ ว่าติด
 - [ ] ส่ง URL เข้า Google Search Console (search.google.com/search-console)
 - [ ] ใส่ URL เว็บใน Google Business Profile (business.google.com)
+
+## ⑨ ติด Google Analytics + วัดผล Google Ads
+
+1. เข้า [analytics.google.com](https://analytics.google.com) → สร้างพร็อพเพอร์ตี้ (property) ใหม่ → เพิ่ม Data Stream แบบ **เว็บ** → ใส่โดเมนร้าน
+2. คัดลอกรหัส **Measurement ID** (ขึ้นต้นด้วย `G-`)
+3. เปิด `variables.txt` บน GitHub → แก้ `GOOGLE_ANALYTICS_ID = G-XXXXXXXXXX` เป็นรหัสจริง → Commit changes
+4. เว็บจะเริ่มส่งข้อมูลผู้เข้าชม และ event `line_click` (กดปุ่ม LINE) กับ `call_click` (กดเบอร์โทร) ให้ทันที ดูได้ที่ Google Analytics → Reports → Realtime
+
+**เชื่อมกับ Google Ads (เพื่อวัดว่าโฆษณาได้ลูกค้าจริงกี่คน):**
+1. เข้า [ads.google.com](https://ads.google.com) → มุมขวาบน ไอคอนประแจ **Tools & Settings** → **Linked accounts** → เลือก **Google Analytics (GA4)** → Link
+2. กลับไป Google Analytics → **Admin** → **Events** → หา `line_click` และ `call_click` → กดสวิตช์ **Mark as key event**
+3. กลับไป Google Ads → **Tools & Settings** → **Conversions** → **+ New conversion action** → **Import** → **Google Analytics 4 properties** → เลือก `line_click`/`call_click` → Import
+4. ตั้งแคมเปญให้ **optimize สำหรับ conversion เหล่านี้** ในหน้าตั้งค่าแคมเปญ
+
+ไม่ต้องแก้โค้ดเพิ่มเติมสำหรับขั้นตอนนี้ ทำผ่านหน้าเว็บ Google Analytics/Ads ทั้งหมด

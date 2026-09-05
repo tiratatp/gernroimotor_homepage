@@ -68,3 +68,11 @@ MAPS_EMBED_URL = https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3874.3295
 # Shop's Google Business Profile URL (short link from Google Maps for reviews)
 # Must start with https://
 BUSINESS_PROFILE_URL = https://maps.app.goo.gl/4mWG7aJ7aAGmMYqz6
+
+# รหัส Google Analytics 4 (GA4) สำหรับวัดผลผู้เข้าชมเว็บ และเชื่อมกับ Google Ads เพื่อดูผลโฆษณา
+# วิธีหา: analytics.google.com → Admin → สร้างพร็อพเพอร์ตี้ → Data Streams → เว็บ → คัดลอกรหัส "Measurement ID" (ขึ้นต้นด้วย G-)
+# ถ้ายังไม่มี ให้ปล่อยค่า G-XXXXXXXXXX ไว้ตามเดิม (เว็บจะยังใช้งานได้ปกติ แค่ยังไม่เก็บข้อมูล)
+# Google Analytics 4 (GA4) Measurement ID, for traffic tracking and linking to Google Ads.
+# How to get one: analytics.google.com → Admin → create a property → Data Streams → Web → copy the "Measurement ID" (starts with G-)
+# If you don't have one yet, leave it as G-XXXXXXXXXX (the site still works fine, it just won't collect data)
+GOOGLE_ANALYTICS_ID = G-XXXXXXXXXX
