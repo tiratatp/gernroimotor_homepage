@@ -724,8 +724,8 @@
     });
   </script>
 
-  <!-- ส่ง event ไป Google Analytics ทุกครั้งที่กดปุ่ม LINE หรือเบอร์โทร — ใช้ตั้งเป็น Conversion ใน Google Ads ได้ -->
-  <!-- Report a Google Analytics event on every LINE/phone click — mark these as conversions in Google Ads -->
+  <!-- ส่ง event ไป Google Analytics ทุกครั้งที่กดปุ่ม LINE, เบอร์โทร หรือปุ่มนำทาง Google Maps — ใช้ตั้งเป็น Conversion ใน Google Ads ได้ -->
+  <!-- Report a Google Analytics event on every LINE/phone/directions click — mark these as conversions in Google Ads -->
   <script>
     function reportClick(eventName) {
       if (typeof gtag === 'function') gtag('event', eventName);
@@ -735,6 +735,9 @@
     });
     document.querySelectorAll('a[href^="tel:"]').forEach(function(a) {
       a.addEventListener('click', function() { reportClick('call_click'); });
+    });
+    document.querySelectorAll('a[href*="google.com/maps/dir"]').forEach(function(a) {
+      a.addEventListener('click', function() { reportClick('maps_click'); });
     });
   </script>
 
