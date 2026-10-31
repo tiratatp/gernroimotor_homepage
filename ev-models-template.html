@@ -31,10 +31,6 @@
   <link rel="icon" type="image/png" sizes="144x144" href="images/favicon.png">
   <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
 
-  <!-- โหลดรูปหน้าร้านส่วนแรกล่วงหน้า หน้าเว็บจะแสดงผลเร็วขึ้น (ช่วยคะแนน LCP) -->
-  <!-- Preload the hero image so the page renders faster (helps LCP) -->
-  <link rel="preload" as="image" href="images/shop-front.jpg">
-
   <!-- โดเมนดึงจาก variables.txt (SITE_URL) — แก้ที่ไฟล์นั้นไฟล์เดียว -->
   <link rel="canonical" href="{{SITE_URL}}ev-models.html">
 
@@ -130,18 +126,13 @@
   <!-- 2. HERO — ส่วนแรกที่เห็น: รูป + หัวข้อรถไฟฟ้า + แท็กไลน์ + ปุ่ม LINE  -->
   <!-- ================================================================ -->
   <section class="hero" id="top">
-    <div class="hero-media">
-      <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปรถไฟฟ้าหรือหน้าร้าน — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
-      <!-- SWAP IMAGE: EV or shop-front photo — change src below to your image in images/ -->
-      <img class="hero-image" src="images/shop-front.jpg" alt="มอเตอร์ไซค์ไฟฟ้าที่{{SHOP_NAME}} โชคชัย 4 แยก 63 ลาดพร้าว" width="1200" height="900" loading="eager" fetchpriority="high">
-    </div>
     <div class="hero-content">
       <!-- EDIT ME / แก้ไขตรงนี้: หัวข้อหลักของหน้า -->
       <h1><span class="nowrap hero-title-name">มอเตอร์ไซค์ไฟฟ้า</span> <span class="hero-title-branch">ฟรีดาวน์ ที่ {{SHOP_NAME}}</span></h1>
-      <!-- EDIT ME / แก้ไขตรงนี้: แท็กไลน์ (ขายตัวเองใน 1 ประโยค) -->
-      <p class="hero-tagline">มีมอเตอร์ไซค์ไฟฟ้าหลายยี่ห้อให้เลือก ฟรีดาวน์ ผ่อนสบาย ไม่ต้องมีคนค้ำ ทักแชทเช็กรุ่นและราคาได้เลย</p>
-      <!-- EDIT ME / แก้ไขตรงนี้: ที่ตั้งร้านและย่านใกล้เคียง -->
-      <p class="hero-location">ร้านอยู่ โชคชัย 4 แยก 63 ลาดพร้าว เดินทางสะดวกจากโซนนาคนิวาส ลาดพร้าว รัชดา และห้วยขวาง</p>
+      <!-- EDIT ME / แก้ไขตรงนี้: แท็กไลน์ (ขายตัวเองใน 1-2 ประโยค) -->
+      <p class="hero-tagline">มอเตอร์ไซค์ไฟฟ้าจดทะเบียนได้ ซื้อได้ทั้งสดและผ่อน มีหลายยี่ห้อ ผ่อนสบาย ไม่ต้องมีคนค้ำ ทักแชทปรึกษารุ่นรถและโปรโมชั่นประจำเดือนได้เลย</p>
+      <!-- EDIT ME / แก้ไขตรงนี้: ที่ตั้งร้านและย่านใกล้เคียง + บริการจัดส่ง -->
+      <p class="hero-location">ลองมาทดลองขี่รถจริงได้ที่ร้าน ร้านอยู่โชคชัย 4 แยก 63 เดินทางสะดวกจากโซนลาดพร้าว รัชดา ห้วยขวาง บางกะปิ<br>มีบริการจัดส่งฟรีทั่วประเทศ</p>
       <!-- LINE ID ดึงจาก variables.txt (LINE_ID) -->
       <!-- EDIT ME / แก้ไขตรงนี้: ข้อความบนปุ่ม LINE ของส่วนนี้ (แก้ได้เฉพาะข้อความใน <span> — โลโก้และลิงก์ห้ามแก้) -->
       <div class="hero-actions">
@@ -168,7 +159,17 @@
   <section class="section" id="models">
     <div class="container">
       <!-- EDIT ME / แก้ไขตรงนี้: ชื่อส่วนรุ่นรถไฟฟ้า -->
-      <h2 class="section-title">รุ่นมอเตอร์ไซค์ไฟฟ้าที่เรามี</h2>
+      <h2 class="section-title">ตัวแทนจำหน่ายอย่างเป็นทางการของมอเตอร์ไซค์ไฟฟ้า</h2>
+      <!-- EDIT ME / แก้ไขตรงนี้: เปลี่ยนชื่อยี่ห้อ หรือก๊อปปี้ li เพื่อเพิ่มยี่ห้อ -->
+      <ul class="brand-chips">
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ยี่ห้อ 1 ยี่ห้อ -->
+        <li class="chip-logo"><img src="images/yadea-logo.svg" alt="Yadea" width="140" height="38"></li>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดยี่ห้อ 1 ยี่ห้อ -->
+        <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: โลโก้ยี่ห้อ (ใช้รูปแทนข้อความได้) -->
+        <li class="chip-logo"><img src="images/em-logo.svg" alt="EM Motor" width="76" height="25"></li>
+        <li class="chip-logo"><img src="images/i-motor-logo.svg" alt="I-motor" width="157" height="28"></li>
+        <li class="chip-logo"><img src="images/lukas-logo.png" alt="Lukas" width="40" height="40"></li>
+      </ul>
       <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้นของรุ่นรถไฟฟ้า -->
       <p class="chip-group-intro">เลือกรุ่นที่สนใจ แล้วทักมาเช็ก ราคาล่าสุด โปรโมชั่น เงินดาวน์ ค่างวด และรถพร้อมส่ง ได้ก่อนเข้าร้าน</p>
 
@@ -353,7 +354,7 @@
       </div>
 
       <!-- EDIT ME / แก้ไขตรงนี้: ชื่อหัวข้อรุ่นอื่นๆ -->
-      <h3 class="chip-group-label">รุ่นอื่นๆ ที่มี</h3>
+      <h3 class="chip-group-label">และรุ่นอื่นๆอีกมากมาย</h3>
 
       <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รุ่นรถของ 1 ยี่ห้อ -->
       <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ และรายชื่อรุ่นด้านล่าง -->
@@ -378,7 +379,7 @@
         <!-- EDIT ME / แก้ไขตรงนี้: ข้อความบนปุ่ม LINE ของส่วนนี้ (แก้ได้เฉพาะข้อความใน <span> — โลโก้และลิงก์ห้ามแก้) -->
         <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener">
           <img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy">
-          <span class="line-cta-text">ทักแชทเช็กราคารุ่นที่สนใจ</span>
+          <span class="line-cta-text">สนใจรุ่นไหนทักแชท</span>
         </a>
       </div>
     </div>
