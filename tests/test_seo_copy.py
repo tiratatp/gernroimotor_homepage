@@ -53,8 +53,8 @@ class TestSeoCopyContract(_TemplateMixin, unittest.TestCase):
     EXPECTED_TITLE = "{{SHOP_NAME}} | ร้านขายมอเตอร์ไซค์ โชคชัย 4 แยก 63"
     EXPECTED_H1 = "{{SHOP_NAME}} ร้านมอเตอร์ไซค์ ลาดพร้าว โชคชัย 4"
     EXPECTED_TAGLINE = (
-        "มีรถให้เลือกทั้ง Honda, Yamaha และมอเตอร์ไซค์ไฟฟ้า "
-        "พร้อมเช็กโปรโมชั่น เงินดาวน์ ค่างวด และสต็อกได้ก่อนเข้าร้าน"
+        "มีทั้ง ฮอนด้า ยามาฮ่า และมอเตอร์ไซค์ไฟฟ้า "
+        "เช็คโปรโมชั่นฟรีดาวน์ และตารางผ่อน ทักแชทได้เลย ยินดีให้คำปรึกษาออกรถ"
     )
     EXPECTED_META_DESC = (
         "{{SHOP_NAME}} ร้านขายมอเตอร์ไซค์ใกล้โชคชัย 4 แยก 63 ลาดพร้าว "
@@ -63,7 +63,7 @@ class TestSeoCopyContract(_TemplateMixin, unittest.TestCase):
     )
     EXPECTED_LOCATION = (
         "ร้านอยู่ โชคชัย 4 แยก 63 ลาดพร้าว "
-        "เดินทางสะดวกจากโซนนาคนิวาส ลาดพร้าววังหิน รัชดา และห้วยขวาง"
+        "เดินทางสะดวกจากโซนนาคนิวาส ลาดพร้าว รัชดา และห้วยขวาง"
     )
 
     def test_title_tag_uses_approved_copy(self) -> None:
