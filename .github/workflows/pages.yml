@@ -39,28 +39,29 @@ jobs:
       - name: Run safety tests (รันทดสอบความปลอดภัยของข้อมูล)
         run: python3 -m unittest discover -s tests -v
 
-      # Build index.html from the template. If variables.txt has a
-      # mistake, build.py prints a Thai error message here and stops.
-      - name: Build website from template (สร้างเว็บไซต์จาก template)
+      # Build index.html + ev-models.html from their templates. If
+      # variables.txt has a mistake, build.py prints a Thai error message
+      # here and stops.
+      - name: Build website from templates (สร้างเว็บไซต์จาก template)
         run: python3 build.py
 
       # Structural HTML validation (catches unclosed/misplaced tags).
       # Rules are configured in .htmlvalidate.json
       - name: Validate HTML structure (ตรวจสอบโครงสร้าง HTML)
-        run: npx --yes html-validate@11.9.0 index.html
+        run: npx --yes html-validate@11.9.0 index.html ev-models.html
 
       # Sentinel checks: make sure critical pieces still exist.
       - name: Check closing html tag (ตรวจสอบแท็กปิด html)
-        run: grep -q "</html>" index.html
+        run: grep -q "</html>" index.html && grep -q "</html>" ev-models.html
 
       - name: Check JSON-LD block (ตรวจสอบข้อมูล JSON-LD สำหรับ Google)
-        run: grep -q 'application/ld+json' index.html
+        run: grep -q 'application/ld+json' index.html && grep -q 'application/ld+json' ev-models.html
 
       - name: Check EDIT ME markers (ตรวจสอบเครื่องหมาย EDIT ME)
-        run: grep -q "EDIT ME" template.html
+        run: grep -q "EDIT ME" template.html && grep -q "EDIT ME" ev-models-template.html
 
       - name: Check copy-paste fences (ตรวจสอบเครื่องหมายคัดลอก)
-        run: grep -q "คัดลอกตั้งแต่ตรงนี้" template.html
+        run: grep -q "คัดลอกตั้งแต่ตรงนี้" template.html && grep -q "คัดลอกตั้งแต่ตรงนี้" ev-models-template.html
 
       - name: Check stylesheet (ตรวจสอบไฟล์ CSS)
         run: |
@@ -126,20 +127,22 @@ jobs:
       # Validate the exact optimized output that will be uploaded.
       - name: Validate optimized website (ตรวจสอบเว็บไซต์หลังย่อไฟล์)
         run: |
-          npx --yes html-validate@11.9.0 index.html
-          grep -q "</html>" index.html
-          grep -q 'application/ld+json' index.html
-          if grep -q "{{" index.html; then
-            echo "ERROR / ข้อผิดพลาด: index.html ยังมีตัวแปร {{...}} ที่ไม่ได้แทนค่า (unreplaced token remains)"
-            exit 1
-          fi
+          npx --yes html-validate@11.9.0 index.html ev-models.html
+          for f in index.html ev-models.html; do
+            grep -q "</html>" "$f"
+            grep -q 'application/ld+json' "$f"
+            if grep -q "{{" "$f"; then
+              echo "ERROR / ข้อผิดพลาด: $f ยังมีตัวแปร {{...}} ที่ไม่ได้แทนค่า (unreplaced token remains)"
+              exit 1
+            fi
+          done
 
       # Stage only public files. Source, tests, workflow, and README stay out.
       - name: Stage minimal Pages artifact (เตรียมเฉพาะไฟล์เว็บสำหรับเผยแพร่)
         run: |
           rm -rf _site
           mkdir -p _site/images
-          cp index.html robots.txt sitemap.xml style.css _site/
+          cp index.html ev-models.html robots.txt sitemap.xml style.css _site/
           cp -R images/. _site/images/
           if [ -f CNAME ]; then cp CNAME _site/; fi
 
