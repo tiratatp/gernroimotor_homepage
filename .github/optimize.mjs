@@ -1,20 +1,20 @@
 // ============================================================
 // optimize.mjs — optimize the built site in GitHub Actions only.
 // Optimize the BUILT site before deploy: shrink images, make WebP
-// copies, switch references to WebP, then minify index.html and
-// style.css.
+// copies, switch references to WebP, then minify every built HTML
+// page (see HTML_PAGES below) and style.css.
 //
 // CI-ONLY script — the maintainer never runs this. It runs in the
-// deploy job AFTER build.py, so it edits the generated index.html
-// (never template.html) and the deploy copy of style.css. Local
-// testing: see pages.yml deploy job.
+// deploy job AFTER build.py, so it edits the generated HTML pages
+// (never the *-template.html sources) and the deploy copy of
+// style.css. Local testing: see pages.yml deploy job.
 //
 // What it does:
 //      Resize every images/*.jpg|png to max 1200px and recompress.
 //      Create a .webp sibling next to each image.
-//      Rewrite index.html references to WebP with JPEG/PNG fallback.
+//      Rewrite each HTML page's references to WebP with JPEG/PNG fallback.
 //      Rewrite style.css url() references to WebP, then minify it.
-//      Minify index.html (strip comments/whitespace) and re-verify.
+//      Minify each HTML page (strip comments/whitespace) and re-verify.
 // ============================================================
 
 import { createRequire } from "node:module";
@@ -34,8 +34,10 @@ const CleanCSS = require("clean-css");
 
 const ROOT = join(fileURLToPath(import.meta.url), "..", "..");
 const IMAGES_DIR = join(ROOT, "images");
-const INDEX_HTML = join(ROOT, "index.html");
 const STYLE_CSS = join(ROOT, "style.css");
+// Every HTML page build.py generates — keep this list in sync with build.py's
+// PAGES list so every published page gets the same WebP rewrite + minify pass.
+const HTML_PAGES = ["index.html", "ev-models.html"].map((name) => join(ROOT, name));
 
 // Tuning knobs.
 const MAX_DIMENSION = 1200;   // px — enough for common mobile and desktop displays
@@ -162,7 +164,7 @@ function rewriteAndMinifyCss(webpReady) {
 }
 
 // ---- Step 4: minify and verify ------------------------------------------
-async function minifyAndVerify(html) {
+async function minifyAndVerify(html, pageName) {
   const result = await minify(html, {
     collapseWhitespace: true,
     removeComments: true,
@@ -174,35 +176,38 @@ async function minifyAndVerify(html) {
 
   // Re-verify the output before deploy.
   if (!result.includes("</html>")) {
-    fail("index.html ที่ย่อแล้วไม่มีแท็กปิด </html>", "minified index.html lost </html>");
+    fail(`${pageName} ที่ย่อแล้วไม่มีแท็กปิด </html>`, `minified ${pageName} lost </html>`);
   }
   const ldBlocks = [...result.matchAll(
     /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g
   )];
   if (ldBlocks.length === 0) {
-    fail("index.html ที่ย่อแล้วไม่มี JSON-LD", "minified index.html lost JSON-LD");
+    fail(`${pageName} ที่ย่อแล้วไม่มี JSON-LD`, `minified ${pageName} lost JSON-LD`);
   }
   for (const block of ldBlocks) {
     try {
       JSON.parse(block[1]); // JSON-LD must stay valid.
     } catch {
-      fail("JSON-LD เสียหลังการย่อไฟล์", "JSON-LD broke during minification");
+      fail(`JSON-LD เสียหลังการย่อไฟล์ (${pageName})`, `JSON-LD broke during minification (${pageName})`);
     }
   }
   if (result.includes("{{")) {
-    fail("index.html ยังมีตัวแปร {{...}} ที่ไม่ได้แทนค่า", "unreplaced {{TOKEN}} remains");
+    fail(`${pageName} ยังมีตัวแปร {{...}} ที่ไม่ได้แทนค่า`, `unreplaced {{TOKEN}} remains in ${pageName}`);
   }
   return result;
 }
 
 const webpReady = await optimizeImages();
-const before = statSync(INDEX_HTML).size;
-let html = readFileSync(INDEX_HTML, "utf8");
-html = rewriteToWebp(html, webpReady);
-html = await minifyAndVerify(html);
-writeFileSync(INDEX_HTML, html);
-console.log(
-  `ย่อ index.html: ${kb(before)} → ${kb(statSync(INDEX_HTML).size)} (minified)`
-);
+for (const htmlPath of HTML_PAGES) {
+  const pageName = htmlPath.slice(ROOT.length + 1);
+  const before = statSync(htmlPath).size;
+  let html = readFileSync(htmlPath, "utf8");
+  html = rewriteToWebp(html, webpReady);
+  html = await minifyAndVerify(html, pageName);
+  writeFileSync(htmlPath, html);
+  console.log(
+    `ย่อ ${pageName}: ${kb(before)} → ${kb(statSync(htmlPath).size)} (minified)`
+  );
+}
 rewriteAndMinifyCss(webpReady);
 console.log("OK: เว็บพร้อมเผยแพร่ (site optimized and ready to deploy)");
