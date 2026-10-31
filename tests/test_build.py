@@ -68,6 +68,10 @@ class _BuildHarness(unittest.TestCase):
     ) -> subprocess.CompletedProcess[str]:
         (self.workspace / "variables.txt").write_text(variables_text, encoding="utf-8")
         (self.workspace / "template.html").write_text(template_text, encoding="utf-8")
+        # build.py builds every page in its PAGES list; the second page's
+        # exact content doesn't matter for these variable-policy tests, so
+        # reuse the same minimal fixture for it too.
+        (self.workspace / "ev-models-template.html").write_text(template_text, encoding="utf-8")
         return subprocess.run(
             [sys.executable, str(self.build_py)],
             cwd=self.workspace, capture_output=True, text=True, timeout=15,

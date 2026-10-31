@@ -86,14 +86,22 @@ def validate_value(key, value):
                  f"BUSINESS_PROFILE_URL '{value}' has no host")
 
 
+# Pages to build: (template file, output file, path appended to SITE_URL for
+# the sitemap — "" means the site root itself). Add a tuple here to publish
+# another page; build.py handles the rest (validation, sitemap, robots.txt).
+PAGES = [
+    ("template.html", "index.html", ""),
+    ("ev-models-template.html", "ev-models.html", "ev-models.html"),
+]
+
+
 def main():
     vars_file = ROOT / "variables.txt"
-    template_file = ROOT / "template.html"
-    output_file = ROOT / "index.html"
+    for template_name, output_name, _ in PAGES:
+        if not (ROOT / template_name).exists():
+            fail(f"ไม่พบไฟล์ {template_name}", f"{template_name} not found")
     if not vars_file.exists():
         fail("ไม่พบไฟล์ variables.txt", "variables.txt not found")
-    if not template_file.exists():
-        fail("ไม่พบไฟล์ template.html", "template.html not found")
 
     # 1. Read variables.txt.
     variables = {}
@@ -115,42 +123,46 @@ def main():
             fail(f"ตัวแปร {key} ถูกเขียนซ้ำสองครั้ง", f"variable {key} defined twice")
         variables[key] = value
 
-    # 2. Read the template.
-    html = template_file.read_text(encoding="utf-8")
-
-    # 2a. Validate template placeholders.
-    #     A complete {{...}} block whose body is not [A-Z_]+ is malformed.
-    #     Any leftover {{ or }} (no matching pair) is also malformed and would
-    #     ship to the live site if we silently let it pass.
-    for match in re.finditer(r"\{\{([^{}]*)\}\}", html):
-        body = match.group(1)
-        if not re.fullmatch(r"[A-Z_]+", body):
-            fail(f"template.html มี placeholder '{{{{{body}}}}}' ผิดรูปแบบ (ต้องเป็น A-Z และ _ เท่านั้น)",
-                 f"template.html has malformed placeholder '{{{{{body}}}}}' (UPPERCASE A-Z and _ only)")
-    leftover = re.sub(r"\{\{[A-Z_]+\}\}", "", html)
-    if "{{" in leftover or "}}" in leftover:
-        fail("template.html มี {{ หรือ }} ที่ไม่ตรงกัน",
-             "template.html has unmatched {{ or }}")
-
-    # 2b. Validate known boundary values.
+    # 2b. Validate known boundary values (once, shared across all pages).
     for key, value in variables.items():
         validate_value(key, value)
 
-    # 3. Every {{TOKEN}} in the template must exist in variables.txt.
-    used = set(re.findall(r"\{\{([A-Z_]+)\}\}", html))
-    missing = sorted(used - variables.keys())
-    if missing:
-        fail("template.html ใช้ตัวแปรที่ไม่มีใน variables.txt: " + ", ".join(missing),
-             "template.html uses tokens not defined in variables.txt: " + ", ".join(missing))
-    for key in sorted(variables.keys() - used):
-        print("NOTE / หมายเหตุ: ตัวแปร " + key + " ไม่ได้ถูกใช้ใน template.html (not used)")
+    # 2. Read, validate, and substitute each template.
+    all_used = set()
+    for template_name, output_name, _ in PAGES:
+        html = (ROOT / template_name).read_text(encoding="utf-8")
 
-    # 4. Replace tokens and write the output.
-    for key, value in variables.items():
-        html = html.replace("{{" + key + "}}", value)
-    output_file.write_text(html, encoding="utf-8")
+        # 2a. Validate template placeholders.
+        #     A complete {{...}} block whose body is not [A-Z_]+ is malformed.
+        #     Any leftover {{ or }} (no matching pair) is also malformed and
+        #     would ship to the live site if we silently let it pass.
+        for match in re.finditer(r"\{\{([^{}]*)\}\}", html):
+            body = match.group(1)
+            if not re.fullmatch(r"[A-Z_]+", body):
+                fail(f"{template_name} มี placeholder '{{{{{body}}}}}' ผิดรูปแบบ (ต้องเป็น A-Z และ _ เท่านั้น)",
+                     f"{template_name} has malformed placeholder '{{{{{body}}}}}' (UPPERCASE A-Z and _ only)")
+        leftover = re.sub(r"\{\{[A-Z_]+\}\}", "", html)
+        if "{{" in leftover or "}}" in leftover:
+            fail(f"{template_name} มี {{ หรือ }} ที่ไม่ตรงกัน",
+                 f"{template_name} has unmatched {{ or }}")
 
-    # 5. Generate robots.txt and sitemap.xml from SITE_URL.
+        # 3. Every {{TOKEN}} in the template must exist in variables.txt.
+        used = set(re.findall(r"\{\{([A-Z_]+)\}\}", html))
+        all_used |= used
+        missing = sorted(used - variables.keys())
+        if missing:
+            fail(f"{template_name} ใช้ตัวแปรที่ไม่มีใน variables.txt: " + ", ".join(missing),
+                 f"{template_name} uses tokens not defined in variables.txt: " + ", ".join(missing))
+
+        # 4. Replace tokens and write the output.
+        for key, value in variables.items():
+            html = html.replace("{{" + key + "}}", value)
+        (ROOT / output_name).write_text(html, encoding="utf-8")
+
+    for key in sorted(variables.keys() - all_used):
+        print("NOTE / หมายเหตุ: ตัวแปร " + key + " ไม่ได้ถูกใช้ในหน้าเว็บใดเลย (not used in any page)")
+
+    # 5. Generate robots.txt and sitemap.xml from SITE_URL (one entry per page).
     site_url = variables["SITE_URL"]  # guaranteed present: template.html uses it
     (ROOT / "robots.txt").write_text(
         "# This file is auto-generated by build.py — do not edit directly.\n"
@@ -159,15 +171,20 @@ def main():
         "Sitemap: " + site_url + "sitemap.xml\n",
         encoding="utf-8",
     )
+    sitemap_urls = "".join(
+        "  <url><loc>" + site_url + sitemap_path + "</loc></url>\n"
+        for _, _, sitemap_path in PAGES
+    )
     (ROOT / "sitemap.xml").write_text(
         '<?xml version="1.0" encoding="UTF-8"?>\n'
         "<!-- auto-generated by build.py — do not edit directly -->\n"
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        "  <url><loc>" + site_url + "</loc></url>\n"
+        + sitemap_urls +
         "</urlset>\n",
         encoding="utf-8",
     )
-    print("OK: สร้าง index.html + robots.txt + sitemap.xml เรียบร้อย (built successfully)")
+    page_list = " + ".join(output_name for _, output_name, _ in PAGES)
+    print(f"OK: สร้าง {page_list} + robots.txt + sitemap.xml เรียบร้อย (built successfully)")
 
 
 if __name__ == "__main__":

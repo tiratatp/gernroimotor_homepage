@@ -1,0 +1,575 @@
+<!-- ================================================================ -->
+<!-- ev-models-template.html — แม่แบบหน้า "มอเตอร์ไซค์ไฟฟ้า" ระบบสร้าง    -->
+<!-- ev-models.html จากไฟล์นี้ (ห้ามแก้ ev-models.html โดยตรง)            -->
+<!-- หน้านี้ทำไว้สำหรับใช้เป็นลิงก์ปลายทางโฆษณา Google Ads ของรถไฟฟ้า      -->
+<!-- โดยเฉพาะ — เน้นสั้น ตรงประเด็น ไม่มีเมนูเยอะให้เสียโฟกัส              -->
+<!-- ข้อมูลซ้ำๆ เช่น ชื่อร้าน/เบอร์โทร อยู่ใน variables.txt — วิธีแก้:     -->
+<!-- หาคำว่า EDIT ME / SWAP IMAGE / COPY FROM HERE — อ่าน README.md ก่อนเริ่ม -->
+<!-- Page template for "electric motorcycles" — generates ev-models.html. -->
+<!-- (never edit ev-models.html directly). Built for use as a dedicated   -->
+<!-- Google Ads landing page for electric models — short nav on purpose   -->
+<!-- so paid traffic isn't distracted. Repeated shop info → variables.txt -->
+<!-- ================================================================ -->
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ชื่อร้านดึงจาก variables.txt (SHOP_NAME) — แก้ description ได้ตรงนี้ (สำหรับ Google) -->
+  <title>มอเตอร์ไซค์ไฟฟ้า ฟรีดาวน์ | {{SHOP_NAME}} โชคชัย 4 แยก 63</title>
+  <meta name="description" content="{{SHOP_NAME}} จำหน่ายมอเตอร์ไซค์ไฟฟ้าหลายยี่ห้อ ฟรีดาวน์ ผ่อนสบาย ไม่ต้องมีคนค้ำ ใกล้โชคชัย 4 แยก 63 ลาดพร้าว แอด LINE เช็กรุ่นและราคาก่อนเข้าร้าน">
+  <!-- บอก Google ให้เก็บหน้านี้เข้าดัชนี และอนุญาตรูปขนาดใหญ่ในผลค้นหา -->
+  <!-- Tell Google to index this page and allow large image previews -->
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <!-- สีแถบเบราว์เซอร์บนมือถือ — ถ้าเปลี่ยน --color-primary ใน CSS ให้เปลี่ยนตรงนี้ตาม -->
+  <!-- Mobile browser bar color — keep in sync with --color-primary in the CSS -->
+  <meta name="theme-color" content="#CF0000">
+
+  <!-- ไอคอนเว็บ (แสดงในแท็บเบราว์เซอร์และผลค้นหา Google บนมือถือ) -->
+  <!-- Favicon — shown in browser tabs and Google's mobile search results -->
+  <link rel="icon" type="image/png" sizes="144x144" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+
+  <!-- โหลดรูปหน้าร้านส่วนแรกล่วงหน้า หน้าเว็บจะแสดงผลเร็วขึ้น (ช่วยคะแนน LCP) -->
+  <!-- Preload the hero image so the page renders faster (helps LCP) -->
+  <link rel="preload" as="image" href="images/shop-front.jpg">
+
+  <!-- โดเมนดึงจาก variables.txt (SITE_URL) — แก้ที่ไฟล์นั้นไฟล์เดียว -->
+  <link rel="canonical" href="{{SITE_URL}}ev-models.html">
+
+  <!-- Open Graph — สำหรับแชร์บน Facebook/LINE/Twitter (ชื่อร้าน/โดเมนจาก variables.txt) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="มอเตอร์ไซค์ไฟฟ้า ฟรีดาวน์ | {{SHOP_NAME}} โชคชัย 4 แยก 63">
+  <meta property="og:description" content="{{SHOP_NAME}} จำหน่ายมอเตอร์ไซค์ไฟฟ้าหลายยี่ห้อ ฟรีดาวน์ ผ่อนสบาย ไม่ต้องมีคนค้ำ ใกล้โชคชัย 4 แยก 63 ลาดพร้าว แอด LINE เช็กรุ่นและราคาก่อนเข้าร้าน">
+  <meta property="og:url" content="{{SITE_URL}}ev-models.html">
+  <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปสำหรับแชร์บน Facebook/LINE (ต้องมีขนาด 1200x630 พิกเซลพอดี) -->
+  <!-- Share image for Facebook/LINE — must be exactly 1200x630 pixels -->
+  <meta property="og:image" content="{{SITE_URL}}images/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="มอเตอร์ไซค์ไฟฟ้าที่{{SHOP_NAME}} โชคชัย 4 แยก 63">
+  <meta property="og:locale" content="th_TH">
+  <meta property="og:site_name" content="{{SHOP_NAME}}">
+
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- ฟอนต์ จาก Google Fonts — Kanit สำหรับหัวข้อ, Sarabun สำหรับข้อความอื่น; ถ้าโหลดไม่ได้จะใช้ฟอนต์ระบบแทน / Kanit for headings, Sarabun for other text; falls back to system fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,600;0,700;1,600&family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- สไตล์ทั้งหมดอยู่ใน style.css — เปลี่ยนสีได้ที่ต้นไฟล์นั้น / all styles live in style.css -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Google tag (gtag.js) — วัดผู้เข้าชมเว็บ ใช้เชื่อมกับ Google Ads เพื่อดูผลโฆษณา -->
+  <!-- แก้ค่า GOOGLE_ANALYTICS_ID ใน variables.txt เพื่อเปิดใช้งาน (ถ้ายังเป็นค่าเริ่มต้นจะไม่โหลดแท็กนี้) -->
+  <!-- Google tag (gtag.js) — site analytics, links to Google Ads for conversion reporting -->
+  <!-- Set GOOGLE_ANALYTICS_ID in variables.txt to enable (this tag stays off while it's the placeholder value) -->
+  <script>
+    (function() {
+      var GA_ID = '{{GOOGLE_ANALYTICS_ID}}';
+      if (!GA_ID || GA_ID.indexOf('XXXX') !== -1) return;
+      var tag = document.createElement('script');
+      tag.async = true;
+      tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+      document.head.appendChild(tag);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function() { dataLayer.push(arguments); };
+      gtag('js', new Date());
+      gtag('config', GA_ID);
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- ================================================================ -->
+  <!-- 1. HEADER — แถบบนสุด: โลโก้ + เมนู (เมนูสั้นกว่าหน้าแรกตั้งใจ เพราะหน้านี้ -->
+  <!--    เป็นปลายทางโฆษณา ไม่อยากให้คนเข้ามาแล้วหลุดโฟกัสไปหน้าอื่น)        -->
+  <!--    Shorter nav than the home page on purpose — this page is an ad   -->
+  <!--    landing page, so we don't want to distract visitors away from it -->
+  <!-- ================================================================ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <!-- โลโก้ร้าน กดแล้วกลับไปหน้าแรกของเว็บ — ชื่อร้านอยู่ใน alt ดึงจาก variables.txt (SHOP_NAME) -->
+      <!-- Shop logo, links back to the homepage — shop name in alt from variables.txt (SHOP_NAME) -->
+      <a href="{{SITE_URL}}" class="header-brand"><img src="images/logo.jpg" alt="{{SHOP_NAME}}" width="800" height="800"></a>
+
+      <!-- ปุ่มโทรออก (ไอคอนอย่างเดียว) อยู่ก่อนเมนูทางขวา — เบอร์ดึงจาก variables.txt (PHONE_TEL / PHONE_DISPLAY) -->
+      <!-- Icon-only call button, sits before the menu on the right; number comes from variables.txt (PHONE_TEL / PHONE_DISPLAY) -->
+      <a href="tel:{{PHONE_TEL}}" class="header-call" aria-label="โทรหาร้าน {{PHONE_DISPLAY}}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      </a>
+
+      <input type="checkbox" id="nav-toggle" class="nav-checkbox" aria-label="เปิด/ปิดเมนูนำทาง">
+      <label for="nav-toggle" class="nav-hamburger">
+        <svg class="icon-open" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16"/>
+          <path d="M4 12h16"/>
+          <path d="M4 17h16"/>
+        </svg>
+        <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M6 6l12 12"/>
+          <path d="M18 6L6 18"/>
+        </svg>
+      </label>
+      <!-- EDIT ME / แก้ไขตรงนี้: เพิ่ม/ลบลิงก์เมนูใน <nav> นี้ที่เดียว (ใช้ร่วมทั้งมือถือและเดสก์ท็อป) -->
+      <nav class="header-nav" aria-label="เมนูหลัก">
+        <a href="#models">รุ่นรถไฟฟ้า</a>
+        <a href="#contact">ติดต่อ</a>
+        <a href="{{SITE_URL}}">กลับหน้าหลัก</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+  <!-- ================================================================ -->
+  <!-- 2. HERO — ส่วนแรกที่เห็น: รูป + หัวข้อรถไฟฟ้า + แท็กไลน์ + ปุ่ม LINE  -->
+  <!-- ================================================================ -->
+  <section class="hero" id="top">
+    <div class="hero-media">
+      <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปรถไฟฟ้าหรือหน้าร้าน — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+      <!-- SWAP IMAGE: EV or shop-front photo — change src below to your image in images/ -->
+      <img class="hero-image" src="images/shop-front.jpg" alt="มอเตอร์ไซค์ไฟฟ้าที่{{SHOP_NAME}} โชคชัย 4 แยก 63 ลาดพร้าว" width="1200" height="900" loading="eager" fetchpriority="high">
+    </div>
+    <div class="hero-content">
+      <!-- EDIT ME / แก้ไขตรงนี้: หัวข้อหลักของหน้า -->
+      <h1><span class="nowrap hero-title-name">มอเตอร์ไซค์ไฟฟ้า</span> <span class="hero-title-branch">ฟรีดาวน์ ที่ {{SHOP_NAME}}</span></h1>
+      <!-- EDIT ME / แก้ไขตรงนี้: แท็กไลน์ (ขายตัวเองใน 1 ประโยค) -->
+      <p class="hero-tagline">มีมอเตอร์ไซค์ไฟฟ้าหลายยี่ห้อให้เลือก ฟรีดาวน์ ผ่อนสบาย ไม่ต้องมีคนค้ำ ทักแชทเช็กรุ่นและราคาได้เลย</p>
+      <!-- EDIT ME / แก้ไขตรงนี้: ที่ตั้งร้านและย่านใกล้เคียง -->
+      <p class="hero-location">ร้านอยู่ โชคชัย 4 แยก 63 ลาดพร้าว เดินทางสะดวกจากโซนนาคนิวาส ลาดพร้าว รัชดา และห้วยขวาง</p>
+      <!-- LINE ID ดึงจาก variables.txt (LINE_ID) -->
+      <!-- EDIT ME / แก้ไขตรงนี้: ข้อความบนปุ่ม LINE ของส่วนนี้ (แก้ได้เฉพาะข้อความใน <span> — โลโก้และลิงก์ห้ามแก้) -->
+      <div class="hero-actions">
+        <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener">
+          <img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320">
+          <span class="line-cta-text">แอด LINE เช็กรุ่นและราคา</span>
+        </a>
+        <!-- EDIT ME / แก้ไขตรงนี้: ลิงก์นำทาง Google Maps ของร้าน (destination = พิกัดร้าน) -->
+        <a href="https://www.google.com/maps/dir/?api=1&amp;destination=13.8192369%2C100.5962201&amp;travelmode=driving" class="btn btn-primary" target="_blank" rel="noopener">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          นำทางไปร้าน
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- 3. MODELS / รุ่นมอเตอร์ไซค์ไฟฟ้าที่เรามี — chip pills แยกตามยี่ห้อ    -->
+  <!--    เพิ่มยี่ห้อ/รุ่น: คัดลอกบล็อก <li>...</li> / copy an <li> to add one -->
+  <!-- ================================================================ -->
+  <section class="section" id="models">
+    <div class="container">
+      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อส่วนรุ่นรถไฟฟ้า -->
+      <h2 class="section-title">รุ่นมอเตอร์ไซค์ไฟฟ้าที่เรามี</h2>
+      <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายสั้นของรุ่นรถไฟฟ้า -->
+      <p class="chip-group-intro">เลือกรุ่นที่สนใจ แล้วทักมาเช็ก ราคาล่าสุด โปรโมชั่น เงินดาวน์ ค่างวด และรถพร้อมส่ง ได้ก่อนเข้าร้าน</p>
+
+      <!-- ================================================================ -->
+      <!-- รุ่นขายดี — การ์ดมีรูป+ราคา+สเปก สำหรับรุ่นที่อยากเน้นเป็นพิเศษ         -->
+      <!-- รุ่นที่ไม่ได้ทำการ์ดไว้ ยังอยู่ในรายการ chip ด้านล่างตามปกติ            -->
+      <!-- Bestsellers — a card with photo + price + specs, for models you    -->
+      <!-- want to highlight. Models without a card still show as chips below -->
+      <!-- ================================================================ -->
+      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อหัวข้อรุ่นขายดี -->
+      <h3 class="chip-group-label">รุ่นขายดี</h3>
+      <div class="product-grid">
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดสินค้า 1 รุ่น -->
+        <article class="product-card">
+          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปจริงของรุ่นนี้ — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+          <img src="images/ev-yadea-gt80.jpg" alt="Yadea GT80 มอเตอร์ไซค์ไฟฟ้า สีเทา-ดำ">
+          <div class="product-card-body">
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ -->
+            <p class="product-brand">Yadea</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อรุ่น และราคา (ใช้ <s> ครอบราคาปกติถ้ามีส่วนลด) -->
+            <div class="product-title-row">
+              <h3 class="product-name">GT80</h3>
+              <p class="product-price">57,900.-</p>
+            </div>
+            <p class="product-price-sub">ผ่อนเริ่มต้น 2,240.-/เดือน</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: สเปกเด่น 4 ข้อ (กำลังมอเตอร์ / ระยะวิ่ง / ความเร็ว / แบตเตอรี่) -->
+            <ul class="product-specs">
+              <li>มอเตอร์ 3000W</li>
+              <li>1 ชาร์จวิ่งได้ 110 กม.</li>
+              <li>ความเร็วสูงสุด 90 กม./ชม.</li>
+              <li>ลิเธียม 72V 50Ah</li>
+            </ul>
+          </div>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดสินค้า 1 รุ่น -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดสินค้า 1 รุ่น -->
+        <article class="product-card">
+          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปจริงของรุ่นนี้ — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+          <img src="images/ev-yadea-gs70.jpg" alt="Yadea GS70 มอเตอร์ไซค์ไฟฟ้าทัวร์ริ่ง สีเทาเข้ม">
+          <div class="product-card-body">
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ -->
+            <p class="product-brand">Yadea</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อรุ่น และราคา (ใช้ <s> ครอบราคาปกติถ้ามีส่วนลด) -->
+            <div class="product-title-row">
+              <h3 class="product-name">GS70</h3>
+              <p class="product-price">39,900.-</p>
+            </div>
+            <p class="product-price-sub">ผ่อนเริ่มต้น 1,544.-/เดือน</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: สเปกเด่น 4 ข้อ (กำลังมอเตอร์ / ระยะวิ่ง / ความเร็ว / แบตเตอรี่) -->
+            <ul class="product-specs">
+              <li>มอเตอร์ 2000W</li>
+              <li>1 ชาร์จวิ่งได้ 85 กม.</li>
+              <li>ความเร็วสูงสุด 75 กม./ชม.</li>
+              <li>ลิเธียม 72V 30Ah</li>
+            </ul>
+          </div>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดสินค้า 1 รุ่น -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดสินค้า 1 รุ่น -->
+        <article class="product-card">
+          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปจริงของรุ่นนี้ — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+          <img src="images/ev-yadea-rs20p.jpg" alt="Yadea RS20P มอเตอร์ไซค์ไฟฟ้า สีบรอนซ์เทา">
+          <div class="product-card-body">
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ -->
+            <p class="product-brand">Yadea</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อรุ่น และราคา (ใช้ <s> ครอบราคาปกติถ้ามีส่วนลด) -->
+            <div class="product-title-row">
+              <h3 class="product-name">RS20P</h3>
+              <p class="product-price"><s class="product-price-was">49,900.-</s> 39,900.-</p>
+            </div>
+            <p class="product-price-sub">ผ่อนเริ่มต้น 1,931.-/เดือน</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: สเปกเด่น 4 ข้อ (กำลังมอเตอร์ / ระยะวิ่ง / ความเร็ว / แบตเตอรี่) -->
+            <ul class="product-specs">
+              <li>มอเตอร์ 2000W</li>
+              <li>1 ชาร์จวิ่งได้ 90 กม.</li>
+              <li>ความเร็วสูงสุด 65 กม./ชม.</li>
+              <li>ลิเธียม 72V 30Ah</li>
+            </ul>
+          </div>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดสินค้า 1 รุ่น -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดสินค้า 1 รุ่น -->
+        <article class="product-card">
+          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปจริงของรุ่นนี้ — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+          <img src="images/ev-em-milano.jpg" alt="EM Milano มอเตอร์ไซค์ไฟฟ้า สีขาว">
+          <div class="product-card-body">
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ -->
+            <p class="product-brand">EM</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อรุ่น และราคา (ใช้ <s> ครอบราคาปกติถ้ามีส่วนลด) -->
+            <div class="product-title-row">
+              <h3 class="product-name">Milano</h3>
+              <p class="product-price">59,900.-</p>
+            </div>
+            <p class="product-price-sub">ผ่อนเริ่มต้น 1,544.-/เดือน</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: สเปกเด่น 4 ข้อ (กำลังมอเตอร์ / ระยะวิ่ง / ความเร็ว / แบตเตอรี่) -->
+            <ul class="product-specs">
+              <li>มอเตอร์ 4000W</li>
+              <li>1 ชาร์จวิ่งได้ 100 กม.</li>
+              <li>ความเร็วสูงสุด 85 กม./ชม.</li>
+              <li>ลิเธียม 72V 44Ah</li>
+            </ul>
+          </div>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดสินค้า 1 รุ่น -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดสินค้า 1 รุ่น -->
+        <article class="product-card">
+          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปจริงของรุ่นนี้ — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+          <img src="images/ev-em-arena.jpg" alt="EM Arena มอเตอร์ไซค์ไฟฟ้า สีดำ-แดง">
+          <div class="product-card-body">
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ -->
+            <p class="product-brand">EM</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อรุ่น และราคา (ใช้ <s> ครอบราคาปกติถ้ามีส่วนลด) -->
+            <div class="product-title-row">
+              <h3 class="product-name">Arena</h3>
+              <p class="product-price"><s class="product-price-was">59,900.-</s> 55,500.-</p>
+            </div>
+            <p class="product-price-sub">ผ่อนเริ่มต้น 2,147.-/เดือน</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: สเปกเด่น 4 ข้อ (กำลังมอเตอร์ / ระยะวิ่ง / ความเร็ว / แบตเตอรี่) -->
+            <ul class="product-specs">
+              <li>มอเตอร์ 4000W</li>
+              <li>1 ชาร์จวิ่งได้ 100-120 กม.</li>
+              <li>ความเร็วสูงสุด 90 กม./ชม.</li>
+              <li>ลิเธียม 72V 55Ah</li>
+            </ul>
+          </div>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดสินค้า 1 รุ่น -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดสินค้า 1 รุ่น -->
+        <article class="product-card">
+          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปจริงของรุ่นนี้ — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+          <img src="images/ev-em-legend-pro.jpg" alt="EM Legend Pro มอเตอร์ไซค์ไฟฟ้า สีเขียวมอส">
+          <div class="product-card-body">
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ -->
+            <p class="product-brand">EM</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อรุ่น และราคา (ใช้ <s> ครอบราคาปกติถ้ามีส่วนลด) -->
+            <div class="product-title-row">
+              <h3 class="product-name">Legend Pro</h3>
+              <p class="product-price">49,900.-</p>
+            </div>
+            <p class="product-price-sub">ผ่อนเริ่มต้น 1,931.-/เดือน</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: สเปกเด่น 4 ข้อ (กำลังมอเตอร์ / ระยะวิ่ง / ความเร็ว / แบตเตอรี่) -->
+            <ul class="product-specs">
+              <li>มอเตอร์ 2500W</li>
+              <li>1 ชาร์จวิ่งได้ 70 กม.</li>
+              <li>ความเร็วสูงสุด 70 กม./ชม.</li>
+              <li>ลิเธียม 72V 24Ah</li>
+            </ul>
+          </div>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดสินค้า 1 รุ่น -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดสินค้า 1 รุ่น -->
+        <article class="product-card">
+          <!-- SWAP IMAGE / เปลี่ยนรูปตรงนี้: รูปจริงของรุ่นนี้ — เปลี่ยน src ด้านล่างเป็น images/รูปของคุณ.jpg -->
+          <img src="images/ev-imotor-thunder.jpg" alt="I-motor Thunder มอเตอร์ไซค์ไฟฟ้า สีเหลือง-ส้ม">
+          <div class="product-card-body">
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ -->
+            <p class="product-brand">I-motor</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: ชื่อรุ่น และราคา (ใช้ <s> ครอบราคาปกติถ้ามีส่วนลด) -->
+            <div class="product-title-row">
+              <h3 class="product-name">Thunder</h3>
+              <p class="product-price"><s class="product-price-was">65,000.-</s> 59,000.-</p>
+            </div>
+            <p class="product-price-sub">ผ่อนเริ่มต้น 2,282.-/เดือน</p>
+            <!-- EDIT ME / แก้ไขตรงนี้: สเปกเด่น 4 ข้อ (กำลังมอเตอร์ / ระยะวิ่ง / ความเร็ว / แบตเตอรี่) -->
+            <ul class="product-specs">
+              <li>มอเตอร์ 3000W</li>
+              <li>1 ชาร์จวิ่งได้ 100 กม.</li>
+              <li>ความเร็วสูงสุด 80 กม./ชม.</li>
+              <li>ลิเธียม 73.6V 24Ah</li>
+            </ul>
+          </div>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดสินค้า 1 รุ่น -->
+
+      </div>
+
+      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อหัวข้อรุ่นอื่นๆ -->
+      <h3 class="chip-group-label">รุ่นอื่นๆ ที่มี</h3>
+
+      <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: รุ่นรถของ 1 ยี่ห้อ -->
+      <!-- EDIT ME / แก้ไขตรงนี้: ชื่อยี่ห้อ และรายชื่อรุ่นด้านล่าง -->
+      <h4 class="chip-brand-label">EM Motor</h4>
+      <ul class="brand-chips">
+        <li class="chip">Owen Longrange</li>
+      </ul>
+      <!-- TO HERE / ถึงตรงนี้: สิ้นสุดรุ่นรถของ 1 ยี่ห้อ -->
+
+      <h4 class="chip-brand-label">Yadea</h4>
+      <ul class="brand-chips">
+        <li class="chip">Orla</li>
+      </ul>
+
+      <h4 class="chip-brand-label">I-motor</h4>
+      <ul class="brand-chips">
+        <li class="chip">Vapor</li>
+        <li class="chip">Breeze</li>
+      </ul>
+
+      <div class="section-cta">
+        <!-- EDIT ME / แก้ไขตรงนี้: ข้อความบนปุ่ม LINE ของส่วนนี้ (แก้ได้เฉพาะข้อความใน <span> — โลโก้และลิงก์ห้ามแก้) -->
+        <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="line-cta" target="_blank" rel="noopener">
+          <img class="line-cta-logo" src="images/line-logo.svg" alt="" width="320" height="320" loading="lazy">
+          <span class="line-cta-text">ทักแชทเช็กราคารุ่นที่สนใจ</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- 3b. WHY / ทำไมลูกค้าถึงเลือกออกรถไฟฟ้ากับเรา                       -->
+  <!--    เพิ่มการ์ด: คัดลอก service-card / Copy a service-card to add one -->
+  <!-- ================================================================ -->
+  <section class="section" id="why">
+    <div class="container">
+      <h2 class="section-title">ทำไมลูกค้าถึงเลือกออกรถไฟฟ้ากับเรา</h2>
+
+      <div class="services-grid">
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดบริการ 1 ใบ -->
+        <article class="service-card">
+          <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
+          <h3>ฟรีดาวน์! ผ่อนสบาย</h3>
+          <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
+          <p>ออกรถมอเตอร์ไซค์ไฟฟ้าเริ่มต้นฟรีดาวน์ ผ่อนสบายๆ ดอกเบี้ยต่ำ บริการแบบเป็นกันเอง ยินดีให้คำปรึกษาออกรถ</p>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดบริการ 1 ใบ -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดบริการ 1 ใบ -->
+        <article class="service-card">
+          <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
+          <h3>ออกรถง่าย ไม่ต้องมีคนค้ำ</h3>
+          <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
+          <p>ไม่ว่าจะเป็น พนักงานบริษัท อาชีพอิสระ ค้าขาย หรือไรเดอร์ ก็ทักมาปรึกษาเรื่องออกรถได้<br>ใช้เอกสารน้อย ไม่ต้องมีคนค้ำ</p>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดบริการ 1 ใบ -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: การ์ดบริการ 1 ใบ -->
+        <article class="service-card">
+          <!-- EDIT ME / แก้ไขตรงนี้: ชื่อบริการ -->
+          <h3>มีบริการหลังการขายครบวงจร</h3>
+          <!-- EDIT ME / แก้ไขตรงนี้: คำอธิบายบริการ 1-2 ประโยค -->
+          <p>เช็คระยะ เบิกอะไหล่ และดูแลรถ โดยทีมช่างของร้าน<br>รับรถไปแล้วมีอะไรสงสัยหรือรถมีปัญหา ก็ยังกลับมาคุยกับเราได้</p>
+        </article>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดการ์ดบริการ 1 ใบ -->
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================ -->
+  <!-- 4. CONTACT / ช่องทางติดต่อ (เหมือนหน้าแรก)                        -->
+  <!--    ซ้าย: แผนที่/ที่อยู่/นำทาง — ขวา: เวลาเปิดและโทร/LINE             -->
+  <!--    Left: map/address/directions — right: hours and phone/LINE       -->
+  <!-- ================================================================ -->
+  <section class="section" id="contact">
+    <div class="container">
+      <h2 class="section-title">ติดต่อเรา</h2>
+
+      <div class="contact-hours">
+        <!-- EDIT ME / แก้ไขตรงนี้: วันและเวลาเปิดทำการ (อยู่บรรทัดเดียวกัน) -->
+        <p class="hours"><strong>เปิดทุกวัน</strong> 08:30 - 18:30 น.</p>
+        <!-- ที่อยู่ดึงจาก variables.txt (ADDRESS + POSTAL_CODE) -->
+        <p class="address-line">{{ADDRESS}} กรุงเทพมหานคร {{POSTAL_CODE}}</p>
+      </div>
+
+      <div class="location-grid">
+        <div class="contact-map-column">
+          <!-- EDIT ME / แก้ไขตรงนี้: ฝังแผนที่จริงของร้าน
+               วิธี: ไป Google Maps → ค้นหาที่อยู่ร้าน → คลิก "แชร์" → เลือก "ฝังแผนที่"
+               → คัดลอกเฉพาะ URL ในส่วน src="..." ไปวางใน variables.txt (MAPS_EMBED_URL) -->
+          <iframe
+            class="map-embed"
+            src="{{MAPS_EMBED_URL}}"
+            title="แผนที่ร้าน" loading="lazy" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <!-- EDIT ME / แก้ไขตรงนี้: ลิงก์นำทาง Google Maps ของร้าน (destination = พิกัดร้าน) -->
+          <a href="https://www.google.com/maps/dir/?api=1&amp;destination=13.8192369%2C100.5962201&amp;travelmode=driving" class="btn btn-primary contact-directions" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            นำทางไปร้าน
+          </a>
+        </div>
+
+        <div class="contact-details">
+          <ul class="contact-list">
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ช่องทางติดต่อ 1 ช่อง -->
+        <!-- เบอร์โทรดึงจาก variables.txt (PHONE_TEL / PHONE_DISPLAY) -->
+        <li>
+          <a href="tel:{{PHONE_TEL}}" class="contact-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+            </svg>
+            <span>โทรเลย<small>{{PHONE_DISPLAY}}</small></span>
+          </a>
+        </li>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางติดต่อ 1 ช่อง -->
+
+        <!-- COPY FROM HERE / คัดลอกตั้งแต่ตรงนี้: ช่องทางติดต่อ 1 ช่อง -->
+        <!-- LINE ID ดึงจาก variables.txt (LINE_ID) ไม่ต้องแก้ตรงนี้ -->
+        <li>
+          <a href="https://line.me/R/ti/p/@{{LINE_ID}}" class="contact-item" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+            </svg>
+            <span>แอด LINE<small>@{{LINE_ID}}</small></span>
+          </a>
+        </li>
+        <!-- TO HERE / ถึงตรงนี้: สิ้นสุดช่องทางติดต่อ 1 ช่อง -->
+
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ================================================================ -->
+  <!-- 5. FOOTER — ส่วนล่างสุด: ลิขสิทธิ์                                -->
+  <!-- ================================================================ -->
+  <footer class="site-footer">
+    <div class="container">
+      <!-- EDIT ME: แก้ปีลิขสิทธิ์ได้ตรงนี้ — ชื่อร้านดึงจาก variables.txt -->
+      <small>&copy; 2026 {{SHOP_NAME}} สงวนลิขสิทธิ์</small>
+    </div>
+  </footer>
+
+  <!-- ================================================================ -->
+  <!-- ข้อมูลสำหรับ Google (JSON-LD) — ชื่อร้าน/เบอร์/ที่อยู่ จาก variables.txt -->
+  <!-- แก้ตรงนี้เฉพาะเวลาเปิด (opens/closes) และพิกัด geo / edit hours+geo only -->
+  <!-- ================================================================ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MotorcycleDealer",
+    "name": "{{SHOP_NAME}}",
+    "image": "{{SITE_URL}}images/og-cover.jpg",
+    "@id": "{{SITE_URL}}ev-models.html",
+    "url": "{{SITE_URL}}ev-models.html",
+    "telephone": "{{PHONE_TEL_INTL}}",
+    "priceRange": "฿฿",
+    "areaServed": "กรุงเทพมหานคร",
+    "hasMap": "https://www.google.com/maps/dir/?api=1&destination=13.8192369%2C100.5962201&travelmode=driving",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "{{ADDRESS}}",
+      "addressLocality": "กรุงเทพมหานคร",
+      "addressRegion": "กรุงเทพฯ",
+      "postalCode": "{{POSTAL_CODE}}",
+      "addressCountry": "TH"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "08:30",
+        "closes": "18:30"
+      }
+    ],
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "13.8192369",
+      "longitude": "100.5962201"
+    }
+  }
+  </script>
+
+  <!-- ปิดเมนูมือถือหลังเลือกลิงก์ — คง checkbox hack ไว้ / close mobile nav after clicking a link; checkbox hack retained -->
+  <script>
+    document.querySelectorAll('.header-nav a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        document.getElementById('nav-toggle').checked = false;
+      });
+    });
+  </script>
+
+  <!-- ส่ง event ไป Google Analytics ทุกครั้งที่กดปุ่ม LINE, เบอร์โทร หรือปุ่มนำทาง Google Maps — ใช้ตั้งเป็น Conversion ใน Google Ads ได้ -->
+  <!-- Report a Google Analytics event on every LINE/phone/directions click — mark these as conversions in Google Ads -->
+  <script>
+    function reportClick(eventName) {
+      if (typeof gtag === 'function') gtag('event', eventName);
+    }
+    document.querySelectorAll('.line-cta').forEach(function(a) {
+      a.addEventListener('click', function() { reportClick('line_click'); });
+    });
+    document.querySelectorAll('a[href^="tel:"]').forEach(function(a) {
+      a.addEventListener('click', function() { reportClick('call_click'); });
+    });
+    document.querySelectorAll('a[href*="google.com/maps/dir"]').forEach(function(a) {
+      a.addEventListener('click', function() { reportClick('maps_click'); });
+    });
+  </script>
+
+</body>
+</html>

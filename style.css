@@ -331,6 +331,50 @@ main > section:nth-of-type(even) { background: var(--color-surface-alt); }
 }
 .chip-logo img { display: block; height: 30px; width: auto; }
 
+/* ===== 3e. FEATURED PRODUCT CARDS — รุ่นขายดีที่มีรูป (เสริมจาก chip pills ด้านบน) =====
+   สำหรับรุ่นที่อยากใส่รูป+ราคา+สเปกเด่น ๆ ส่วน chip pills ด้านบนยังใช้กับรุ่นทั่วไปได้ตามปกติ
+   For models you want shown with a photo, price and key specs; the chip pills
+   above still cover ordinary models. Pick either per model — not required to use both. */
+.product-grid {
+  display: grid;
+  /* auto-fill (not auto-fit) with a capped max keeps cards a sensible product-card
+     width instead of stretching a lone card edge-to-edge; pasted cards still
+     reflow into more columns with no CSS change. */
+  grid-template-columns: repeat(auto-fill, minmax(240px, 320px));
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+.product-card {
+  background: var(--color-bg); border: 1px solid var(--color-border);
+  border-radius: var(--radius); overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.product-card img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.product-card-body { padding: var(--space-md); }
+.product-brand { font-size: 0.85rem; font-weight: 600; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+/* ชื่อรุ่น+ราคาอยู่แถวเดียวกัน ราคาชิดขวา — ถ้าที่ไม่พอ (จอแคบ/ชื่อรุ่น-ราคายาว) ตกลงบรรทัดใหม่เอง
+   Model name + price share one row, price pinned right — wraps to its own line
+   automatically when there isn't room (narrow screens, long name/price) */
+.product-title-row {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  justify-content: space-between; column-gap: var(--space-sm);
+  margin: 0.2rem 0 var(--space-xs);
+}
+.product-name { font-size: 1.4rem; font-weight: 700; margin: 0; }
+.product-price { font-size: 1.5rem; font-weight: 700; color: var(--color-primary); margin: 0; white-space: nowrap; }
+/* ราคาปกติแบบขีดฆ่า ใช้ครอบในแท็ก <s> เวลามีราคาพิเศษ / crossed-out original price, wrap it in <s> for a promo price */
+.product-price-was { font-size: 1rem; font-weight: 400; color: var(--color-text-muted); }
+.product-price-sub { color: var(--color-text-muted); font-size: 0.9rem; margin-bottom: var(--space-sm); }
+.product-specs {
+  list-style: none; display: grid; grid-template-columns: 1fr 1fr;
+  gap: var(--space-xs); margin-top: var(--space-sm);
+}
+.product-specs li {
+  background: var(--color-surface-alt); border-radius: var(--radius-sm);
+  padding: 0.4rem 0.6rem; font-size: 0.85rem; text-align: center;
+}
+
 /* ===== 3d. DELIVERY CAROUSEL — สไลด์รูปส่งมอบรถ (scroll-snap ล้วน ไม่ใช้ JS) ===== */
 /* แถบเลื่อนแนวนอน: ปัดบนมือถือ / ลากแถบเลื่อนบนเดสก์ท็อป — snap เข้าล็อกทีละรูป
    Horizontal scroller: swipe on mobile / drag scrollbar on desktop, snaps per slide */
